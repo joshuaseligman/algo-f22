@@ -1,4 +1,6 @@
 #pragma once
 
-// Reads a file for the sake of reading a file
-void readFile(std::string path);
+#include "util.h"
+
+// Reads a file and stores each line into an array
+StringArr* readFile(std::string path);
