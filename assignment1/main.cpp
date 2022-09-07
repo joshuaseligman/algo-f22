@@ -4,6 +4,7 @@
 #include "node.h"
 #include "stack.h"
 #include "queue.h"
+#include "fileUtil.h"
 
 // Function to test the Node class
 void testNode() {
@@ -49,14 +50,14 @@ void testStack() {
 
 // Function to test the Queue class
 void testQueue() {
-    // Create a stack and add some data to it
+    // Create a queue and add some data to it
     Queue<char> queue;
     queue.enqueue('J');
     queue.enqueue('o');
     queue.enqueue('s');
     queue.enqueue('h');
 
-    // Print out the letters as we remove them from the stack
+    // Print out the letters as we remove them from the queue
     while (!queue.isEmpty()) {
         std::cout << queue.dequeue();
     }
@@ -81,6 +82,8 @@ int main() {
 
     std::cout << "----- Testing Queue class -----" << std::endl;
     testQueue();
+
+    readFile("magicitems.txt");
 
     return 0;
 }
