@@ -2,6 +2,7 @@
 #include <string>
 
 #include "node.h"
+#include "stack.h"
 
 // Function to test the Node class
 void testNode() {
@@ -22,8 +23,33 @@ void testNode() {
     }
 }
 
+// Function to test the Stack class
+void testStack() {
+    // Create a stack and add some data to it
+    Stack stack;
+    stack.push("h");
+    stack.push("s");
+    stack.push("o");
+    stack.push("J");
+
+    // Print out the letters as we remove them from the stack
+    while (!stack.isEmpty()) {
+        std::cout << stack.pop();
+    }
+    std::cout << std::endl;
+
+    try {
+        // This should throw an error
+        stack.pop();
+    } catch (const std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
 int main() {
     testNode();
+
+    testStack();
 
     return 0;
 }
