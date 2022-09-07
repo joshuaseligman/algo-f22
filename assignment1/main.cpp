@@ -72,6 +72,42 @@ void testQueue() {
     }
 }
 
+bool isPalindrome(std::string word) {
+    // Initialize an empty stack and queue for the checks
+    Stack<char> wordStack;
+    Queue<char> wordQueue;
+
+    // Iterate through each character in the word to populate the stack and queue
+    for (int i = 0; i < word.length(); i++) {
+        char character = word[i];
+        if (character == ' ') {
+            // Go to next character because we are ignoring whitespace
+            continue;
+        } else if (character >= 'a' && character <= 'z') {
+            // Adjust the character to make it uppercase by taking the difference between
+            // the start of the lowercase letters and the start of the uppercase letters
+            character -= 'a' - 'A';
+        }
+        // Add the character to both the stack and the queue
+        wordStack.push(character);
+        wordQueue.enqueue(character);
+    }
+
+    while (!wordStack.isEmpty() && !wordQueue.isEmpty()) {
+        // Get the character from the top of the stack and queue
+        char charFromStack = wordStack.pop();
+        char charFromQueue = wordQueue.dequeue();
+
+        if (charFromStack != charFromQueue) {
+            // We can return false because we already know that the string is not a palindrome
+            return false;
+        }
+    }
+
+    // The string is a palindrome
+    return true;
+}
+
 int main() {
     std::cout << "----- Testing Node class -----" << std::endl;
     testNode();
@@ -85,20 +121,29 @@ int main() {
     testQueue();
     std::cout << std::endl;
 
-    try {
-        // Read the file and store it in an array
-        StringArr* data = readFile("magicitems.txt");
+    std::cout << "----- Testing isPalindrome -----" << std::endl;
+    std::cout << isPalindrome("racecar") << std::endl; // 1
+    std::cout << isPalindrome("RaCecAr") << std::endl; // 1
+    std::cout << isPalindrome("ra   c e   car") << std::endl; // 1
+    std::cout << isPalindrome("4") << std::endl; // 1
+    std::cout << isPalindrome("") << std::endl; // 1
+    std::cout << isPalindrome("ABC") << std::endl; // 0
+    std::cout << std::endl;
 
-        // Print out each row
-        for (int i = 0; i < data->length; i++) {
-            std::cout << data->arr[i] << std::endl;
-        }
+    // try {
+    //     // Read the file and store it in an array
+    //     StringArr* data = readFile("magicitems.txt");
 
-        // Clean up memory
-        delete data;
-    } catch (const std::invalid_argument& e) {
-        std::cerr << e.what() << std::endl;
-    }
+    //     // Print out each row
+    //     for (int i = 0; i < data->length; i++) {
+    //         std::cout << data->arr[i] << std::endl;
+    //     }
+
+    //     // Clean up memory
+    //     delete data;
+    // } catch (const std::invalid_argument& e) {
+    //     std::cerr << e.what() << std::endl;
+    // }
 
     return 0;
 }

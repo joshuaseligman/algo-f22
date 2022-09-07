@@ -25,7 +25,7 @@ StringArr* readFile(std::string filePath) {
 
         // Create the struct to output the data
         StringArr* outArr = new StringArr;
-        outArr->arr = new std::string[(unsigned long) numItems];
+        outArr->arr = new std::string[numItems];
         outArr->length = numItems;
 
         // We will now reread the file and store the data now that the array has been
