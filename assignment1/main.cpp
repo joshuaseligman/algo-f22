@@ -130,20 +130,23 @@ int main() {
     std::cout << isPalindrome("ABC") << std::endl; // 0
     std::cout << std::endl;
 
-    // try {
-    //     // Read the file and store it in an array
-    //     StringArr* data = readFile("magicitems.txt");
+    std::cout << "----- Magic Items -----" << std::endl;
+    try {
+        // Read the file and store it in an array
+        StringArr* data = readFile("magicitems.txt");
 
-    //     // Print out each row
-    //     for (int i = 0; i < data->length; i++) {
-    //         std::cout << data->arr[i] << std::endl;
-    //     }
+        // Only print out the palindromes
+        for (int i = 0; i < data->length; i++) {
+            if (isPalindrome(data->arr[i])) {
+                std::cout << data->arr[i] << std::endl;
+            }
+        }
 
-    //     // Clean up memory
-    //     delete data;
-    // } catch (const std::invalid_argument& e) {
-    //     std::cerr << e.what() << std::endl;
-    // }
+        // Clean up memory
+        delete data;
+    } catch (const std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
+    }
 
     return 0;
 }
