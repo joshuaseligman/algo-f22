@@ -1,1 +1,6 @@
+#LateX files
 *.gz
+
+# Compilation files
+*.out
+a.out.dSYM/
