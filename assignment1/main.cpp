@@ -8,16 +8,16 @@
 // Function to test the Node class
 void testNode() {
     // Create the nodes on the stack, so we do not have to delete later
-    Node n1("node 1");
-    Node n2("node 2");
-    Node n3("node 3");
+    Node<std::string> n1("node 1");
+    Node<std::string> n2("node 2");
+    Node<std::string> n3("node 3");
 
     // Set up the links
     n1.next = &n2;
     n2.next = &n3;
 
     // Print out the data of each node in the linked list
-    Node* cur = &n1;
+    Node<std::string>* cur = &n1;
     while (cur != nullptr) {
         std::cout << cur->data << std::endl;
         cur = cur->next;
@@ -27,11 +27,11 @@ void testNode() {
 // Function to test the Stack class
 void testStack() {
     // Create a stack and add some data to it
-    Stack stack;
-    stack.push("h");
-    stack.push("s");
-    stack.push("o");
-    stack.push("J");
+    Stack<char> stack;
+    stack.push('h');
+    stack.push('s');
+    stack.push('o');
+    stack.push('J');
 
     // Print out the letters as we remove them from the stack
     while (!stack.isEmpty()) {
@@ -50,11 +50,11 @@ void testStack() {
 // Function to test the Queue class
 void testQueue() {
     // Create a stack and add some data to it
-    Queue queue;
-    queue.enqueue("J");
-    queue.enqueue("o");
-    queue.enqueue("s");
-    queue.enqueue("h");
+    Queue<char> queue;
+    queue.enqueue('J');
+    queue.enqueue('o');
+    queue.enqueue('s');
+    queue.enqueue('h');
 
     // Print out the letters as we remove them from the stack
     while (!queue.isEmpty()) {
@@ -73,9 +73,11 @@ void testQueue() {
 int main() {
     std::cout << "----- Testing Node class -----" << std::endl;
     testNode();
+    std::cout << std::endl;
 
     std::cout << "----- Testing Stack class -----" << std::endl;
     testStack();
+    std::cout << std::endl;
 
     std::cout << "----- Testing Queue class -----" << std::endl;
     testQueue();

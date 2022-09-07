@@ -4,11 +4,13 @@
 #include "node.h"
 
 // Instantiate the queue with the head pointing to nothing
-Queue::Queue() {
+template <typename T>
+Queue<T>::Queue() {
     head = nullptr;
 }
 
-Queue::~Queue() {
+template <typename T>
+Queue<T>::~Queue() {
     // Since the nodes were created on the heap, we have to make sure everything is cleared from memory
     while (!isEmpty()) {
         dequeue();
@@ -16,15 +18,16 @@ Queue::~Queue() {
 }
 
 // Creates a new node and adds it to the queue
-void Queue::enqueue(std::string newData) {
-    Node* newNode = new Node(newData);
+template <typename T>
+void Queue<T>::enqueue(T newData) {
+    Node<T>* newNode = new Node(newData);
     
     if (isEmpty()) {
         // Immediately set the head to be the new node if we are empty
         head = newNode;
     } else {
         // Traverse to the back of the queue
-        Node* cur = head;
+        Node<T>* cur = head;
         while (cur->next != nullptr) {
             cur = cur->next;
         }
@@ -34,14 +37,15 @@ void Queue::enqueue(std::string newData) {
 }
 
 // Removes the front node from the queue
-std::string Queue::dequeue() {
+template <typename T>
+T Queue<T>::dequeue() {
     if (isEmpty()) {
         // Throw an exception if the queue is already empty
         throw std::invalid_argument("Tried to dequeue from an empty queue.");
     } else {
         // We need to collect the data in the node before removing it from the queue
-        Node* frontNode = head;
-        std::string frontData = frontNode->data;
+        Node<T>* frontNode = head;
+        T frontData = frontNode->data;
         head = head->next;
 
         // Since the node was created on the heap, we have to free it from memory
@@ -51,6 +55,11 @@ std::string Queue::dequeue() {
 }
 
 // Checks to see if the queue is empty or not
-bool Queue::isEmpty() {
+template <typename T>
+bool Queue<T>::isEmpty() {
     return head == nullptr;
 }
+
+// Define acceptable data types that the Queue can accept for the template
+template class Queue<std::string>;
+template class Queue<char>;
