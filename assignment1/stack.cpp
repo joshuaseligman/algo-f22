@@ -11,7 +11,7 @@ Stack::Stack() {
 Stack::~Stack() {
     // Since the nodes were created on the heap, we have to make sure everything is cleared from memory
     while (!isEmpty()) {
-        Stack::pop();
+        pop();
     }
 }
 
@@ -23,6 +23,7 @@ void Stack::push(std::string newData) {
     top = newNode;
 }
 
+// Removes the top node from the stack
 std::string Stack::pop() {
     if (isEmpty()) {
         // Throw an exception if the stack is already empty

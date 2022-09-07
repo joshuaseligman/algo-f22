@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include "stack.h"
+#include "queue.h"
 
 // Function to test the Node class
 void testNode() {
@@ -46,10 +47,38 @@ void testStack() {
     }
 }
 
+// Function to test the Queue class
+void testQueue() {
+    // Create a stack and add some data to it
+    Queue queue;
+    queue.enqueue("J");
+    queue.enqueue("o");
+    queue.enqueue("s");
+    queue.enqueue("h");
+
+    // Print out the letters as we remove them from the stack
+    while (!queue.isEmpty()) {
+        std::cout << queue.dequeue();
+    }
+    std::cout << std::endl;
+
+    try {
+        // This should throw an error
+        queue.dequeue();
+    } catch (const std::invalid_argument& e) {
+        std::cerr << e.what() << std::endl;
+    }
+}
+
 int main() {
+    std::cout << "----- Testing Node class -----" << std::endl;
     testNode();
 
+    std::cout << "----- Testing Stack class -----" << std::endl;
     testStack();
+
+    std::cout << "----- Testing Queue class -----" << std::endl;
+    testQueue();
 
     return 0;
 }
