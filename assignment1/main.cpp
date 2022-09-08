@@ -72,6 +72,7 @@ void testQueue() {
     }
 }
 
+// Function to check if a string is a palindrome, minus whitespace and capitalization
 bool isPalindrome(std::string word) {
     // Initialize an empty stack and queue for the checks
     Stack<char> wordStack;

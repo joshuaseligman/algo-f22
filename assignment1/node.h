@@ -14,6 +14,5 @@ class Node {
         Node(T initialData);
 };
 
-// Super helpful resources on templates for c++
-// https://isocpp.org/wiki/faq/templates#templates-defn-vs-decl
+// Super helpful resource on templates for c++
 // https://isocpp.org/wiki/faq/templates#separate-template-fn-defn-from-decl
