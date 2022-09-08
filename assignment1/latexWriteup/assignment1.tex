@@ -78,8 +78,8 @@
 \begin{document}
 \maketitle % Print the title
 
-\section{Singly Linked List}
-\subsection{The Data Structure}
+\section{Singly Linked List}\label{linkedListSection}
+\subsection{The Data Structure}\label{linkedListDataStructure}
 A singly linked list is comprised of nodes which contain some form of data as well as a pointer to the next element within the list. As shown in 
 Figure \ref{figure:linkedList}, the final node has a next of \textbf{null}, which marks the end of the list. In order to access a particular element,
 one has to start at the beginning and traverse through the list until the desired node is found. This causes data access to be on the magnitude of $O(n)$ as the time required
@@ -94,14 +94,14 @@ to find an element has a linear relationship with the size of the list.
 
 \subsection{Benefits of a Singly Linked List}
 \subsubsection{Size}
-As previously mentioned, the last node within a linked list has a next of \textbf{null}. This characteristic enables linked lists to have no size restrictions barring memory capacity.
+As previously mentioned in Section \ref{linkedListDataStructure}, the last node within a linked list has a next of \textbf{null}. This characteristic enables linked lists to have no size restrictions barring memory capacity.
 As a result, this feature makes linked lists preferred over arrays, which have a fixed length, when the size of the data is frequently changing and has an unkown maximum. For instance, as demonstrated in
 Section \ref{mainProgramListing} starting on line 10 within \textit{main.cpp}, the size of the linked list is only limited by our needs and, if needed, more nodes are able
 to easily be added to the list with their creation as done on lines 13-15 and linking as shown on lines 18 and 19. On the other hand, if the list was made with an array,
 the size of the array would have to be provided at the time of the creation of the array, and it would not be easy to change the size if additional data have to be added
 to the array.
 
-\subsubsection{Data Type Flexibility}
+\subsubsection{Data Type Flexibility}\label{linkedListDataType}
 Linked lists do not have to be restricted to be able to store a specific data type. Instead, with the use of generics (C++ templates), the definition of a node is
 independent of the data type that the user wants to store within the linked list. This provides flexibilty and reusability for many use cases. As demonstrated in
 Section \ref{nodeListing} in \textit{node.h}, the definition of a node uses a generic T as the type of data being stored, which prevents any assumptions of the data
@@ -111,214 +111,258 @@ Regardless, although they have to be specified for C++, any data type can still 
 which data type is stored in a node is in Section \ref{mainProgramListing} on lines 13-15 within \textit{main.cpp}. Instead of the Node class defining the data type,
 the user is able to specify the type of data they want to store, which is a string in this situation but can be anything they want.
 
+\section{Stack}
+\subsection{The Data Structure}\label{stackDataStructure}
+A stack uses a last in, first out (LIFO) approach to storing data. The most common analogy for stacks is a stack of plates. Each plate is
+placed on top of each other to build the stack when being stored, but the plate on top is always the first to be used. In other words, the most recently plate
+that was put away is also the first plate that is taken out. As displayed in Figure \ref{figure:stack}, the stack has a variable called top, which points to the first item in the stack.
+Additionally, as shown by the arrows between each element, linked lists are used in the implementation of stacks. Stacks have 3 primary functions: push, pop, and isEmpty.
+Push adds a new element to the top of the stack, pop removes the top item from the stack and returns the data, and isEmpty returns whether or not the stack is empty.
+
+\begin{figure}[ht] 
+    \centering 
+    \includegraphics[height=8cm]{stack}
+    \caption{Example stack of 4 Yankees legends.}
+    \label{figure:stack}
+ \end{figure}
+
+\subsection{Benefits of a Stack}
+\subsubsection{Time of Individual Data Access}
+Stacks are incredibly fast when it comes to the implementation of the push and pop methods. As demonstrated in \textit{stack.cpp} in Section \ref{stackListing},
+the push method on lines 21-28 creates the new node for the stack (line 24), points its next element to the current top of the stack (line 26), and then update the top of the stack to
+point to the newly created node (line 28). These 3 steps will always run and do not depend on the current size of the stack, which means that the push method runs in $O(1)$ time.
+The pop method on lines 30-46 is very similar in that it also executes the same few steps regardless of the current size of the stack. These steps are check if the stack is empty for safety (lines 33-36),
+grab the data from the top of the stack (line 39), update the top pointer to point to the second item in the stack (line 40), and return the data (line 44). There is no need to traverse the list because the push
+method made the new node the first element of the list, which is equivalent to the top of the stack. Therefore, just like the push method, the pop method also runs in $O(1)$ time.
+
+\subsubsection{Compatibility with the Node Class}
+As mentioned in Section \ref{stackDataStructure} and illustrated in Figure \ref{figure:stack}, the stack is implemented using a singly linked list. Therefore, the Stack
+class in the code has to utilize the Node class written for singly linked lists, which can be found in Section \ref{nodeListing} and was analyzed in Section \ref{linkedListSection}.
+In Section \ref{stackListing}, line 9 in \textit{stack.h} shows that the Stack class has an instance variable that points to the node on the top of the stack. Since the Node
+class supports any data type (see Section \ref{linkedListDataType}), the Stack class has to be able to provide a data type for each node to store. For the same reasons as
+described in Section \ref{linkedListDataType}, the Stack class also utilizes C++ templates to allow the user to decide which data type gets stored within the stack.
+The Stack class is then able to take the data type that the user requests, such as \textbf{char} on line 32 of \textit{main.cpp} in Section \ref{mainProgramListing},
+and pass it down to the data type that is stored within each node. This concept is demonstrated in Section \ref{stackListing} in \textit{stack.cpp} on 
+line 24 when a new node is created and on line 9 of \textit{stack.h} when defining the top variable for the stack.
+
+\section{Queue}
+\subsection{The Data Structure}
+
+\subsection{Benefits of a Stack}
+
+\section{Main Program}
+\subsection{Program Overview}
+
+\subsection{Good Parts of the Program}
+
 %----------------------------------------------------------------------------------------
 %   start PROBLEM ONE
 %----------------------------------------------------------------------------------------
-\section{Problem One}
+% \section{Problem One}
 
-\subsection{The Data Structure}
-An $n$-element array of integer pairs: ($currentCount$, $predecessorSum$) will, once initialized in the preprocessing step,  support \textsc{Member}, \textsc{Less}, and \textsc{Range} operations as described in Section \ref{operations} in $O(1)$ (constant) time.
+% \subsection{The Data Structure}
+% An $n$-element array of integer pairs: ($currentCount$, $predecessorSum$) will, once initialized in the preprocessing step,  support \textsc{Member}, \textsc{Less}, and \textsc{Range} operations as described in Section \ref{operations} in $O(1)$ (constant) time.
 
-For illustration, consider the case where $S = (1, 2, 3, 4, 7, 7, 7, 7, 7, 8, 9, 10, 10,10,10,10,10, 14, 16)$. \\
-Here we have $m = 19$ elements in $S$ ranging in value from 1 through $n = 16$.
-The array for $S$ after preprocessing is given in Figure~\ref{figure:array}.
+% For illustration, consider the case where $S = (1, 2, 3, 4, 7, 7, 7, 7, 7, 8, 9, 10, 10,10,10,10,10, 14, 16)$. \\
+% Here we have $m = 19$ elements in $S$ ranging in value from 1 through $n = 16$.
+% The array for $S$ after preprocessing is given in Figure~\ref{figure:array}.
 
-% This is how we include a figure when 
-% the file is in the same directory as this document.
-\begin{figure}[ht] 
-   \centering 
-%    \includegraphics[width=11cm]{array}
-   \caption{Example array built from 19 values, 10 of them unique.}
-   \label{figure:array}
-\end{figure}
+% % This is how we include a figure when 
+% % the file is in the same directory as this document.
+% \begin{figure}[ht] 
+%    \centering 
+% %    \includegraphics[width=11cm]{array}
+%    \caption{Example array built from 19 values, 10 of them unique.}
+%    \label{figure:array}
+% \end{figure}
 
-\subsection{Preprocessing}
-There are two preprocessing steps, \textsc{Tally} and \textsc{Predecessor Sum}, each of which is $O(m+n)$ as we will see in Equations \ref{equation:pass1} and \ref{equation:pass2} below.
-This makes the overall performance $O(m+n)$ because 
-$2 \cdot O(m+n) =\footnote{This is an abuse of the notation, but if it's okay in the CLRS~\cite{clrs} book I hope it's okay here.} O(m+n)$.
+% \subsection{Preprocessing}
+% There are two preprocessing steps, \textsc{Tally} and \textsc{Predecessor Sum}, each of which is $O(m+n)$ as we will see in Equations \ref{equation:pass1} and \ref{equation:pass2} below.
+% This makes the overall performance $O(m+n)$ because 
+% $2 \cdot O(m+n) =\footnote{This is an abuse of the notation, but if it's okay in the CLRS~\cite{clrs} book I hope it's okay here.} O(m+n)$.
 
-% Note bot the footnote and the citation in the above two lines.
+% % Note bot the footnote and the citation in the above two lines.
 
-\subsubsection{Pass one: Tally}
-For each element $i$ in $S$ we'll store its number of occurrences at $A[i].currentCount$.
+% \subsubsection{Pass one: Tally}
+% For each element $i$ in $S$ we'll store its number of occurrences at $A[i].currentCount$.
 
-% This is an example of including an algorithm in your document.
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \caption{Tally}
-    \label{algorithm:tally}
-    \KwData{collection $S$}
-    \KwResult{array $A$ containing tallys for each element $i$ in $S$ }
+% % This is an example of including an algorithm in your document.
+% \begin{algorithm}[H]
+%     \SetAlgoLined
+%     \caption{Tally}
+%     \label{algorithm:tally}
+%     \KwData{collection $S$}
+%     \KwResult{array $A$ containing tallys for each element $i$ in $S$ }
    
-    allocate $A[n]$\;
-    \For{$j \leftarrow 1$ \KwTo $n$}{
-         $A[j].currentCount \leftarrow 0$\;
-    }   
-    \ForEach(// There are $m$ elements in $s$.){element i in S}{
-         $A[i].currentCount \leftarrow A[i].currentCount + 1$\;
-    }
-\end{algorithm}
+%     allocate $A[n]$\;
+%     \For{$j \leftarrow 1$ \KwTo $n$}{
+%          $A[j].currentCount \leftarrow 0$\;
+%     }   
+%     \ForEach(// There are $m$ elements in $s$.){element i in S}{
+%          $A[i].currentCount \leftarrow A[i].currentCount + 1$\;
+%     }
+% \end{algorithm}
 
-\textbf{Asymptotic Analysis} \\
-We are given $m$ integer values (the size of the collection), each in the range $[1..n]$ (the size of the domain) and want to iterate over them, computing the tally for each.
-Consider Algorithm~\ref{algorithm:tally}.
-Line 1 executes in constant time.
-Lines 2 through 4 execute in $O(n)$ time because we are iterating from 1 to $n$.  
-Lines 5 through 7 execute in $O(m)$ time because we are iterating over all the elements of $S$, of which there are $m$.  
+% \textbf{Asymptotic Analysis} \\
+% We are given $m$ integer values (the size of the collection), each in the range $[1..n]$ (the size of the domain) and want to iterate over them, computing the tally for each.
+% Consider Algorithm~\ref{algorithm:tally}.
+% Line 1 executes in constant time.
+% Lines 2 through 4 execute in $O(n)$ time because we are iterating from 1 to $n$.  
+% Lines 5 through 7 execute in $O(m)$ time because we are iterating over all the elements of $S$, of which there are $m$.  
 
-% This is how you include an equation:
+% % This is how you include an equation:
 
-So, for pass one, we have :
-\begin{equation}   
-   \label{equation:pass1}   
-   \begin{split}
-   O(pass1) & = constant + O(n) + O(m)\\
-            & = O(n) + O(m)\\
-            & = O(m+n)   
-   \end{split}
-\end{equation}
+% So, for pass one, we have :
+% \begin{equation}   
+%    \label{equation:pass1}   
+%    \begin{split}
+%    O(pass1) & = constant + O(n) + O(m)\\
+%             & = O(n) + O(m)\\
+%             & = O(m+n)   
+%    \end{split}
+% \end{equation}
 
-\subsubsection{Pass two: Predecessor Sum}
-Once the tally is done we need to make another pass over $A$ to compute, for each $A[i] : i>1$, 
-the sum of all of its predecessors ($A[1] .. A[i-1]$) and store that in $A[i].predecessorSum$.
+% \subsubsection{Pass two: Predecessor Sum}
+% Once the tally is done we need to make another pass over $A$ to compute, for each $A[i] : i>1$, 
+% the sum of all of its predecessors ($A[1] .. A[i-1]$) and store that in $A[i].predecessorSum$.
 
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \caption{Predecessor Sum}
-    \label{algorithm:predecessorSum}
-    \KwData{array $A$ containing tallys for each element $i$ in $S$}
-    \KwResult{a new and improved array $A$, now with the predecessor sums}
+% \begin{algorithm}[H]
+%     \SetAlgoLined
+%     \caption{Predecessor Sum}
+%     \label{algorithm:predecessorSum}
+%     \KwData{array $A$ containing tallys for each element $i$ in $S$}
+%     \KwResult{a new and improved array $A$, now with the predecessor sums}
    
-    $A[1].predecessorSum \leftarrow 0$\;
-   \If {n > 1} {
-       \For{$k\leftarrow 2$ \KwTo $n$}{
-            $A[k].predecessorSum \leftarrow A[k-1].predecessorSum + A[k-1].currentCount$\;
-        }   
-   }
-\end{algorithm}
+%     $A[1].predecessorSum \leftarrow 0$\;
+%    \If {n > 1} {
+%        \For{$k\leftarrow 2$ \KwTo $n$}{
+%             $A[k].predecessorSum \leftarrow A[k-1].predecessorSum + A[k-1].currentCount$\;
+%         }   
+%    }
+% \end{algorithm}
 
-\textbf{Asymptotic Analysis}\\
-Looking at Algorithm~\ref{algorithm:predecessorSum}, line 1 is assignment, a constant time operation.
-If lines 3 through 5 execute at all, they do so in $O(n)$ time because we make $n - 1$ iterations over line 4, which is assignment and array lookups, both constant time operations.
-For pass two, we have :
-\begin{equation}
-   \label{equation:pass2}   
-   \begin{split}       
-       O(pass2) & = constant + O(n) \\
-                & = O(n) \\
-                & = O(m+n) \, \text{which is ok so long as $m > 0$}   
-    \end{split}
-\end{equation}
+% \textbf{Asymptotic Analysis}\\
+% Looking at Algorithm~\ref{algorithm:predecessorSum}, line 1 is assignment, a constant time operation.
+% If lines 3 through 5 execute at all, they do so in $O(n)$ time because we make $n - 1$ iterations over line 4, which is assignment and array lookups, both constant time operations.
+% For pass two, we have :
+% \begin{equation}
+%    \label{equation:pass2}   
+%    \begin{split}       
+%        O(pass2) & = constant + O(n) \\
+%                 & = O(n) \\
+%                 & = O(m+n) \, \text{which is ok so long as $m > 0$}   
+%     \end{split}
+% \end{equation}
 
 
-\subsection{Operations}\label{operations}
+% \subsection{Operations}\label{operations}
 
-\subsubsection{Member}
+% \subsubsection{Member}
 
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \caption{Member}
-    \label{algorithm:member}
-    \KwIn{parameter $i$}
-    \KwData{a new and improved array $A$, replete with tallys and predecessor sums}
-    \KwOut{$True$ if $i$ exists in $S$, $False$ otherwise}
+% \begin{algorithm}[H]
+%     \SetAlgoLined
+%     \caption{Member}
+%     \label{algorithm:member}
+%     \KwIn{parameter $i$}
+%     \KwData{a new and improved array $A$, replete with tallys and predecessor sums}
+%     \KwOut{$True$ if $i$ exists in $S$, $False$ otherwise}
      
-    \eIf {$(i \ge 1) \land (i \le n)$} {
-        return $(A[i].currentCount > 0)$\;
-    } {
-        return $False$\;
-   }
-\end{algorithm}
+%     \eIf {$(i \ge 1) \land (i \le n)$} {
+%         return $(A[i].currentCount > 0)$\;
+%     } {
+%         return $False$\;
+%    }
+% \end{algorithm}
 
-\textbf{Asymptotic Analysis}\\
-Looking at Algorithm~\ref{algorithm:member}, line 1 consists of comparisons, which are constant time operations.
-Line 2 is an array lookup and a comparison, both constant time operations.
-The remaining parts of the algorithm (including the rest of line 2) are for program control, and not considered in this analysis. Since all parts of the algorithm execute in constant time, the whole thing executes in constant time and is therefore $O(1)$.
+% \textbf{Asymptotic Analysis}\\
+% Looking at Algorithm~\ref{algorithm:member}, line 1 consists of comparisons, which are constant time operations.
+% Line 2 is an array lookup and a comparison, both constant time operations.
+% The remaining parts of the algorithm (including the rest of line 2) are for program control, and not considered in this analysis. Since all parts of the algorithm execute in constant time, the whole thing executes in constant time and is therefore $O(1)$.
 
-\subsubsection{Less}
+% \subsubsection{Less}
 
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \caption{Less}
-    \label{algorithm:less}
-    \KwIn{parameter $i$}
-    \KwData{a new and improved array $A$, replete with tallys and predecessor sums}
-    \KwOut{The number of elements in $S$ that are strictly less than $i$.}
+% \begin{algorithm}[H]
+%     \SetAlgoLined
+%     \caption{Less}
+%     \label{algorithm:less}
+%     \KwIn{parameter $i$}
+%     \KwData{a new and improved array $A$, replete with tallys and predecessor sums}
+%     \KwOut{The number of elements in $S$ that are strictly less than $i$.}
      
-    \eIf {$(i \ge 1) \land (i \le n)$} {
-        return $A[i].predecessorSum$\;
-    } {
-        return 0\;
-   }
-\end{algorithm}
+%     \eIf {$(i \ge 1) \land (i \le n)$} {
+%         return $A[i].predecessorSum$\;
+%     } {
+%         return 0\;
+%    }
+% \end{algorithm}
 
-\textbf{Asymptotic Analysis}\\
-Looking at Algorithm~\ref{algorithm:less}, line 1 consists of comparisons, which are constant time operations.
-Line 2 is an array lookup, a constant time operation.
-The remaining parts of the algorithm (including the rest of line 2) are for program control, and not considered in this analysis. Since all parts of the algorithm execute in constant time, the whole thing executes in constant time, and is therefore $O(1)$.
+% \textbf{Asymptotic Analysis}\\
+% Looking at Algorithm~\ref{algorithm:less}, line 1 consists of comparisons, which are constant time operations.
+% Line 2 is an array lookup, a constant time operation.
+% The remaining parts of the algorithm (including the rest of line 2) are for program control, and not considered in this analysis. Since all parts of the algorithm execute in constant time, the whole thing executes in constant time, and is therefore $O(1)$.
 
-\subsubsection{Range}
+% \subsubsection{Range}
 
-\begin{algorithm}[H]
-    \SetAlgoLined
-    \caption{Range}
-    \label{algorithm:range}
-    \KwIn{parameters $i$ and $j$ : $i \le j$}
-    \KwData{a new and improved array $A$, replete with tallys and predecessor sums}
-    \KwOut{The number of elements in $S$ that are in the range $[i .. j]$.}
+% \begin{algorithm}[H]
+%     \SetAlgoLined
+%     \caption{Range}
+%     \label{algorithm:range}
+%     \KwIn{parameters $i$ and $j$ : $i \le j$}
+%     \KwData{a new and improved array $A$, replete with tallys and predecessor sums}
+%     \KwOut{The number of elements in $S$ that are in the range $[i .. j]$.}
      
-    \eIf {$(i \ge 1) \land (i \le n) \land (j \ge 1) \land (j \le n) \land (i \le j)$} {
-        return $(A[j].currentCount + A[j].predecessorSum - A[i].predecessorSum)$\;
-    } {
-        return 0\;
-   }
-\end{algorithm}
+%     \eIf {$(i \ge 1) \land (i \le n) \land (j \ge 1) \land (j \le n) \land (i \le j)$} {
+%         return $(A[j].currentCount + A[j].predecessorSum - A[i].predecessorSum)$\;
+%     } {
+%         return 0\;
+%    }
+% \end{algorithm}
 
-\textbf{Asymptotic Analysis}\\
-Looking at Algorithm~\ref{algorithm:range}, line 1 consists of comparisons, which are constant time operations.
-Line 2 consists of array lookups, addition, and subtraction, all constant time operations.
-The remaining parts of the algorithm (including the rest of line 2) are for program control, and not considered in this analysis. Since all parts of the algorithm execute in constant time, the whole thing executes in constant time, and is therefore $O(1)$.
+% \textbf{Asymptotic Analysis}\\
+% Looking at Algorithm~\ref{algorithm:range}, line 1 consists of comparisons, which are constant time operations.
+% Line 2 consists of array lookups, addition, and subtraction, all constant time operations.
+% The remaining parts of the algorithm (including the rest of line 2) are for program control, and not considered in this analysis. Since all parts of the algorithm execute in constant time, the whole thing executes in constant time, and is therefore $O(1)$.
 
-%----------------------------------------------------------------------------------------
-%   end PROBLEM ONE
-%----------------------------------------------------------------------------------------
+% %----------------------------------------------------------------------------------------
+% %   end PROBLEM ONE
+% %----------------------------------------------------------------------------------------
 
-\pagebreak
+% \pagebreak
 
-%----------------------------------------------------------------------------------------
-%   start PROBLEM TWO
-%----------------------------------------------------------------------------------------
-\section{Problem Two}
+% %----------------------------------------------------------------------------------------
+% %   start PROBLEM TWO
+% %----------------------------------------------------------------------------------------
+% \section{Problem Two}
 
-%----------------------------------------------------------------------------------------
-%   end PROBLEM Two
-%----------------------------------------------------------------------------------------
+% %----------------------------------------------------------------------------------------
+% %   end PROBLEM Two
+% %----------------------------------------------------------------------------------------
 
-\pagebreak
+% \pagebreak
 
-%----------------------------------------------------------------------------------------
-%   start PROBLEM Three
-%----------------------------------------------------------------------------------------
-\section{Problem Three}
+% %----------------------------------------------------------------------------------------
+% %   start PROBLEM Three
+% %----------------------------------------------------------------------------------------
+% \section{Problem Three}
 
-%----------------------------------------------------------------------------------------
-%   end PROBLEM THREE
-%----------------------------------------------------------------------------------------
+% %----------------------------------------------------------------------------------------
+% %   end PROBLEM THREE
+% %----------------------------------------------------------------------------------------
 
-\pagebreak
+% \pagebreak
 
-%----------------------------------------------------------------------------------------
-%   REFERENCES
-%----------------------------------------------------------------------------------------
-% The following two commands are all you need in the initial runs of your .tex file to
-% produce the bibliography for the citations in your paper.
-\bibliographystyle{abbrv}
-\bibliography{lab01} 
-% You must have a proper ".bib" file and remember to run:
-% latex bibtex latex latex
-% to resolve all references.
+% %----------------------------------------------------------------------------------------
+% %   REFERENCES
+% %----------------------------------------------------------------------------------------
+% % The following two commands are all you need in the initial runs of your .tex file to
+% % produce the bibliography for the citations in your paper.
+% \bibliographystyle{abbrv}
+% \bibliography{lab01} 
+% % You must have a proper ".bib" file and remember to run:
+% % latex bibtex latex latex
+% % to resolve all references.
 
-\pagebreak
+% \pagebreak
 
 %----------------------------------------------------------------------------------------
 %   Appendix
@@ -370,7 +414,7 @@ class Node {
 // https://isocpp.org/wiki/faq/templates#separate-template-fn-defn-from-decl
 \end{lstlisting}
 
-\subsection{Stack}
+\subsection{Stack}\label{stackListing}
 \subitem{stack.cpp}
 \begin{lstlisting}[frame=single, ]  
 #include <string>
