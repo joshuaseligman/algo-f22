@@ -4,3 +4,5 @@
 # Compilation files
 *.out
 a.out.dSYM/
+
+.DS_Store
