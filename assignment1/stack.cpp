@@ -9,18 +9,9 @@ Stack<T>::Stack() {
     top = nullptr;
 }
 
-template <typename T>
-Stack<T>::~Stack() {
-    // Since the nodes were created on the heap, we have to make sure everything is cleared from memory
-    while (!isEmpty()) {
-        pop();
-    }
-}
-
 // Creates a new node and adds it to the stack
 template <typename T>
-void Stack<T>::push(T newData) {
-    Node<T>* newNode = new Node(newData);
+void Stack<T>::push(Node<T>* newNode) {
     // Set the next first so we do not lose the rest of the stack
     newNode->next = top;
     top = newNode;
@@ -28,19 +19,20 @@ void Stack<T>::push(T newData) {
 
 // Removes the top node from the stack
 template <typename T>
-T Stack<T>::pop() {
+Node<T>* Stack<T>::pop() {
     if (isEmpty()) {
         // Throw an exception if the stack is already empty
-        throw std::invalid_argument("Tried to pop from an empty stack.");
+        throw std::invalid_argument("Stack underflow exception. Tried to pop from an empty stack.");
     } else {
         // We need to collect the data in the node before removing it from the stack
         Node<T>* topNode = top;
-        T topData = topNode->data;
         top = top->next;
 
-        // Since the node was created on the heap, we have to free it from memory
-        delete topNode;
-        return topData;
+        // We have to remove whatever next is pointing to because the node is no longer
+        // a part of the linked list for the stack
+        topNode->next = nullptr;
+
+        return topNode;
     }
 }
 
