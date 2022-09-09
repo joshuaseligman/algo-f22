@@ -60,14 +60,20 @@ void testStack() {
 void testQueue() {
     // Create a queue and add some data to it
     Queue<char> queue;
-    queue.enqueue('J');
-    queue.enqueue('o');
-    queue.enqueue('s');
-    queue.enqueue('h');
+    Node<char> jNode('J');
+    Node<char> oNode('o');
+    Node<char> sNode('s');
+    Node<char> hNode('h');
+
+    queue.enqueue(&jNode);
+    queue.enqueue(&oNode);
+    queue.enqueue(&sNode);
+    queue.enqueue(&hNode);
 
     // Print out the letters as we remove them from the queue
     while (!queue.isEmpty()) {
-        std::cout << queue.dequeue();
+        Node<char>* dequeuedElem = queue.dequeue();
+        std::cout << dequeuedElem->data << '\t' << dequeuedElem->next << std::endl;
     }
     std::cout << std::endl;
 
@@ -78,7 +84,9 @@ void testQueue() {
         std::cerr << e.what() << std::endl;
     }
 
-    // queue.enqueue("Hello");
+    // Proves type safety with templates and fails to compile
+    // Node<std::string> mismatchTest("Hello");
+    // queue.enqueue(mismatchTest);
 }
 
 // // Function to check if a string is a palindrome, minus whitespace and capitalization
@@ -99,14 +107,15 @@ void testQueue() {
 //             character -= 'a' - 'A';
 //         }
 //         // Add the character to both the stack and the queue
-//         wordStack.push(character);
-//         wordQueue.enqueue(character);
+//         Node<char> charNode(character);
+//         wordStack.push(&charNode);
+//         wordQueue.enqueue(&charNode);
 //     }
 
 //     while (!wordStack.isEmpty() && !wordQueue.isEmpty()) {
 //         // Get the character from the top of the stack and queue
-//         char charFromStack = wordStack.pop();
-//         char charFromQueue = wordQueue.dequeue();
+//         char charFromStack = wordStack.pop()->data;
+//         char charFromQueue = wordQueue.dequeue()->data;
 
 //         if (charFromStack != charFromQueue) {
 //             // We can return false because we already know that the string is not a palindrome
@@ -127,9 +136,9 @@ int main() {
     testStack();
     std::cout << std::endl;
 
-    // std::cout << "----- Testing Queue class -----" << std::endl;
-    // testQueue();
-    // std::cout << std::endl;
+    std::cout << "----- Testing Queue class -----" << std::endl;
+    testQueue();
+    std::cout << std::endl;
 
     // std::cout << "----- Testing isPalindrome -----" << std::endl;
     // std::cout << isPalindrome("racecar") << std::endl; // 1
@@ -138,7 +147,7 @@ int main() {
     // std::cout << isPalindrome("4") << std::endl; // 1
     // std::cout << isPalindrome("") << std::endl; // 1
     // std::cout << isPalindrome("ABC") << std::endl; // 0
-    // std::cout << std::endl;
+    std::cout << std::endl;
 
     // std::cout << "----- Magic Items -----" << std::endl;
     // try {

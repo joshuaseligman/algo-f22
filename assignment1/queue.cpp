@@ -7,50 +7,43 @@
 template <typename T>
 Queue<T>::Queue() {
     head = nullptr;
-}
-
-template <typename T>
-Queue<T>::~Queue() {
-    // Since the nodes were created on the heap, we have to make sure everything is cleared from memory
-    while (!isEmpty()) {
-        dequeue();
-    }
+    tail = nullptr;
 }
 
 // Creates a new node and adds it to the queue
 template <typename T>
-void Queue<T>::enqueue(T newData) {
-    Node<T>* newNode = new Node(newData);
-    
+void Queue<T>::enqueue(Node<T>* newNode) {    
     if (isEmpty()) {
-        // Immediately set the head to be the new node if we are empty
+        // Immediately set the head and tail to be the new node if we are empty
         head = newNode;
+        tail = newNode;
     } else {
-        // Traverse to the back of the queue
-        Node<T>* cur = head;
-        while (cur->next != nullptr) {
-            cur = cur->next;
-        }
-        // Insert the new node in the back of the queue
-        cur->next = newNode;
+        // Have the old tail to point to the new node and then update the pointer
+        tail->next = newNode;
+        tail = newNode;
     }
 }
 
 // Removes the front node from the queue
 template <typename T>
-T Queue<T>::dequeue() {
+Node<T>* Queue<T>::dequeue() {
     if (isEmpty()) {
         // Throw an exception if the queue is already empty
         throw std::invalid_argument("Tried to dequeue from an empty queue.");
     } else {
         // We need to collect the data in the node before removing it from the queue
         Node<T>* frontNode = head;
-        T frontData = frontNode->data;
         head = head->next;
+        if (head == nullptr) {
+            // Tail has to become nullptr because the queue is now empty
+            tail = nullptr;
+        }
 
-        // Since the node was created on the heap, we have to free it from memory
-        delete frontNode;
-        return frontData;
+        // We have to remove whatever next is pointing to because the node is no longer
+        // a part of the linked list for the stack
+        frontNode->next = nullptr;
+
+        return frontNode;
     }
 }
 
