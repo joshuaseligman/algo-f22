@@ -95,22 +95,10 @@ Assuming one only has a pointer to the first element in the list, doing any sort
 
 \subsection{Benefits of a Singly Linked List}
 \subsubsection{Limited Size Restrictions}
-As previously mentioned in Section \ref{linkedListDataStructure}, the last node within a linked list has a next of \textbf{null}. This characteristic enables linked lists to have no size restrictions barring memory capacity.
-As a result, this feature makes linked lists preferred over arrays, which have a fixed length, when the size of the data is frequently changing and has an unkown maximum. For instance, as demonstrated in
-Section \ref{mainProgramListing} starting on line 10 within \textit{main.cpp}, the size of the linked list is only limited by our needs and, if needed, more nodes are able
-to easily be added to the list with their creation as done on lines 13-15 and linking as shown on lines 18 and 19. On the other hand, if the list was made with an array,
-the size of the array would have to be provided at the time of the creation of the array, and it would not be easy to change the size if additional data have to be added
-to the array.
+As previously mentioned in Section \ref{linkedListDataStructure}, the last node within a linked list has a next of \textbf{null}. This characteristic enables linked lists to have no size restrictions barring memory capacity. As a result, this feature makes linked lists preferred over arrays, which have a fixed length, when the size of the data is frequently changing and has an unkown maximum. For instance, as demonstrated in Listing \ref{lst:maincpp} of Section \ref{mainProgramListing} on lines 13-19, the size of the linked list is only limited by our needs and, if needed, more nodes are able to easily be added to the list with their creation as done on lines 13-15 and linking as shown on lines 18 and 19. On the other hand, if the list was made with an array, the size of the array would have to be provided at the time of creation, and it would not be easy to change the size if additional data have to be added to the array.
 
 \subsubsection{Data Type Flexibility}\label{linkedListDataType}
-Linked lists do not have to be restricted to be able to store a specific data type. Instead, with the use of generics (C++ templates), the definition of a node is
-independent of the data type that the user wants to store within the linked list. This provides flexibilty and reusability for many use cases. As demonstrated in
-Section \ref{nodeListing} in \textit{node.h}, the definition of a node uses a generic T as the type of data being stored, which prevents any assumptions of the data
-and ensures compatibility with all data types. However, due to how the C++ linker works and to prevent all the code from being written within a single header file,
-the allowed types have to be stated on lines 13 and 14 of \textit{node.cpp}. This is a C++ specific issue and is not present in other languages such as Java.
-Regardless, although they have to be specified for C++, any data type can still be stored within a node and a linked list. A demonstration of the user defining
-which data type is stored in a node is in Section \ref{mainProgramListing} on lines 13-15 within \textit{main.cpp}. Instead of the Node class defining the data type,
-the user is able to specify the type of data they want to store, which is a string in this situation but can be anything they want.
+Linked lists do not have to be restricted to be able to store a specific data type. Instead, with the use of generics (C++ templates), the definition of a node is independent of the data type that the user wants to store within the linked list. This provides flexibilty and reusability for many use cases. As demonstrated in Section \ref{nodeListing} Listing \ref{lst:nodeh}, the definition of a node uses a generic T as the type of data being stored, which prevents any assumptions of the data and ensures compatibility with all data types. However, due to how the C++ linker works and to prevent all the code from being written within a single header file, the allowed types have to be stated on lines 13 and 14 in Listing \ref{lst:nodecpp}. This is a C++ specific issue and is not present in other languages such as Java. Regardless, although they have to be specified for C++, any data type can still be stored within a node and a linked list. A demonstration of the user defining which data type is stored in a node is in Section \ref{mainProgramListing} on lines 13-15 of Listing \ref{lst:maincpp}. Instead of the Node class defining the data type, the user is able to specify the type of data they want to store, which is a string in this situation but can be anything they want.
 
 \section{Stack}
 \subsection{The Data Structure}\label{stackDataStructure}
