@@ -180,8 +180,18 @@ empty queue. It is of importance to note that this feature is also implemented i
 
 \section{Main Program}
 \subsection{Program Overview}
+The objective of the main program was to print out all the palindromes, ignoring whitespace and capitalization, within a file. More specifically, after normalizing
+a string for whitespace and capitalization, each character of the string should be both pushed onto a stack and enqueued on a queue. The stack will hold the
+characters in reverse order and the queue will hold each character in the order as they are in the string. Thus, checking to see if the string is a palindrome requires
+one to just pop the first character from the stack and dequeue the first character in the queue. If there is ever a time where the characters are different, then
+the string is not a palindrome. On the other hand, if every comparison is successful, then the string is a palindrome.
+
 
 \subsection{Good Parts of the Program}
+\subsubsection{File Operations and Output}
+
+\subsubsection{Time Complexity of isPalindrome}
+
 
 %----------------------------------------------------------------------------------------
 %   start PROBLEM ONE
@@ -787,6 +797,86 @@ int main() {
 
     return 0;
 }
+\end{lstlisting}
+
+\subitem{fileUtil.cpp}
+\begin{lstlisting}[frame=single, ]  
+#include <string>
+#include <fstream>
+#include <iostream>
+
+#include "fileUtil.h"
+#include "util.h"
+
+StringArr* readFile(std::string filePath) {
+    // File reading code from https://cplusplus.com/doc/tutorial/files/
+
+    // We need to determine how many items there are, so a counter would work well
+    int numItems = 0;
+
+    // Create the string buffer for storing each line
+    std::string line;
+    // Attempt to open the file
+    std::ifstream file(filePath);
+    if (file.is_open()) {
+        // Read each line from the file
+        while (getline(file, line)) {
+            // During the first read through, we only need to count the number of lines
+            // because we do not know how big to make the array
+            numItems++;
+        }
+
+        // Create the struct to output the data
+        StringArr* outArr = new StringArr;
+        outArr->arr = new std::string[numItems];
+        outArr->length = numItems;
+
+        // We will now reread the file and store the data now that the array has been
+        // created with the correct size. Thus, we have to clear any error flags
+        // and fix the pointer to go back to the top of the file 
+        file.clear();
+        file.seekg(0);
+
+        // i is a counter to keep track of the index we are on when reading from the file
+        int i = 0;
+        while (getline(file, line)) {
+            // During the second read through, we will store the contents 
+            // of the line in the array
+            outArr->arr[i] = line;
+            i++;
+        }
+
+        // Close the file when done for safety
+        file.close();
+
+        return outArr;
+    } else {
+        // Throw an error if the file was not found
+        throw std::invalid_argument("Unable to open file " + filePath);
+    }
+}
+\end{lstlisting}
+
+\subitem{fileUtil.h}
+\begin{lstlisting}[frame=single, ]  
+#pragma once
+
+#include "util.h"
+
+// Reads a file and stores each line into an array
+StringArr* readFile(std::string path);
+\end{lstlisting}
+
+\subitem{util.h}
+\begin{lstlisting}[frame=single, ]  
+#pragma once
+
+// Struct to create string arrays and store their length at the same time
+// Especially for use on the heap
+struct StringArr {
+    std::string* arr;
+    int length;
+};
 \end{lstlisting}
 
 \end{document}
