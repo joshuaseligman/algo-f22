@@ -22,4 +22,6 @@ public:
 
     // isEmpty checks to see if the queue is empty
     bool isEmpty();
+
+    void printQueue();
 };

@@ -19,4 +19,6 @@ public:
 
     // isEmpty checks to see if the stack is empty
     bool isEmpty();
+
+    void printStack();
 };

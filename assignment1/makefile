@@ -5,4 +5,3 @@ program:
 
 clean:
 	rm a.out
-	rm -r a.out.dSYM

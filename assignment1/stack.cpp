@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include "stack.h"
 #include "node.h"
@@ -15,6 +16,8 @@ void Stack<T>::push(Node<T>* newNode) {
     // Set the next first so we do not lose the rest of the stack
     newNode->next = top;
     top = newNode;
+
+    // printStack();
 }
 
 // Removes the top node from the stack
@@ -40,6 +43,16 @@ Node<T>* Stack<T>::pop() {
 template <typename T>
 bool Stack<T>::isEmpty() {
     return top == nullptr;
+}
+
+template <typename T>
+void Stack<T>::printStack() {
+    Node<T>* cur = top;
+    while (cur != nullptr) {
+        std::cout << cur->data << " -> ";
+        cur = cur->next;
+    }
+    std::cout << "nullptr" << std::endl;
 }
 
 // Define acceptable data types that the Stack can accept for the template

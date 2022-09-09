@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 
 #include "queue.h"
 #include "node.h"
@@ -22,6 +23,7 @@ void Queue<T>::enqueue(Node<T>* newNode) {
         tail->next = newNode;
         tail = newNode;
     }
+    // printQueue();
 }
 
 // Removes the front node from the queue
@@ -51,6 +53,16 @@ Node<T>* Queue<T>::dequeue() {
 template <typename T>
 bool Queue<T>::isEmpty() {
     return head == nullptr;
+}
+
+template <typename T>
+void Queue<T>::printQueue() {
+    Node<T>* cur = head;
+    while (cur != nullptr) {
+        std::cout << cur->data << " -> ";
+        cur = cur->next;
+    }
+    std::cout << "nullptr" << std::endl;
 }
 
 // Define acceptable data types that the Queue can accept for the template
