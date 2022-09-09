@@ -147,8 +147,36 @@ line 24 when a new node is created and on line 9 of \textit{stack.h} when defini
 
 \section{Queue}
 \subsection{The Data Structure}
+A queue uses a first in, first out (FIFO) approach to handling data. One analogy to understand how a queue works is a line to buy movie tickets. The first person that
+is in line for these tickets is the first to be assisted at the ticket counter. On the other hand, the last person to enter the line will also be the last one to
+buy their ticket. Similar to stacks, queues are implemented using a singly linked list. As displayed in Figure \ref{figure:queue}, queues have a head variable 
+that points to the first node within the linked list, which equates to the front of the line for the movie tickets. Queues have 3 primary functions: enqueue, dequeue,
+and isEmpty. Enqueue adds a new element to the end of the queue, dequeue removes and returns the first element in the queue, and isEmpty checks to see if the queue is empty or not.
 
-\subsection{Benefits of a Stack}
+\begin{figure}[ht] 
+    \centering 
+    \includegraphics[width=15cm]{queue}
+    \caption{Example queue of 4 Yankees legends.}
+    \label{figure:queue}
+ \end{figure}
+
+\subsection{Benefits of a Queue}
+\subsubsection{Compatibility with the Node Class}\label{queueNodes}
+The Queue class, just like the Stack class, was implemented using templates to be able to support the use of the Node class, which requires an input of a data type upon
+creation. As described in Section \ref{linkedListDataType}, C++ templates enable flexibilty and support for many different data types. Additionally, it is also very
+safe to use because creating a Queue (or a Stack or Node) of a given type will result in a data structure that only accepts that type in the future. For instance, if a Queue is created
+to support strings, one cannot attempt to enqueue an integer as there will be a type mismatch and the code will not compile. For instance, line 74 of \textit{main.cpp}
+in Section \ref{mainProgramListing} is commented out because the compiler cannot convert a string to a single character, which causes a compilation error as the queue
+cannot support the string.
+
+\subsubsection{Error Safety}
+In addition the the type safety of the templates as described in Section \ref{queueNodes}, the Queue class also has an error measure to prevent users from breaking
+the program by doing something that is not allowed. In the case of the Queue class, the error safety occurs if the user tries to dequeue from an empty queue. As displayed on
+lines 43-45 of \textit{queue.cpp} in Section \ref{queueListing}, the function checks if the queue is empty and throws an error if it is. This is really important
+as, without the check, there would be a runtime error that crashes the program from attempting to work with a null pointer. In the test program for the queue in \textit{main.cpp} of
+Section \ref{mainProgramListing}, lines 67-72 use a try-catch block to make sure the programmed error is thrown when attempting to dequeue from an
+empty queue. It is of importance to note that this feature is also implemented in the Stack class when attempting to pop from an empty stack (see lines 
+33-35 of \textit{stack.cpp} in Section \ref{stackListing}).
 
 \section{Main Program}
 \subsection{Program Overview}
@@ -502,7 +530,7 @@ public:
 };
 \end{lstlisting}
 
-\subsection{Queue}
+\subsection{Queue}\label{queueListing}
 \subitem{queue.cpp}
 \begin{lstlisting}[frame=single, ]  
 #include <string>
@@ -675,6 +703,8 @@ void testQueue() {
     } catch (const std::invalid_argument& e) {
         std::cerr << e.what() << std::endl;
     }
+
+    // queue.enqueue("Hello");
 }
 
 // Function to check if a string is a palindrome, minus whitespace and capitalization
