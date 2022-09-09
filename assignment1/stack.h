@@ -20,5 +20,6 @@ public:
     // isEmpty checks to see if the stack is empty
     bool isEmpty();
 
+    // Prints the stack out
     void printStack();
 };

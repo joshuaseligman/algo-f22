@@ -47,11 +47,13 @@ bool Stack<T>::isEmpty() {
 
 template <typename T>
 void Stack<T>::printStack() {
+    // Get the top of the stack and iterate through, printing the data in each node
     Node<T>* cur = top;
     while (cur != nullptr) {
         std::cout << cur->data << " -> ";
         cur = cur->next;
     }
+    // Finish the queue printing
     std::cout << "nullptr" << std::endl;
 }
 

@@ -57,11 +57,13 @@ bool Queue<T>::isEmpty() {
 
 template <typename T>
 void Queue<T>::printQueue() {
+    // Get the head of the queue and iterate through, printing the data in each node
     Node<T>* cur = head;
     while (cur != nullptr) {
         std::cout << cur->data << " -> ";
         cur = cur->next;
     }
+    // Finish the queue printing
     std::cout << "nullptr" << std::endl;
 }
 
