@@ -93,7 +93,7 @@ A singly linked list is comprised of nodes which contain some form of data as we
 \subsection{Asymptotic Analysis}
 Assuming one only has a pointer to the first element in the list, doing any sort of work with the data requires one to start at the beginning and traverse through the list by using the next pointers within each node until the desired operation is complete. For example, as done in Listing \ref{lst:maincpp} within Section \ref{mainProgramListing} on lines 22-26, the only way to dynamically obtain the data for each node was to start at the beginning and iterate through each node by taking advantage of the links. Overall, since linked list operations, such as searching, adding, and removing, all function at a rate of a magnitude of the size of the list, their runtime is classified as $O(n)$.
 
-\subsection{Benefits of a Singly Linked List}
+\subsection{Implementation Benefits of a Singly Linked List}
 \subsubsection{Limited Size Restrictions}
 As previously mentioned in Section \ref{linkedListDataStructure}, the last node within a linked list has a next of \textbf{null}. This characteristic enables linked lists to have no size restrictions barring memory capacity. As a result, this feature makes linked lists preferred over arrays, which have a fixed length, when the size of the data is frequently changing and has an unkown maximum. For instance, as demonstrated in Listing \ref{lst:maincpp} of Section \ref{mainProgramListing} on lines 13-19, the size of the linked list is only limited by our needs and, if needed, more nodes are able to easily be added to the list with their creation as done on lines 13-15 and linking as shown on lines 18 and 19. On the other hand, if the list was made with an array, the size of the array would have to be provided at the time of creation, and it would not be easy to change the size if additional data have to be added to the array.
 
@@ -102,70 +102,43 @@ Linked lists do not have to be restricted to be able to store a specific data ty
 
 \section{Stack}
 \subsection{The Data Structure}\label{stackDataStructure}
-A stack uses a last in, first out (LIFO) approach to storing data. The most common analogy for stacks is a stack of plates. Each plate is
-placed on top of each other to build the stack when being stored, but the plate on top is always the first to be used. In other words, the most recently plate
-that was put away is also the first plate that is taken out. As displayed in Figure \ref{figure:stack}, the stack has a variable called top, which points to the first item in the stack.
-Additionally, as shown by the arrows between each element, linked lists are used in the implementation of stacks. Stacks have 3 primary functions: push, pop, and isEmpty.
-Push adds a new element to the top of the stack, pop removes the top item from the stack and returns the data, and isEmpty returns whether or not the stack is empty.
+A stack uses a last in, first out (LIFO) approach to storing data. The most common analogy for stacks is a stack of plates. Each plate is placed on top of each other to build the stack when being stored, but the plate on top is always the first to be used. In other words, the most recently plate that was put away is also the first plate that is taken out. As displayed in Figure \ref{figure:stack}, the stack has a variable called top, which points to the first item in the stack. Additionally, as shown by the arrows between each element, linked lists are used in the implementation of stacks. Stacks have 3 primary functions: push, pop, and isEmpty. Push adds a new element to the top of the stack, pop removes the top item from the stack and returns the data, and isEmpty returns whether or not the stack is empty.
 
 \begin{figure}[ht] 
     \centering 
-    \includegraphics[height=8cm]{stack}
+    \includegraphics[height=6cm]{stack}
     \caption{Example stack of 4 Yankees legends.}
     \label{figure:stack}
  \end{figure}
 
-\subsection{Benefits of a Stack}
-\subsubsection{Time of Individual Data Access}
-Stacks are incredibly fast when it comes to the implementation of the push and pop methods. As demonstrated in \textit{stack.cpp} in Section \ref{stackListing},
-the push method on lines 21-28 creates the new node for the stack (line 24), points its next element to the current top of the stack (line 26), and then update the top of the stack to
-point to the newly created node (line 28). These 3 steps will always run and do not depend on the current size of the stack, which means that the push method runs in $O(1)$ time.
-The pop method on lines 30-46 is very similar in that it also executes the same few steps regardless of the current size of the stack. These steps are check if the stack is empty for safety (lines 33-36),
-grab the data from the top of the stack (line 39), update the top pointer to point to the second item in the stack (line 40), and return the data (line 44). There is no need to traverse the list because the push
-method made the new node the first element of the list, which is equivalent to the top of the stack. Therefore, just like the push method, the pop method also runs in $O(1)$ time.
-
-\subsubsection{Compatibility with the Node Class}
-As mentioned in Section \ref{stackDataStructure} and illustrated in Figure \ref{figure:stack}, the stack is implemented using a singly linked list. Therefore, the Stack
-class in the code has to utilize the Node class written for singly linked lists, which can be found in Section \ref{nodeListing} and was analyzed in Section \ref{linkedListSection}.
-In Section \ref{stackListing}, line 9 in \textit{stack.h} shows that the Stack class has an instance variable that points to the node on the top of the stack. Since the Node
-class supports any data type (see Section \ref{linkedListDataType}), the Stack class has to be able to provide a data type for each node to store. For the same reasons as
-described in Section \ref{linkedListDataType}, the Stack class also utilizes C++ templates to allow the user to decide which data type gets stored within the stack.
-The Stack class is then able to take the data type that the user requests, such as \textbf{char} on line 32 of \textit{main.cpp} in Section \ref{mainProgramListing},
-and pass it down to the data type that is stored within each node. This concept is demonstrated in Section \ref{stackListing} in \textit{stack.cpp} on 
-line 24 when a new node is created and on line 9 of \textit{stack.h} when defining the top variable for the stack.
+\subsection{Asymptotic Analysis}\label{stackAnalysis}
+Stacks are incredibly fast when it comes to the implementation of its methods. As demonstrated in Listing \ref{lst:stackcpp} in Section \ref{stackListing}, the push method on lines 14-21 points the new element's next to the current top of the stack (line 17) and updates the top of the stack to point to the new node (line 18). These 2 steps will always run and do not depend on the current size of the stack, which means that the push method runs in $O(1)$ time. The pop method on lines 24-40 is very similar in that it also executes the same few steps regardless of the current size of the stack. These steps are check if the stack is empty for safety (lines 26-29), grab the node from the top of the stack (line 31), update the top pointer to point to the second item in the stack (line 32), update the old top by making it not point to another node (line 36), and return the old top node (line 38). There is no need to traverse the list because the push method made the new node the first element of the list, which is equivalent to the top of the stack. Therefore, just like the push method, the pop method also runs in $O(1)$ time. Lastly, the isEmpty method simply returns the result of the boolean expression on line 45, which also makes it run in $O(1)$ time.
 
 \section{Queue}
 \subsection{The Data Structure}
-A queue uses a first in, first out (FIFO) approach to handling data. One analogy to understand how a queue works is a line to buy movie tickets. The first person that
-is in line for these tickets is the first to be assisted at the ticket counter. On the other hand, the last person to enter the line will also be the last one to
-buy their ticket. Similar to stacks, queues are implemented using a singly linked list. As displayed in Figure \ref{figure:queue}, queues have a head variable 
-that points to the first node within the linked list, which equates to the front of the line for the movie tickets. Queues have 3 primary functions: enqueue, dequeue,
-and isEmpty. Enqueue adds a new element to the end of the queue, dequeue removes and returns the first element in the queue, and isEmpty checks to see if the queue is empty or not.
+A queue uses a first in, first out (FIFO) approach to handling data. One analogy to understand how a queue works is a line to buy movie tickets. The first person that is in line for these tickets is the first to be assisted at the ticket counter. On the other hand, the last person to enter the line will also be the last one to buy their ticket. Similar to stacks, queues are implemented using a singly linked list. As displayed in Figure \ref{figure:queue}, queues have a head variable that points to the first node within the linked list, which equates to the front of the line for the movie tickets. Although not needed to implement a queue, a tail pointer to the last element in the queue may also be provided for efficiency, which is described more in detail in Section \ref{queueAnalysis}. Lastly, queues have 3 primary functions: enqueue, dequeue, and isEmpty. Enqueue adds a new element to the end of the queue, dequeue removes and returns the first element in the queue, and isEmpty checks to see if the queue is empty or not.
 
 \begin{figure}[ht] 
     \centering 
     \includegraphics[width=15cm]{queue}
     \caption{Example queue of 4 Yankees legends.}
     \label{figure:queue}
- \end{figure}
+\end{figure}
 
-\subsection{Benefits of a Queue}
+\subsection{Asymptotic Analysis}\label{queueAnalysis}
+Similar to stacks, queues are also very efficient in the implementation of their respective methods. First, the enqueue method has different run times dependent on the implementation of the data structure. If there is no tail pointer, then one would have to start at the head and then traverse through the list and then set the new node to be the next of the last node in the queue. This implementation results in $O(n)$ runtime because it only loops through the list once. The other implementation of a queue with a tail pointer, despite its need for a little extra memory, greatly reduces the runtime of the enqueue method. As shown in Listing \ref{lst:queuecpp} of Section \ref{queueListing} on lines 23 and 24, the addition of the tail pointer prevents the need to traverse through the list and, instead, immediately add the new node to the queue. Since there are now a fixed number of steps regardless of the size of the queue, the new runtime of the enqueue method is $O(1)$. Next, in addition to the update to the tail pointer if the queue is empty after dequeuing an element on lines 39-42 of Listing \ref{lst:queuecpp} of Section \ref{queueListing}, the dequeue method is identical to the pop method from the Stack class (see Section \ref{stackAnalysis}), which classifies it as constant time $O(1)$. Lastly, the isEmpty method also runs in $O(1)$ time because it only executes and returns the result of the boolean expression.
+
+
+
+\subsection{Implementation Benefits of Stacks and Queues}
+\subsection{Compatibility with the Node Class}
+As mentioned in Section \ref{stackDataStructure} and illustrated in Figure \ref{figure:stack}, the stack is implemented using a singly linked list. Therefore, the Stack class in the code has to utilize the Node class written for singly linked lists, which can be found in Section \ref{nodeListing} and was analyzed in Section \ref{linkedListSection}. In Section \ref{stackListing}, line 9 in \textit{stack.h} shows that the Stack class has an instance variable that points to the node on the top of the stack. Since the Node class supports any data type (see Section \ref{linkedListDataType}), the Stack class has to be able to provide a data type for each node to store. For the same reasons as described in Section \ref{linkedListDataType}, the Stack class also utilizes C++ templates to allow the user to decide which data type gets stored within the stack. The Stack class is then able to take the data type that the user requests, such as \textbf{char} on line 32 of \textit{main.cpp} in Section \ref{mainProgramListing}, and pass it down to the data type that is stored within each node. This concept is demonstrated in Section \ref{stackListing} in \textit{stack.cpp} on line 24 when a new node is created and on line 9 of \textit{stack.h} when defining the top variable for the stack.
 \subsubsection{Compatibility with the Node Class}\label{queueNodes}
-The Queue class, just like the Stack class, was implemented using templates to be able to support the use of the Node class, which requires an input of a data type upon
-creation. As described in Section \ref{linkedListDataType}, C++ templates enable flexibilty and support for many different data types. Additionally, it is also very
-safe to use because creating a Queue (or a Stack or Node) of a given type will result in a data structure that only accepts that type in the future. For instance, if a Queue is created
-to support strings, one cannot attempt to enqueue an integer as there will be a type mismatch and the code will not compile. For instance, line 74 of \textit{main.cpp}
-in Section \ref{mainProgramListing} is commented out because the compiler cannot convert a string to a single character, which causes a compilation error as the queue
-cannot support the string.
+The Queue class, just like the Stack class, was implemented using templates to be able to support the use of the Node class, which requires an input of a data type upon creation. As described in Section \ref{linkedListDataType}, C++ templates enable flexibilty and support for many different data types. Additionally, it is also very safe to use because creating a Queue (or a Stack or Node) of a given type will result in a data structure that only accepts that type in the future. For instance, if a Queue is created to support strings, one cannot attempt to enqueue an integer as there will be a type mismatch and the code will not compile. For instance, line 74 of \textit{main.cpp} in Section \ref{mainProgramListing} is commented out because the compiler cannot convert a string to a single character, which causes a compilation error as the queue cannot support the string.
 
 \subsubsection{Error Safety}
 In addition the the type safety of the templates as described in Section \ref{queueNodes}, the Queue class also has an error measure to prevent users from breaking
-the program by doing something that is not allowed. In the case of the Queue class, the error safety occurs if the user tries to dequeue from an empty queue. As displayed on
-lines 43-45 of \textit{queue.cpp} in Section \ref{queueListing}, the function checks if the queue is empty and throws an error if it is. This is really important
-as, without the check, there would be a runtime error that crashes the program from attempting to work with a null pointer. In the test program for the queue in \textit{main.cpp} of
-Section \ref{mainProgramListing}, lines 67-72 use a try-catch block to make sure the programmed error is thrown when attempting to dequeue from an
-empty queue. It is of importance to note that this feature is also implemented in the Stack class when attempting to pop from an empty stack (see lines 
-33-35 of \textit{stack.cpp} in Section \ref{stackListing}).
+the program by doing something that is not allowed. In the case of the Queue class, the error safety occurs if the user tries to dequeue from an empty queue. As displayed on lines 43-45 of \textit{queue.cpp} in Section \ref{queueListing}, the function checks if the queue is empty and throws an error if it is. This is really important as, without the check, there would be a runtime error that crashes the program from attempting to work with a null pointer. In the test program for the queue in \textit{main.cpp} of Section \ref{mainProgramListing}, lines 67-72 use a try-catch block to make sure the programmed error is thrown when attempting to dequeue from an empty queue. It is of importance to note that this feature is also implemented in the Stack class when attempting to pop from an empty stack (see lines 33-35 of \textit{stack.cpp} in Section \ref{stackListing}).
 
 \section{Main Program}
 \subsection{Program Overview}
