@@ -2,6 +2,6 @@
 *.gz
 
 # Compilation files
-*.out
+main
 
 .DS_Store
