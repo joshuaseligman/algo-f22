@@ -6,7 +6,33 @@
 #include "util.h"
 
 int selectionSort(StringArr* data) {
-    return 0;
+    // Start comparisons at 0
+    int comparisons = 0;
+
+    // Iterate through the second to last element because the last element will already be sorted as is
+    for (int i = 0; i < data->length - 1; i++) {
+        // The smallest index is going to start as the start of the subset of the list
+        int smallestIndex = i;
+
+        // Iterate through the rest of the list
+        for (int j = i + 1; j < data->length; j++) {
+            // Compare the current element to the current smallest element in the subset
+            if (data->arr[smallestIndex].compare(data->arr[j]) > 0) {
+                // If the current element comes first, make it the new smallest element
+                smallestIndex = j;
+            }
+            // Increment comparisons
+            comparisons++;
+        }
+
+        // Put the smallest index in its respective place
+        std::string temp = data->arr[i];
+        data->arr[i] = data->arr[smallestIndex];
+        data->arr[smallestIndex] = temp;
+    }
+
+    // Return the number of comparisons
+    return comparisons;
 }
 
 void knuthShuffle(StringArr* data) {
