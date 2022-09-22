@@ -1,0 +1,131 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CMPT 435
+% Fall 2022
+% Assignment 2
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from: http://www.LaTeXTemplates.com
+% Original author: % Frits Wenneker (http://www.howtotex.com)
+% License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Modified by Alan G. Labouseur  - alan@labouseur.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letterpaper, 10pt,DIV=13]{scrartcl} 
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm,xfrac} % Math packages
+\usepackage{sectsty} % Allows customizing section commands
+\usepackage{graphicx}
+\usepackage{algorithm, algpseudocode}
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage{lastpage}
+\usepackage{color}
+
+\allsectionsfont{\normalfont\scshape} % Make all section titles in default font and small caps.
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{page \thepage\ of \pageref{LastPage}} % Page numbering for right footer
+
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs.
+
+\binoppenalty=3000
+\relpenalty=3000
+
+\algrenewcommand{\algorithmiccomment}[1]{\hskip1em\textit{$//$ #1}}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+   \normalfont \normalsize 
+   \textsc{CMPT 435 - Fall 2022 - Dr. Labouseur} \\[10pt] % Header stuff.
+   \horrule{0.5pt} \\[0.25cm] 	% Top horizontal rule
+   \huge Assignment Two  \\     	    % Assignment title
+   \horrule{0.5pt} \\[0.25cm] 	% Bottom horizontal rule
+}
+
+\author{Josh Seligman \\ \normalsize joshua.seligman1@marist.edu}
+
+\date{\normalsize\today} 	% Today's date.
+
+\begin{document}
+\maketitle % Print the title
+
+\section{Selection Sort}\label{selectionSortSection}
+\subsection{The Algorithm}
+Selection sort is a sorting algorithm that, for each iteration of the array, selects the smallest (or largest) element of the unsorted part of the array and places the element into its sorted position. As shown in the pseudocode for the sort in Algorithm \ref{algorithm:selectionSort}, selection sort works with the subset of the array in the range $[i,~n)$ in each iteration because each element in an index less than $i$ is already sorted and does not have to be checked. Thus, as more elements get sorted, the quicker each iteration becomes because a smaller portion of the array is compared until $i = n - 1$, which will terminate the algorithm.
+
+\begin{algorithm}
+  \caption{Selection Sort Algorithm}
+  \label{algorithm:selectionSort}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+      \Procedure{SelectionSort}{$arr$}
+        \For{$i \gets 1,~n - 2$} \Comment{Iterate through the second to last element as an array of size 1 is sorted}
+          \State $smallestIndex \gets i $
+          \For{$j \gets i + 1,~n - 1$} \Comment{Iterate through the remainder of the array}
+            \If{$arr[j] < arr[smallestIndex]$}
+              \State $smallestIndex \gets j$ \Comment{Set the new smallest index if a smaller element is found}
+            \EndIf
+          \EndFor
+          \State $swap(arr,~i,~smallestIndex)$ \Comment{Place the smallest item in the subarray into its sorted place}
+        \EndFor
+      \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Asymptotic Analysis}
+Listing \ref{lst:selectionSortListing} contains the C++ code implementing selection sort on lines 6 - 25. The outer loop iterates through all but the very last element of the array, which, by default, makes it run in $O(n)$ time. The outer loop contains 3 main parts inside: the initialization of the smallest index variable (line 8), the inner loop (lines 11-19), and the swap to put the next element in place (lines 22-24). First, the time used to declare a variable is independent of the length of the array and, therefore, runs in constant time $O(1)$. Next, the inner loop iterates through the array beginning at index $i + 1$. The worst case for the inner loop is when $i = 0$, which makes the inner loop iterate through all but the last element, making the loop run in at least $O(n)$ time. The body of the inner loop contains an if statement and 2 variable assignments, all of which will run in constant time regardless of the size of the array or the current indices being checked. Therefore, the final runtime for the inner loop is $O(1 * n)$, which simplifies to $O(n)$. Lastly, the swap to put the smallest element in its proper place contains 3 variable assignments that will always run for each iteration of the outer loop, which makes the swap $O(1)$. Overall, the runtime of selection sort is $O((1 + n + 1) * n)$, which is $O(n^2)$.
+
+\section{Appendix}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
+
+% Colors and lstset for syntax highlighting from https://www.overleaf.com/latex/examples/syntax-highlighting-in-latex-with-the-listings-package/jxnppmxxvsvk
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+  backgroundcolor=\color{white},   % choose the background color
+  basicstyle=\footnotesize,        % size of fonts used for the code
+  breaklines=true,                 % automatic line breaking only at whitespace
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  keywordstyle=\color{blue},       % keyword style
+  stringstyle=\color{mymauve},     % string literal style
+}
+
+\subsection{Selection Sort}\label{selectionSortListing}
+\lstinputlisting[caption=Selection Sort (C++), label=lst:selectionSortListing, language=C++, firstline = 8, lastline = 36, firstnumber = 1]{./../sortsAndShuffles.cpp}
+
+\end{document}
