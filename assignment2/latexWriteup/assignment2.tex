@@ -91,8 +91,8 @@ Selection sort is a sorting algorithm that, for each iteration of the array, sel
   %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
   \begin{algorithmic}[1]
       \Procedure{SelectionSort}{$arr$}
-        \For{$i \gets 1,~n - 2$} \Comment{Iterate through the second to last element as an array of size 1 is sorted}
-          \State $smallestIndex \gets i $
+        \For{$i \gets 0,~n - 2$} \Comment{Iterate through the second to last element as an array of size 1 is sorted}
+          \State $smallestIndex \gets i$
           \For{$j \gets i + 1,~n - 1$} \Comment{Iterate through the remainder of the array}
             \If{$arr[j] < arr[smallestIndex]$}
               \State $smallestIndex \gets j$ \Comment{Set the new smallest index if a smaller element is found}
@@ -105,8 +105,31 @@ Selection sort is a sorting algorithm that, for each iteration of the array, sel
 \end{algorithm}
 
 \subsection{Asymptotic Analysis}\label{selectionAnalysis}
-Listing \ref{lst:selectionSortListing} contains the C++ code implementing selection sort on lines 6 - 25. Line 6 defines a loop that iterates $n - 1$ times and contains 2 assignments and a comparison, all of which operate in constant time for each iteration. Thus, line 6 will take $(n - 1) * C_{1}$ time, where $C_{1}$ is the time needed for each of the operations. Next, line 8 is an assignment, which take a constant time and executes $n - 1$ times because it is in the outer loop, resulting in a time of $(n - 1) * C_{2}$, where $C_{2}$ is the constant time needed for the assignment. Line 11, similar to line 6, defines a loop with 3 constant time expressions, which can be marked as $C_{3}$. However, since it is nested inside of the loop on line 6, the total number of iterations of the inner loop is more complex. In the first iteration of the outer loop, the inner loop runs $n - 1$ times. From there, each corresponding iteration of the outer loop results in one less iteration of the inner loop with a minimum of 1 pass on the inner loop when $i = n - 2$. Therefore, the total number of times the inner loop on line 11 will be called is $\sum_{k = 1} ^{n - 1} k$, which by the formula for the sum of the first $N$ natural numbers, is equal to $\frac{(n - 1)(n - 1 + 1)}{2} = \frac{1}{2}n^2 - \frac{1}{2}n$. Thus, the total time to execute line 11 is $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{3}$. Next, line 13 contains a comparison that, since it is nested inside the inner loop, will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{4}$ time, where $C_{4}$ is the time needed to make the comparison. Line 15 is a simple assignment and, just like line 14, will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{5}$, where $C_{5}$ is the time to perform the assignment. The assignment on line 18 is purely for collecting data and not part of the algorithm and, therefore, will be excluded from the asymptotic analysis of selection sort. Lastly, lines 22-24 are all assigments, which run in constant time, and are located in the outer loop. Thus, they run in $(n - 1) * C_{6}$ time, where $C_{6}$ is the time needed to perform the swap. When adding up the runtimes of each line and dropping the constants, the sum is $(n - 1) + (n - 1) + (\frac{1}{2}n^2 - \frac{1}{2}n) + (\frac{1}{2}n^2 - \frac{1}{2}n) + (\frac{1}{2}n^2 - \frac{1}{2}n) + (n - 1) = \frac{3}{2}n^2 + \frac{3}{2}n - 3 \approx n^2 + n$ is $O(n^2)$.
+Listing \ref{lst:selectionSortListing} contains the C++ code implementing selection sort on lines 6 - 25. Line 6 defines a loop that iterates $n - 1$ times and contains 2 assignments and a comparison, all of which operate in constant time for each iteration. Thus, line 6 will take $(n - 1) * C_{1}$ time, where $C_{1}$ is the time needed for each of the operations. Next, line 8 is an assignment, which take a constant time and executes $n - 1$ times because it is in the outer loop, resulting in a time of $(n - 1) * C_{2}$, where $C_{2}$ is the constant time needed for the assignment. Line 11, similar to line 6, defines a loop with 3 constant time expressions, which can be marked as $C_{3}$. However, since it is nested inside of the loop on line 6, the total number of iterations of the inner loop is more complex. In the first iteration of the outer loop, the inner loop runs $n - 1$ times. From there, each corresponding iteration of the outer loop results in one less iteration of the inner loop with a minimum of 1 pass on the inner loop when $i = n - 2$. Therefore, the total number of times the inner loop on line 11 will be called is $\sum_{k = 1} ^{n - 1} k$, which by the formula for the sum of the first $N$ natural numbers, is equal to $\frac{(n - 1)(n - 1 + 1)}{2} = \frac{1}{2}n^2 - \frac{1}{2}n$. Thus, the total time to execute line 11 is $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{3}$. Next, line 13 contains a comparison that, since it is nested inside the inner loop, will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{4}$ time, where $C_{4}$ is the time needed to make the comparison. Line 15 is a simple assignment and, just like line 14, will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{5}$, where $C_{5}$ is the time to perform the assignment. The assignment on line 18 is purely for collecting data and not part of the algorithm and, therefore, will be excluded from the asymptotic analysis of selection sort. Lastly, lines 22-24 are all assigments, which run in constant time, and are located in the outer loop. Thus, they run in $(n - 1) * C_{6}$ time, where $C_{6}$ is the time needed to perform the swap. When adding up the runtimes of each line and dropping the constants, the sum is $3 * (n - 1) + 3 * (\frac{1}{2}n^2 - \frac{1}{2}n) = \frac{3}{2}n^2 + \frac{3}{2}n - 3 \approx n^2 + n$ is $O(n^2)$.
 
+\section{Insertion Sort}\label{insertionSortSection}
+\subsection{The Algorithm}
+
+\begin{algorithm}
+  \caption{Insertion Sort Algorithm}
+  \label{algorithm:insertionSort}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+      \Procedure{InsertionSort}{$arr$}
+        \For{$i \gets 1,~n - 1$} \Comment{Start at index 1 because the first element is already sorted}
+          \State $currentVal \gets arr[i]$
+          \State $j \gets i - 1$
+          \While{$j \geq 0 ~\textbf{and} ~currentVal < arr[j]$} \Comment{Find the position to place the element}
+            \State $arr[j + 1] \gets arr[j]$ \Comment{Shift the element over because it is greater than the current value}
+            \State $j \gets j - 1$
+          \EndWhile
+          \State $arr[j + 1] \gets currentVal$ \Comment{Place the element in its sorted position}
+        \EndFor
+      \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Asymptotic Analysis}\label{insertionAnalysis}
 
 \section{Appendix}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
