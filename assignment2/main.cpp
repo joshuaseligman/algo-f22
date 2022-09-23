@@ -27,7 +27,19 @@ int main() {
     // Print out the results of the selection sort
     std::cout << "Selection Sort" << std::endl;
     std::cout << "Comparisons: " << selectionComparisons << std::endl;
-    std::cout << "Time       : " << selectionTime << " μs" << std::endl;
+    std::cout << "Time       : " << selectionTime << " μs" << std::endl << std::endl;;
+
+    knuthShuffle(magicItems);
+    start = std::chrono::high_resolution_clock::now();
+    int insertionComparisons = insertionSort(magicItems);
+    stop = std::chrono::high_resolution_clock::now();
+    // We need to cast the difference in the stop and start times to microseconds
+    long insertionTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
+
+    // Print out the results of the selection sort
+    std::cout << "Insertion Sort" << std::endl;
+    std::cout << "Comparisons: " << insertionComparisons << std::endl;
+    std::cout << "Time       : " << insertionTime << " μs" << std::endl;
     
     // Print out the list to make sure everything is in order
     // for (int i = 0; i < magicItems->length; i++) {

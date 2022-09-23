@@ -35,6 +35,25 @@ int selectionSort(StringArr* data) {
     return comparisons;
 }
 
+int insertionSort(StringArr* data) {
+    int comparisons = 0;
+
+    for (int i = 1; i < data->length; i++) {
+        std::string cur = data->arr[i];
+
+        int j = i - 1;
+        while (j >= 0 && cur.compare(data->arr[j]) < 0) {
+            comparisons++;
+            data->arr[j + 1] = data->arr[j];
+            j--;
+        }
+        comparisons++;
+        data->arr[j + 1] = cur;
+    }
+
+    return comparisons;
+}
+
 void knuthShuffle(StringArr* data) {
     // Random numbers found at https://cplusplus.com/reference/cstdlib/rand/
     // Initialize the seed for random numbers to be different each time the program is run
