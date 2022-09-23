@@ -36,21 +36,41 @@ int selectionSort(StringArr* data) {
 }
 
 int insertionSort(StringArr* data) {
+    // Number of comparisons starts at 0
     int comparisons = 0;
 
+    // We begin with the second element because an array of size 1 is already sorted
+    // So no need to check on the first element
     for (int i = 1; i < data->length; i++) {
+        // Save the current element for later use
         std::string cur = data->arr[i];
 
+        // Comparisons are going to start with the previous index
         int j = i - 1;
+
+        // Continue until j is a valid index (< 0) or until we found an element that is less than the
+        // current element that is being sorted
         while (j >= 0 && cur.compare(data->arr[j]) < 0) {
+            // We made a comparison so increment it
             comparisons++;
+
+            // Shift the compared element over 1 to make room for the element being sorted
             data->arr[j + 1] = data->arr[j];
             j--;
         }
-        comparisons++;
+
+        // After the loop, we want to increment comparisons only if j >= 0 because
+        // if j < 0, then the boolean expression would have immediately returned false without making
+        // a comparison
+        if (j >= 0) {
+            comparisons++;
+        }
+
+        // Place the value in its proper place
         data->arr[j + 1] = cur;
     }
 
+    // Return the number of comparisons
     return comparisons;
 }
 

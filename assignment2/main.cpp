@@ -36,15 +36,15 @@ int main() {
     // We need to cast the difference in the stop and start times to microseconds
     long insertionTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
 
-    // Print out the results of the selection sort
+    // Print out the results of the insertion sort
     std::cout << "Insertion Sort" << std::endl;
     std::cout << "Comparisons: " << insertionComparisons << std::endl;
     std::cout << "Time       : " << insertionTime << " μs" << std::endl;
     
     // Print out the list to make sure everything is in order
-    // for (int i = 0; i < magicItems->length; i++) {
-    //     std::cout << magicItems->arr[i] << std::endl;
-    // }
+    for (int i = 0; i < magicItems->length; i++) {
+        std::cout << magicItems->arr[i] << std::endl;
+    }
 
     // Memory management
     delete magicItems;
