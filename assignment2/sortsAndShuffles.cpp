@@ -43,14 +43,14 @@ int insertionSort(StringArr* data) {
     // So no need to check on the first element
     for (int i = 1; i < data->length; i++) {
         // Save the current element for later use
-        std::string cur = data->arr[i];
+        std::string currentVal = data->arr[i];
 
         // Comparisons are going to start with the previous index
         int j = i - 1;
 
         // Continue until j is a valid index (< 0) or until we found an element that is less than the
         // current element that is being sorted
-        while (j >= 0 && cur.compare(data->arr[j]) < 0) {
+        while (j >= 0 && currentVal.compare(data->arr[j]) < 0) {
             // We made a comparison so increment it
             comparisons++;
 
@@ -67,7 +67,7 @@ int insertionSort(StringArr* data) {
         }
 
         // Place the value in its proper place
-        data->arr[j + 1] = cur;
+        data->arr[j + 1] = currentVal;
     }
 
     // Return the number of comparisons
