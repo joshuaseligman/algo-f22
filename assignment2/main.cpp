@@ -16,13 +16,13 @@ void runSort(int (*sort)(StringArr*), StringArr* input, std::string sortName, bo
     auto start = std::chrono::high_resolution_clock::now();
     int numComparisons = sort(input);
     auto stop = std::chrono::high_resolution_clock::now();
-    // We need to cast the difference in the stop and start times to microseconds
-    long totalTime = std::chrono::duration_cast<std::chrono::microseconds>(stop - start).count();
+    // We need to cast the difference in the stop and start times to nanoseconds
+    long totalTime = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start).count();
 
     // Print out the results of the sort
     std::cout << sortName << " Sort" << std::endl;
     std::cout << "Comparisons: " << numComparisons << std::endl;
-    std::cout << "Time       : " << totalTime << " μs" << std::endl << std::endl;;
+    std::cout << "Time       : " << totalTime << " ns" << std::endl << std::endl;;
 
 }
 
