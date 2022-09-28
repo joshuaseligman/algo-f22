@@ -48,6 +48,7 @@ int main() {
     StringArr* sortedYankees = readFile("yankeesGreatsSorted.txt");
     runSort(selectionSort, sortedYankees, "Selection", false);
     runSort(insertionSort, sortedYankees, "Insertion", false);
+    runSort(mergeSort, sortedYankees, "Merge", false);
 
     std::cout << "20 Yankees Greats, reversed" << std::endl;
     StringArr* reversedYankees = readFile("yankeesGreatsReversed.txt");
@@ -56,6 +57,10 @@ int main() {
 
     reversedYankees = readFile("yankeesGreatsReversed.txt");
     runSort(insertionSort, reversedYankees, "Insertion", false);
+    delete reversedYankees;
+
+    reversedYankees = readFile("yankeesGreatsReversed.txt");
+    runSort(mergeSort, reversedYankees, "Merge", false);
     delete reversedYankees;
 
 
