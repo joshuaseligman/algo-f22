@@ -63,6 +63,12 @@ int main() {
     runSort(mergeSort, reversedYankees, "Merge", false);
     delete reversedYankees;
 
+    std::cout << "Empty List" << std::endl;
+    StringArr* emptyList = readFile("emptyList.txt");
+    runSort(selectionSort, emptyList, "Selection", false);
+    runSort(insertionSort, emptyList, "Insertion", false);
+    runSort(mergeSort, emptyList, "Merge", false);
+
 
     // Print out the list to make sure everything is in order
     // for (int i = 0; i < magicItems->length; i++) {

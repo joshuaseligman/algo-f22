@@ -82,8 +82,8 @@ int mergeSort(StringArr* data) {
 }
 
 int mergeSortWithIndices(StringArr* data, int start, int end) {
-    // Base case is array of size 1
-    if (start == end) {
+    // Base case is array of size 1 or size 0 (if the list is completely empty)
+    if (start >= end) {
         // No comparisons are needed here, so return 0
         return 0;
     }
