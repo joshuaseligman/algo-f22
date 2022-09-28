@@ -78,6 +78,7 @@ int main() {
     // Memory management
     delete magicItems;
     delete sortedYankees;
+    delete emptyList;
 
     return 0;
 }

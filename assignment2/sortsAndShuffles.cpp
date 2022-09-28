@@ -2,8 +2,6 @@
 #include <time.h>
 #include <string>
 
-#include <iostream>
-
 #include "sortsAndShuffles.h"
 #include "util.h"
 
