@@ -139,7 +139,7 @@ In Table \ref{comparisonsTable}, insertion sort is shown to have 3 very differen
 
 \section{Merge Sort}
 \subsection{The Algorithm}
-Merge sort is a divide and conquer sorting algorithm that continues to divide an array up until it has $n$ subarrays of size 1, which are all sorted. From there, the subarrays are merged together by comparing the elements in each subarray to determine the sorted order of the combined subarrays. Eventually, the full array will be merged back together will all of the elements fully sorted.
+Merge sort is a divide and conquer sorting algorithm that continues to divide an array up until it has $n$ subarrays of size 1, which, by definition, are all sorted. From there, the subarrays are merged together by comparing the elements in each subarray to determine the sorted order of the combined subarrays. Eventually, the full array will be merged back together will all of the elements fully sorted. As displayed in Algorithm \ref{algorithm:mergeSort} in the $MergeSort$ procedure, since the sort is a divide and conquer algorithm, merge sort takes advantage of recursion to make the problem smaller until it reaches its base case of $length(arr) <= 1$, which is shown on line 2. Additionally, on lines 4 and 5, merge sort always divides a given array in half, which makes its performance very predictable and consistent, which will be discussed more in detail in Section \ref{mergeSortAnalysis}.
 
 \begin{algorithm}
   \caption{Merge Sort Algorithm}
@@ -181,7 +181,7 @@ Merge sort is a divide and conquer sorting algorithm that continues to divide an
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{Asymptotic Analysis}
+\subsection{Asymptotic Analysis and Comparisons}\label{mergeSortAnalysis}
 
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
