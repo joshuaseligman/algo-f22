@@ -2,6 +2,8 @@
 #include <time.h>
 #include <string>
 
+#include <iostream>
+
 #include "sortsAndShuffles.h"
 #include "util.h"
 
@@ -68,6 +70,87 @@ int insertionSort(StringArr* data) {
 
         // Place the value in its proper place
         data->arr[j + 1] = currentVal;
+    }
+
+    // Return the number of comparisons
+    return comparisons;
+}
+
+int mergeSort(StringArr* data) {
+    // Return the number of comparisons from sorting the entire array
+    return mergeSortWithIndices(data, 0, data->length - 1);
+}
+
+int mergeSortWithIndices(StringArr* data, int start, int end) {
+    // Base case is array of size 1
+    if (start == end) {
+        // No comparisons are needed here, so return 0
+        return 0;
+    }
+
+    // Get the midpoint for the sections
+    int mid = (start + end) / 2;
+
+    // Sort the first half and get the number of comparisons needed to sort it
+    int comp1 = mergeSortWithIndices(data, start, mid);
+
+    // Sort the second haly and get the number of comparisons needed to sort it
+    int comp2 = mergeSortWithIndices(data, mid + 1, end);
+
+    // The number of comparisons for sorting the subarray is the number of comparsions made to sort the 2 halves
+    // and thenumber of comparisons needed to merge the 2 halves together
+    int comparisons = comp1 + comp2 + merge(data, start, end, mid);
+
+    // Return the total number of comparisons
+    return comparisons;
+}
+
+int merge(StringArr* data, int start, int end, int mid) {
+    // The left half is at the start
+    int leftIndex = start;
+
+    // The right half starts at the midpoint + 1
+    int rightIndex = mid + 1;
+
+    // Get the size of the array that the 2 halves will merge into
+    // and create the merged sub array
+    int subArrLength = end - start + 1;
+    std::string newSubArr[subArrLength];
+
+    // Start at 0 comparisons
+    int comparisons = 0;
+
+    // Iterate through the entire merged subarray
+    for (int i = 0; i < subArrLength; i++) {
+        // If the rightIndex > end, then the entire right half is already merged
+        if (rightIndex > end) {
+            // Add the next element from the left half
+            newSubArr[i] = data->arr[leftIndex];
+            leftIndex++;
+        } else if (leftIndex > mid) { // If the leftIndex > mid, then the entire left half is already merged
+            // Add the next element from the right half
+            newSubArr[i] = data->arr[rightIndex];
+            rightIndex++;
+        } else if (data->arr[leftIndex].compare(data->arr[rightIndex]) < 0) { // Compare the 2 elements from each half
+            // Add the next element from the left half
+            newSubArr[i] = data->arr[leftIndex];
+            leftIndex++;
+
+            // Increment the number of comparisons made
+            comparisons++;
+        } else {
+            // Add the next element from the right half
+            newSubArr[i] = data->arr[rightIndex];
+            rightIndex++;
+
+            // Make sure to increment comparisons because a comparison was made in the last else-if condition
+            comparisons++;
+        }
+    }
+
+    // Transfer the merged subarray to the actual array
+    for (int j = 0; j < subArrLength; j++) {
+        data->arr[start + j] = newSubArr[j];
     }
 
     // Return the number of comparisons

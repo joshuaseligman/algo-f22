@@ -42,6 +42,8 @@ int main() {
     // Run and analyze insertion sort
     runSort(insertionSort, magicItems, "Insertion", true);
 
+    runSort(mergeSort, magicItems, "Merge", true);
+
     std::cout << "20 Yankees Greats, sorted" << std::endl;
     StringArr* sortedYankees = readFile("yankeesGreatsSorted.txt");
     runSort(selectionSort, sortedYankees, "Selection", false);
@@ -58,8 +60,8 @@ int main() {
 
 
     // Print out the list to make sure everything is in order
-    // for (int i = 0; i < reversedYankees->length; i++) {
-    //     std::cout << reversedYankees->arr[i] << std::endl;
+    // for (int i = 0; i < magicItems->length; i++) {
+    //     std::cout << magicItems->arr[i] << std::endl;
     // }
 
     // Memory management
