@@ -137,6 +137,52 @@ The code implementation of insertion sort is in Listing \ref{lst:insertionSortLi
 
 In Table \ref{comparisonsTable}, insertion sort is shown to have 3 very different outcomes for the lists that were used for testing relative to selection sort. First, insertion sort used about half the number of comparisons as selection sort for a list of 666 shuffled magic items. This is because the inner loop of insertion sort may terminate when $arr[j] < currentVal$ (see line 16 in Listing \ref{lst:insertionSortListing}) and in a randomly shuffled list, the probability of $arr[j] < currentVal$ will be around 50\%. Therefore, insertion sort will on average be about 50\% more efficient than selection sort, but is still classified as $O(n^2)$ beause it is still running at a function of $n^2$. Next, when the list is already shuffled, insertion sort only makes $n-1$ comparisons. As mentioned in Section \ref{insertionSortAlgo}, the best case for insertion sort is $\Omega(n)$ because the inner loop will never be entered as the second condition for $arr[j] < currentVal$ will always return false. This means there will be only 1 comparison made for each iteration of the outer loop, which equates to $n - 1$ comparisions. Lastly, Section \ref{insertionSortAlgo} mentioned that the worst case for insertion sort is when the list is in reverse order because every element will have to compare itself with all of the elements in the sorted portion of the array. This causes insertion sort to have the same number of comparisons as selection sort for a reversed list at $\frac{1}{2}n^2 - \frac{1}{2}n$, which is also the same number of iterations as the inner loop for insertion sort and makes insertion sort $O(n^2)$.
 
+\section{Merge Sort}
+\subsection{The Algorithm}
+Merge sort is a divide and conquer sorting algorithm that continues to divide an array up until it has $n$ subarrays of size 1, which are all sorted. From there, the subarrays are merged together by comparing the elements in each subarray to determine the sorted order of the combined subarrays. Eventually, the full array will be merged back together will all of the elements fully sorted.
+
+\begin{algorithm}
+  \caption{Merge Sort Algorithm}
+  \label{algorithm:mergeSort}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+      \Procedure{MergeSort}{$arr$}
+        \If{$length(arr) > 1$} \Comment{An array of size 1 is already sorted}
+          \State $mid = floor((length(arr)) / 2)$ \Comment{Get the middle index of the array for splitting it in half}
+          \State $MergeSort(arr[0:mid])$ \Comment{Perform merge sort on the first half of the array (index 0 - mid, inclusive)}
+          \State $MergeSort(arr[mid + 1:length(arr) - 1])$ \Comment{Perform merge sort on the second half of the array}
+          \State $Merge(arr, mid)$ \Comment{Merge the 2 subarrays together in order}
+        \EndIf
+      \EndProcedure
+      \\
+      \Procedure{Merge}{$arr$, $mid$}
+        \State $leftIndex \gets 0$ \Comment{Index for the left subarray}
+        \State $rightIndex \gets mid + 1$ \Comment{Index for the right subarray}
+        \State $newArr \gets [~]$
+        \For{$i \gets 0,~length(arr) - 1$} \Comment{Iterate through all elements}
+          \If{$rightIndex >= length(arr)$} \Comment{All the right subarray items are already in $newArr$}
+            \State $newArr[i] = arr[leftIndex]$ \Comment{Add the next item from the left subarray}
+            \State $leftIndex++$
+          \ElsIf{$leftIndex > mid$} \Comment{All the right subarray items are already in $newArr$}
+            \State $newArr[i] = arr[rightIndex]$ \Comment{Add the next item from the right subarray}
+            \State $rightIndex++$
+          \ElsIf{$arr[leftIndex] < arr[rightIndex]$} \Comment{The next element from the left subarray is less than the next element from the right subarray}
+            \State $newArr[i] = arr[leftIndex]$ \Comment{Add the next item from the left subarray}
+            \State $leftIndex++$
+          \Else
+            \State $newArr[i] = arr[rightIndex]$ \Comment{Add the next item from the right subarray}
+            \State $rightIndex++$
+          \EndIf
+        \EndFor
+        \For{$j \gets 0,~length(arr) - 1$}
+          \State $arr[j] \gets newArr[j]$ \Comment{Transfer the sorted elements to the original array}
+        \EndFor
+      \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Asymptotic Analysis}
+
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
 \begin{center}
@@ -182,5 +228,8 @@ In Table \ref{comparisonsTable}, insertion sort is shown to have 3 very differen
 
 \subsection{Insertion Sort}\label{insertionSortListing}
 \lstinputlisting[caption = Insertion Sort (C++), label = lst:insertionSortListing, language = C++, firstline = 38, lastline = 75, firstnumber = 1]{./../sortsAndShuffles.cpp}
+
+\subsection{Merge Sort}\label{mergeSortListing}
+\lstinputlisting[caption = Merge Sort (C++), label = lst:mergeSortListing, language = C++, firstline = 77, lastline = 156, firstnumber = 1]{./../sortsAndShuffles.cpp}
 
 \end{document}
