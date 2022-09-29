@@ -188,6 +188,8 @@ The first unknown so far is the number of times that the $mergeSortWithIndices$ 
 
 When computing the runtime of merge sort by adding op the terms and dropping constants, the total is $4 * log_2n + n * log_2n \approx log_2n + n * log_2n$ is $O(n * log_2n)$.
 
+As shown in Table \ref{comparisonsTable}, merge sort is significantly more efficient at sorting the magic items by using around 5,500 comparisons, which is a little less than the algorithm's runtime of $O(n * log_2n)$. The reason for the number of comparisons being less than 6246.67 ($666 * log_{2}666$) is explained on lines 48 and 52 in Listing \ref{lst:mergeSortListing} as the merging of an entire subarray before the other will result in the algorithm merging the remainder of the other subarray without needing to compare the elements. Regardless, the number of comparisons is still not far from $O(n * log_2n)$. Additionaly, merge sort is very similar to selection sort in that it will perform consistently for any permutation of an array of size $n$. This is shown in the smaller test cases, which perform almost identically despite being in differing orders. Also, one interesting point to note is the performance of insertion sort versus merge sort for the already sorted list. Since insertion sort has a best case of $\Omega(n)$, it is more efficient than merge sort when the array is already mostly sorted. This leads to the idea of hybrid algorithms that may use one sort up until a certain point and switch to a second algorithm that is more efficient in the end game of the sorting process.
+
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
 \begin{center}
@@ -206,6 +208,12 @@ When computing the runtime of merge sort by adding op the terms and dropping con
     & 20 Yankees greats, sorted & 19 & 795 ns \\
     \hline
     & 20 Yankees greats, reversed & 190 & 2966 ns \\
+    \hline
+    Merge Sort & 666 magic items, shuffled & 5417 & 1006113 ns \\
+    \hline
+    & 20 Yankees greats, sorted & 48 & 6751 ns \\
+    \hline
+    & 20 Yankees greats, reversed & 40 & 6745 ns \\
     \hline
   \end{tabular}
 \captionof{table}{A table of the number of comparisons made and time to complete each sort on a variety of lists.}
