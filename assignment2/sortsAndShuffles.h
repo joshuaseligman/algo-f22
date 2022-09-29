@@ -18,5 +18,14 @@ int mergeSortWithIndices(StringArr* data, int start, int end);
 // Helper function for merge sort to merge 2 halves of the subarray
 int merge(StringArr* data, int start, int end, int mid);
 
+// Quicksort function that returns the number of comparisons made
+int quickSort(StringArr* data);
+
+// Helper function for quicksort
+int quickSortWithIndices(StringArr* data, int start, int end);
+
+// Helper function to partition the array in quicksort
+int* partition(StringArr* data, int start, int end, int pivotIndex);
+
 // Knuth shuffle
 void knuthShuffle(StringArr* data);

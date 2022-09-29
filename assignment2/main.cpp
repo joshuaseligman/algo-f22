@@ -44,11 +44,14 @@ int main() {
 
     runSort(mergeSort, magicItems, "Merge", true);
 
+    runSort(quickSort, magicItems, "Quick", true);
+
     std::cout << "20 Yankees Greats, sorted" << std::endl;
     StringArr* sortedYankees = readFile("yankeesGreatsSorted.txt");
     runSort(selectionSort, sortedYankees, "Selection", false);
     runSort(insertionSort, sortedYankees, "Insertion", false);
     runSort(mergeSort, sortedYankees, "Merge", false);
+    runSort(quickSort, sortedYankees, "Quick", false);
 
     std::cout << "20 Yankees Greats, reversed" << std::endl;
     StringArr* reversedYankees = readFile("yankeesGreatsReversed.txt");
@@ -63,13 +66,17 @@ int main() {
     runSort(mergeSort, reversedYankees, "Merge", false);
     delete reversedYankees;
 
+    reversedYankees = readFile("yankeesGreatsReversed.txt");
+    runSort(quickSort, reversedYankees, "Quick", false);
+    delete reversedYankees;
+
     std::cout << "Empty List" << std::endl;
     StringArr* emptyList = readFile("emptyList.txt");
     runSort(selectionSort, emptyList, "Selection", false);
     runSort(insertionSort, emptyList, "Insertion", false);
     runSort(mergeSort, emptyList, "Merge", false);
-
-
+    runSort(quickSort, emptyList, "Quick", false);
+    
     // Print out the list to make sure everything is in order
     // for (int i = 0; i < magicItems->length; i++) {
     //     std::cout << magicItems->arr[i] << std::endl;

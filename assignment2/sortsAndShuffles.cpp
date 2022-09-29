@@ -155,6 +155,78 @@ int merge(StringArr* data, int start, int end, int mid) {
     return comparisons;
 }
 
+int quickSort(StringArr* data) {
+    // Run the helper function for the entire array
+    return quickSortWithIndices(data, 0, data->length - 1);
+}
+
+int quickSortWithIndices(StringArr* data, int start, int end) {
+    // Base case for arrays of size 1 or 0
+    if (start >= end) {
+        // No comparisons are needed
+        return 0;
+    }
+
+    // Choose the middle element to be the pivot to prevent O(n^2) on completely reversed or sorted lists
+    int pivotIndex = (start + end) / 2;
+
+    // Partition the data around the pivot
+    int* partitionOut = partition(data, start, end, pivotIndex);
+
+    // Sort each of the partitions
+    int comp1 = quickSortWithIndices(data, start, partitionOut[0] - 1);
+    int comp2 = quickSortWithIndices(data, partitionOut[0] + 1, end);
+
+    // Sum up the comparisons
+    int totalComparisons = partitionOut[1] + comp1 + comp2;
+
+    // Memory management
+    delete(partitionOut);
+
+    // Return the number of comparisons made
+    return totalComparisons;
+}
+
+int* partition(StringArr* data, int start, int end, int pivotIndex) {
+    // Move the pivot to the end of the subarray
+    std::string pivot = data->arr[pivotIndex];
+    data->arr[pivotIndex] = data->arr[end];
+    data->arr[end] = pivot;
+
+    // We initially do not have any items in the low partition, so make it less than the start
+    int lastLowPartitonIndex = start - 1;
+
+    // Initialize comparisons to 0
+    int comparisons = 0;
+
+    // Iterate through the subarray, excluding the pivot
+    for (int i = start; i <= end - 1; i++) {
+        // Check if the element is less than the pivot
+        if (data->arr[i].compare(pivot) < 0) {
+            // We have an element for the low partition
+            lastLowPartitonIndex++;
+
+            // Moveth element to the end of the low partition
+            std::string temp = data->arr[i];
+            data->arr[i] = data->arr[lastLowPartitonIndex];
+            data->arr[lastLowPartitonIndex] = temp;
+        }
+        // Incement comparisons
+        comparisons++;
+    }
+
+    // Move the pivot into its approprate place between the partitions
+    data->arr[end] = data->arr[lastLowPartitonIndex + 1];
+    data->arr[lastLowPartitonIndex + 1] = pivot;
+
+    // Create the output and return it
+    int* outArr = new int[2];
+    outArr[0] = lastLowPartitonIndex + 1;
+    outArr[1] = comparisons;
+
+    return outArr;
+}
+
 void knuthShuffle(StringArr* data) {
     // Random numbers found at https://cplusplus.com/reference/cstdlib/rand/
     // Initialize the seed for random numbers to be different each time the program is run
