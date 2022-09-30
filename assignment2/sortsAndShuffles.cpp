@@ -167,8 +167,38 @@ int quickSortWithIndices(StringArr* data, int start, int end) {
         return 0;
     }
 
-    // Choose the middle element to be the pivot to prevent O(n^2) on completely reversed or sorted lists
-    int pivotIndex = (start + end) / 2;
+    // The variable used for the pivot index
+    int pivotIndex;
+
+    if (end - start < 3) {
+        // Array of size 2 should take either element as it will need exactly 1 more divide regardless of the pivot
+        pivotIndex = start;
+    } else {
+        // Initialize random seed
+        srand(time(NULL));
+
+        // Generate 3 random indices to use for the comparisons
+        int pivotChoice1 = rand() % (end - start) + start;
+        int pivotChoice2 = rand() % (end - start) + start;
+        while (pivotChoice2 != pivotChoice1) {
+            pivotChoice2 = rand() % (end - start) + start;
+        }
+        int pivotChoice3 = rand() % (end - start) + start;
+        while (pivotChoice3 != pivotChoice1 && pivotChoice3 != pivotChoice2) {
+            pivotChoice3 = rand() % (end - start) + start;
+        }
+
+        // Find the median of the 3 indices picked and set the pivot index appropriately
+        if ((data->arr[pivotChoice1] <= data->arr[pivotChoice2] && data->arr[pivotChoice1] >= data->arr[pivotChoice3]) || 
+            (data->arr[pivotChoice1] >= data->arr[pivotChoice2] && data->arr[pivotChoice1] <= data->arr[pivotChoice3])) {
+                pivotIndex = pivotChoice1;
+        } else if ((data->arr[pivotChoice2] <= data->arr[pivotChoice1] && data->arr[pivotChoice2] >= data->arr[pivotChoice3]) || 
+                   (data->arr[pivotChoice2] >= data->arr[pivotChoice1] && data->arr[pivotChoice2] <= data->arr[pivotChoice3])) {
+                pivotIndex = pivotChoice2;
+        } else {
+            pivotIndex = pivotChoice3;
+        }
+    }
 
     // Partition the data around the pivot
     int* partitionOut = partition(data, start, end, pivotIndex);
@@ -206,7 +236,7 @@ int* partition(StringArr* data, int start, int end, int pivotIndex) {
             // We have an element for the low partition
             lastLowPartitonIndex++;
 
-            // Moveth element to the end of the low partition
+            // Move the element to the end of the low partition
             std::string temp = data->arr[i];
             data->arr[i] = data->arr[lastLowPartitonIndex];
             data->arr[lastLowPartitonIndex] = temp;
