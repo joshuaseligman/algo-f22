@@ -67,8 +67,8 @@ void insertionSort(StringArr* data, int* comparisons) {
 }
 
 void mergeSort(StringArr* data, int* comparisons) {
-    // Return the number of comparisons from sorting the entire array
-    return mergeSortWithIndices(data, 0, data->length - 1, comparisons);
+    // Sort the entire array
+    mergeSortWithIndices(data, 0, data->length - 1, comparisons);
 }
 
 void mergeSortWithIndices(StringArr* data, int start, int end, int* comparisons) {

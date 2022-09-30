@@ -17,6 +17,7 @@ void runSort(void (*sort)(StringArr*, int*), StringArr* input, std::string sortN
     // Comparisons starts at 0
     int numComparisons = 0;
 
+    // Run the sort and time it
     auto start = std::chrono::high_resolution_clock::now();
     sort(input, &numComparisons);
     auto stop = std::chrono::high_resolution_clock::now();
@@ -47,10 +48,13 @@ int main() {
     // Run and analyze insertion sort
     runSort(insertionSort, magicItems, "Insertion", true);
 
+    // Run and analyze merge sort
     runSort(mergeSort, magicItems, "Merge", true);
 
+    // Run and analyze quicksort
     runSort(quickSort, magicItems, "Quick", true);
 
+    // Edge case test for an array that is already sorted
     std::cout << "20 Yankees Greats, sorted" << std::endl;
     StringArr* sortedYankees = readFile("yankeesGreatsSorted.txt");
     runSort(selectionSort, sortedYankees, "Selection", false);
@@ -58,6 +62,7 @@ int main() {
     runSort(mergeSort, sortedYankees, "Merge", false);
     runSort(quickSort, sortedYankees, "Quick", false);
 
+    // Edge case test for an array that is reversed
     std::cout << "20 Yankees Greats, reversed" << std::endl;
     StringArr* reversedYankees = readFile("yankeesGreatsReversed.txt");
     runSort(selectionSort, reversedYankees, "Selection", false);
@@ -75,6 +80,7 @@ int main() {
     runSort(quickSort, reversedYankees, "Quick", false);
     delete reversedYankees;
 
+    // Edge case to make sure nothing crashes with an array of size 0
     std::cout << "Empty List" << std::endl;
     StringArr* emptyList = readFile("emptyList.txt");
     runSort(selectionSort, emptyList, "Selection", false);
