@@ -74,36 +74,32 @@ int insertionSort(StringArr* data) {
     return comparisons;
 }
 
-int mergeSort(StringArr* data) {
+void mergeSort(StringArr* data, int* comparisons) {
     // Return the number of comparisons from sorting the entire array
-    return mergeSortWithIndices(data, 0, data->length - 1);
+    return mergeSortWithIndices(data, 0, data->length - 1, comparisons);
 }
 
-int mergeSortWithIndices(StringArr* data, int start, int end) {
+void mergeSortWithIndices(StringArr* data, int start, int end, int* comparisons) {
     // Base case is array of size 1 or size 0 (if the list is completely empty)
     if (start >= end) {
-        // No comparisons are needed here, so return 0
-        return 0;
+        // No work is needed
+        return;
     }
 
     // Get the midpoint for the sections
     int mid = (start + end) / 2;
 
-    // Sort the first half and get the number of comparisons needed to sort it
-    int comp1 = mergeSortWithIndices(data, start, mid);
+    // Sort the first half
+    mergeSortWithIndices(data, start, mid, comparisons);
 
-    // Sort the second haly and get the number of comparisons needed to sort it
-    int comp2 = mergeSortWithIndices(data, mid + 1, end);
+    // Sort the second half
+    mergeSortWithIndices(data, mid + 1, end, comparisons);
 
-    // The number of comparisons for sorting the subarray is the number of comparsions made to sort the 2 halves
-    // and thenumber of comparisons needed to merge the 2 halves together
-    int comparisons = comp1 + comp2 + merge(data, start, end, mid);
-
-    // Return the total number of comparisons
-    return comparisons;
+    // Merge both halves
+    merge(data, start, end, mid, comparisons);
 }
 
-int merge(StringArr* data, int start, int end, int mid) {
+void merge(StringArr* data, int start, int end, int mid, int* comparisons) {
     // The left half is at the start
     int leftIndex = start;
 
@@ -114,9 +110,6 @@ int merge(StringArr* data, int start, int end, int mid) {
     // and create the merged sub array
     int subArrLength = end - start + 1;
     std::string newSubArr[subArrLength];
-
-    // Start at 0 comparisons
-    int comparisons = 0;
 
     // Iterate through the entire merged subarray
     for (int i = 0; i < subArrLength; i++) {
@@ -135,14 +128,18 @@ int merge(StringArr* data, int start, int end, int mid) {
             leftIndex++;
 
             // Increment the number of comparisons made
-            comparisons++;
+            if (comparisons != nullptr) {
+                (*comparisons)++;
+            }
         } else {
             // Add the next element from the right half
             newSubArr[i] = data->arr[rightIndex];
             rightIndex++;
 
             // Make sure to increment comparisons because a comparison was made in the last else-if condition
-            comparisons++;
+            if (comparisons != nullptr) {
+                (*comparisons)++;
+            }
         }
     }
 
@@ -150,25 +147,17 @@ int merge(StringArr* data, int start, int end, int mid) {
     for (int j = 0; j < subArrLength; j++) {
         data->arr[start + j] = newSubArr[j];
     }
-
-    // Return the number of comparisons
-    return comparisons;
 }
 
-int quickSort(StringArr* data) {
-    // Comparisons start at 0
-    int comparisons = 0;
-
+void quickSort(StringArr* data, int* comparisons) {
     // Run the helper function for the entire array
-    quickSortWithIndices(data, 0, data->length - 1, &comparisons);
-
-    return comparisons;
+    quickSortWithIndices(data, 0, data->length - 1, comparisons);
 }
 
 void quickSortWithIndices(StringArr* data, int start, int end, int* comparisons) {
     // Base case for arrays of size 1 or 0
     if (start >= end) {
-        // No comparisons are needed
+        // No work is needed
         return;
     }
 
@@ -199,27 +188,37 @@ void quickSortWithIndices(StringArr* data, int start, int end, int* comparisons)
             pivotIndex = pivotChoice1;
 
             // We made 2 comparisons to choose the pivot
-            *comparisons += 2;
+            if (comparisons != nullptr) {
+                *comparisons += 2;
+            }
         } else if (data->arr[pivotChoice1] <= data->arr[pivotChoice3] && data->arr[pivotChoice1] >= data->arr[pivotChoice2]) {
             pivotIndex = pivotChoice1;
 
             // Estimated 4 comparisons to choose the pivot
-            *comparisons += 4;
+            if (comparisons != nullptr) {
+                *comparisons += 4;
+            }
         } else if (data->arr[pivotChoice2] <= data->arr[pivotChoice1] && data->arr[pivotChoice2] >= data->arr[pivotChoice3]) {
             pivotIndex = pivotChoice2;
 
             // Estimated 6 comparisons to choose the pivot
-            *comparisons += 6;
+            if (comparisons != nullptr) {
+                *comparisons += 6;
+            }
         } else if (data->arr[pivotChoice2] >= data->arr[pivotChoice1] && data->arr[pivotChoice2] <= data->arr[pivotChoice3]) {
             pivotIndex = pivotChoice2;
 
             // Estimated 8 comparisons to choose the pivot
-            *comparisons += 8;
+            if (comparisons != nullptr) {
+                *comparisons += 8;
+            }
         } else {
             pivotIndex = pivotChoice3;
 
             // Estimated 8 comparisons to choose the pivot
-            *comparisons += 8;
+            if (comparisons != nullptr) {
+                *comparisons += 8;
+            }
         }
     }
 
@@ -253,7 +252,9 @@ int partition(StringArr* data, int start, int end, int pivotIndex, int* comparis
             data->arr[lastLowPartitonIndex] = temp;
         }
         // Incement comparisons
-        (*comparisons)++;
+        if (comparisons != nullptr) {
+            (*comparisons)++;
+        }
     }
 
     // Move the pivot into its approprate place between the partitions

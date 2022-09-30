@@ -9,17 +9,17 @@ int selectionSort(StringArr* data);
 int insertionSort(StringArr* data);
 
 // Merge sort that returns the number of comparisons made
-int mergeSort(StringArr* data);
+void mergeSort(StringArr* data, int* comparisons = nullptr);
 
 // Helper function for merge sort to make the calls in the main function consistent with the other sorts
 // End is inclusive
-int mergeSortWithIndices(StringArr* data, int start, int end);
+void mergeSortWithIndices(StringArr* data, int start, int end, int* comparisons);
 
 // Helper function for merge sort to merge 2 halves of the subarray
-int merge(StringArr* data, int start, int end, int mid);
+void merge(StringArr* data, int start, int end, int mid, int* comparisons);
 
 // Quicksort function that returns the number of comparisons made
-int quickSort(StringArr* data);
+void quickSort(StringArr* data, int* comparisons = nullptr);
 
 // Helper function for quicksort
 void quickSortWithIndices(StringArr* data, int start, int end, int* comparisons);
