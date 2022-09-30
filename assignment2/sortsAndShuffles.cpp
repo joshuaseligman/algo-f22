@@ -5,10 +5,7 @@
 #include "sortsAndShuffles.h"
 #include "util.h"
 
-int selectionSort(StringArr* data) {
-    // Start comparisons at 0
-    int comparisons = 0;
-
+void selectionSort(StringArr* data, int* comparisons) {
     // Iterate through the second to last element because the last element will already be sorted as is
     for (int i = 0; i < data->length - 1; i++) {
         // The smallest index is going to start as the start of the subset of the list
@@ -22,7 +19,9 @@ int selectionSort(StringArr* data) {
                 smallestIndex = j;
             }
             // Increment comparisons
-            comparisons++;
+            if (comparisons != nullptr) {
+                (*comparisons)++;
+            }
         }
 
         // Put the smallest index in its respective place
@@ -30,15 +29,9 @@ int selectionSort(StringArr* data) {
         data->arr[i] = data->arr[smallestIndex];
         data->arr[smallestIndex] = temp;
     }
-
-    // Return the number of comparisons
-    return comparisons;
 }
 
-int insertionSort(StringArr* data) {
-    // Number of comparisons starts at 0
-    int comparisons = 0;
-
+void insertionSort(StringArr* data, int* comparisons) {
     // We begin with the second element because an array of size 1 is already sorted
     // So no need to check on the first element
     for (int i = 1; i < data->length; i++) {
@@ -52,7 +45,9 @@ int insertionSort(StringArr* data) {
         // current element that is being sorted
         while (j >= 0 && currentVal.compare(data->arr[j]) < 0) {
             // We made a comparison so increment it
-            comparisons++;
+            if (comparisons != nullptr) {
+                (*comparisons)++;
+            }
 
             // Shift the compared element over 1 to make room for the element being sorted
             data->arr[j + 1] = data->arr[j];
@@ -62,16 +57,13 @@ int insertionSort(StringArr* data) {
         // After the loop, we want to increment comparisons only if j >= 0 because
         // if j < 0, then the boolean expression would have immediately returned false without making
         // a comparison
-        if (j >= 0) {
-            comparisons++;
+        if (j >= 0 && comparisons != nullptr) {
+            (*comparisons)++;
         }
 
         // Place the value in its proper place
         data->arr[j + 1] = currentVal;
     }
-
-    // Return the number of comparisons
-    return comparisons;
 }
 
 void mergeSort(StringArr* data, int* comparisons) {

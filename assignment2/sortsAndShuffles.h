@@ -3,10 +3,10 @@
 #include "util.h"
 
 // Selection sort that returns the number of comparisons made
-int selectionSort(StringArr* data);
+void selectionSort(StringArr* data, int* comparisons = nullptr);
 
 // Insertion sort that returns the number of comparisons made
-int insertionSort(StringArr* data);
+void insertionSort(StringArr* data, int* comparisons = nullptr);
 
 // Merge sort that returns the number of comparisons made
 void mergeSort(StringArr* data, int* comparisons = nullptr);

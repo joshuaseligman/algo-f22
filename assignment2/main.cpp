@@ -42,10 +42,10 @@ int main() {
 
     std::cout << "666 Magic Items, shuffled" << std::endl;
     // Run and analyze selection sort
-    // runSort(selectionSort, magicItems, "Selection", true);
+    runSort(selectionSort, magicItems, "Selection", true);
 
     // Run and analyze insertion sort
-    // runSort(insertionSort, magicItems, "Insertion", true);
+    runSort(insertionSort, magicItems, "Insertion", true);
 
     runSort(mergeSort, magicItems, "Merge", true);
 
@@ -53,18 +53,18 @@ int main() {
 
     std::cout << "20 Yankees Greats, sorted" << std::endl;
     StringArr* sortedYankees = readFile("yankeesGreatsSorted.txt");
-    // runSort(selectionSort, sortedYankees, "Selection", false);
-    // runSort(insertionSort, sortedYankees, "Insertion", false);
+    runSort(selectionSort, sortedYankees, "Selection", false);
+    runSort(insertionSort, sortedYankees, "Insertion", false);
     runSort(mergeSort, sortedYankees, "Merge", false);
     runSort(quickSort, sortedYankees, "Quick", false);
 
     std::cout << "20 Yankees Greats, reversed" << std::endl;
     StringArr* reversedYankees = readFile("yankeesGreatsReversed.txt");
-    // runSort(selectionSort, reversedYankees, "Selection", false);
+    runSort(selectionSort, reversedYankees, "Selection", false);
     delete reversedYankees;
 
     reversedYankees = readFile("yankeesGreatsReversed.txt");
-    // runSort(insertionSort, reversedYankees, "Insertion", false);
+    runSort(insertionSort, reversedYankees, "Insertion", false);
     delete reversedYankees;
 
     reversedYankees = readFile("yankeesGreatsReversed.txt");
@@ -77,15 +77,15 @@ int main() {
 
     std::cout << "Empty List" << std::endl;
     StringArr* emptyList = readFile("emptyList.txt");
-    // runSort(selectionSort, emptyList, "Selection", false);
-    // runSort(insertionSort, emptyList, "Insertion", false);
+    runSort(selectionSort, emptyList, "Selection", false);
+    runSort(insertionSort, emptyList, "Insertion", false);
     runSort(mergeSort, emptyList, "Merge", false);
     runSort(quickSort, emptyList, "Quick", false);
     
     // Print out the list to make sure everything is in order
-    for (int i = 0; i < magicItems->length; i++) {
-        std::cout << magicItems->arr[i] << std::endl;
-    }
+    // for (int i = 0; i < magicItems->length; i++) {
+    //     std::cout << magicItems->arr[i] << std::endl;
+    // }
 
     // Memory management
     delete magicItems;
