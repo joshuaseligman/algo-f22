@@ -34,6 +34,7 @@
 \usepackage{parskip}
 \usepackage{lastpage}
 \usepackage{color}
+\usepackage{qtree}
 
 \allsectionsfont{\normalfont\scshape} % Make all section titles in default font and small caps.
 
@@ -111,7 +112,7 @@ As shown in Table \ref{comparisonsTable}, selection sort is very consistent with
 
 \section{Insertion Sort}\label{insertionSortSection}
 \subsection{The Algorithm}\label{insertionSortAlgo}
-Insertion sort in a sorting algorithm that places an element in its sorted place by sliding previously sorted elements over until the sorted position is found for the element. Unlike selection sort, insertion sort has a unique property in that its performance varies based on the state of the input array. For instance, if the array is already completely sorted, the while loop on line 5 in Algorithm \ref{algorithm:insertionSort} will never be entered because each element is already sorted and in its proper position. This makes the best case runtime of insertion sort $\Omega(n)$ because the inner loop is never run and the outer loop just iteraties through the array once. However, the worst case of insertion sort is when the array is in reverse order. This becomes the worst case because, as shown within the while loop in Algorithm \ref{algorithm:insertionSort}, each element will have to be compared with every other element, which will cause $j$ to end at $-1$ and the element gets inserted at the front of the array. This results in a worst case runtime complexity of $O(n^2)$, which will be analyzed and proved in detail in Section \ref{insertionAnalysis}.
+Insertion sort in a sorting algorithm that places an element in its sorted place by sliding previously sorted elements over until the sorted position is found for the element. As shown in Algorithm \ref{algorithm:insertionSort}, the element that is being sorted is only compared to elements in positions $[0, i - 1]$ because these are the elements that have been worked with so far and are known to be in order. Therefore, the elements in this area, as described before, are shifted over until one is less than the value being sorted or until $j < 0$, which will break out of the while loop. Unlike selection sort, the performance of insertion sort varies based on the state of the input array, which will be explored more in detail in Section \ref{insertionAnalysis}.
 
 \begin{algorithm}
   \caption{Insertion Sort Algorithm}
@@ -133,6 +134,9 @@ Insertion sort in a sorting algorithm that places an element in its sorted place
 \end{algorithm}
 
 \subsection{Asymptotic Analysis and Comparisons}\label{insertionAnalysis}
+For instance, if the array is already completely sorted, the while loop on line 5 in Algorithm \ref{algorithm:insertionSort} will never be entered because each element is already sorted and in its proper position. This makes the best case runtime of insertion sort $\Omega(n)$ because the inner loop is never run and the outer loop just iteraties through the array once. However, the worst case of insertion sort is when the array is in reverse order. This becomes the worst case because, as shown within the while loop in Algorithm \ref{algorithm:insertionSort}, each element will have to be compared with every other element, which will cause $j$ to end at $-1$ and the element gets inserted at the front of the array. This results in a worst case runtime complexity of $O(n^2)$, which will be analyzed and proved in detail in Section \ref{insertionAnalysis}.
+
+
 The code implementation of insertion sort is in Listing \ref{lst:insertionSortListing} on lines 7-34. As mentioned in Section \ref{insertionSortAlgo}, the worst case for insertion sort is when the array is in reverse order because every element will have to be compared to every element within the sorted portion of the array. First, the outer loop begins on line 7 and contains 2 assignments and a comparison. Based on the definition of the loop, these statements will run $n - 1$ times, which means the line will run in $(n - 1) * C_{1}$ time, where $C_{1}$ is the time needed to execute these statements. Next, line 9 is a basic assignment and, since it is in the loop, will run in $(n - 1) * C_{2}$ time, where $C_{2}$ is the time to perform the assignment. Line 12 is also an assignment in the outer loop, which will run in $(n - 1) * C_{3}$ time, where $C_{3}$ is the time to execute the assignment. Next, line 16 contains the definition for a while loop, which has 2 comparisions. Since the worst case requires each element to be compared to all of the other sorted elements, the while loop will terminate when $j = -1$. Thus, when $i = 1$, the while loop will only iterate once, and the number of iterations for the while loop will increment with a max of $n - 1$ for when $i = n - 1$. The total iterations is explained in Section \ref{selectionAnalysis} as being $\sum_{k = 1} ^{n - 1} k = \frac{(n - 1)(n - 1 + 1)}{2} = \frac{1}{2}n^2 - \frac{1}{2}n$, which means the loop on line 16 will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{4}$ time, where $C_{4}$ is the time to perform the comparisons. Line 18 is just for counting the comparisons and will be excluded from the analysis of the algorithm. Next, the assignment on line 21 runs in constant time and, since it is in the inner loop, will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{5}$ time, where $C_{5}$ is the time to perform the assignment. Line 22 also contains an assignment and runs in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{6}$ time, where $C_{6}$ is the time to perform the assignment. Line 23 is the end of the while loop, which translates to an unconditional branch to the top of the loop, which will run in $(\frac{1}{2}n^2 - \frac{1}{2}n) * C_{7}$ time, where $C_{7}$ is the time to execute the branch. Lines 28-30 are used for counting the comparisons and are excluded from the analysis of insertion sort. Next, line 33 is an assignment to put the element in its sorted place, which will run in $(n - 1) * C_{8}$ time because it is in the outer loop, where $C_{8}$ is the time to perform the assignment. Lastly, line 34 is the end of the for loop, which is an unconditional branch to the top of the loop, which will run in $(n - 1) * C_{9}$, where $C_{9}$ is the time to perform the branch. Overall, when summing up each runtime and dropping the constants, the total is $5 * (n - 1) + 4 * (\frac{1}{2}n^2 - \frac{1}{2}n) = 2n^2 + 3n - 5 \approx n^2 + n$ is $O(n^2)$.
 
 In Table \ref{comparisonsTable}, insertion sort is shown to have 3 very different outcomes for the lists that were used for testing relative to selection sort. First, insertion sort used about half the number of comparisons as selection sort for a list of 666 shuffled magic items. This is because the inner loop of insertion sort may terminate when $arr[j] < currentVal$ (see line 16 in Listing \ref{lst:insertionSortListing}) and in a randomly shuffled list, the probability of $arr[j] < currentVal$ will be around 50\%. Therefore, insertion sort will on average be about 50\% more efficient than selection sort, but is still classified as $O(n^2)$ beause it is still running at a function of $n^2$. Next, when the list is already shuffled, insertion sort only makes $n-1$ comparisons. As mentioned in Section \ref{insertionSortAlgo}, the best case for insertion sort is $\Omega(n)$ because the inner loop will never be entered as the second condition for $arr[j] < currentVal$ will always return false. This means there will be only 1 comparison made for each iteration of the outer loop, which equates to $n - 1$ comparisions. Lastly, Section \ref{insertionSortAlgo} mentioned that the worst case for insertion sort is when the list is in reverse order because every element will have to compare itself with all of the elements in the sorted portion of the array. This causes insertion sort to have the same number of comparisons as selection sort for a reversed list at $\frac{1}{2}n^2 - \frac{1}{2}n$, which is also the same number of iterations as the inner loop for insertion sort and makes insertion sort $O(n^2)$.
@@ -182,11 +186,53 @@ Merge sort is a divide and conquer sorting algorithm that continues to divide an
 \end{algorithm}
 
 \subsection{Asymptotic Analysis and Comparisons}\label{mergeSortAnalysis}
-The C++ implementation of merge sort can be found in Listing \ref{lst:mergeSortListing}, more specifically lines 6-28. First, the base case for checking if there are 0 or 1 elements is on lines 8-11 with an if statement and a return for the number of comparisons. This block of code runs 1 time per function call and runs in $? * C_{1}$ time, where $?$ is the number of times the function gets called through recursion and $C_{1}$ is the time needed to execute the comparison in the codition and return the value if needed. Next, line 14 computes the middle index for dividing the array, which runs once per function call in $? * C_{2}$ time, where $?$ is the number of times the function gets called through recursion and $C_{2}$ is the time to perform the operation. Next, lines 17 and 18 divide the array through recursive calls to the same function, each of which runs in $? * C_{3}$ and $? * C_{4}$ time, respectively, where $?$ is the number of times the function gets called and $C_{3}$ and $C_{4}$ are the time for the functions to run. Lastly, line 24 contains a call for the $merge$ function, which will run in $? * ??$ time, where $?$ is the number of times the function gets called and $??$ is the runtime of $merge$.
+The C++ implementation of merge sort can be found in Listing \ref{lst:mergeSortListing}, more specifically lines 6-28. As shown on line 14, the array is always split in half for each successive call of merge sort until the subarray is of length 1. The recursion tree for merge sort is displayed below.
 
-The first unknown so far is the number of times that the $mergeSortWithIndices$ function gets called to reach a subarray of size 1. Since the array gets divided in half each time, the number of divides needed to reach the base case will be $log_2n$. The other unknown is the runtime complexity of $merge$. This function is defined on lines 30-80. First, lines 32-40 are variable assignments for the left subarray index, the right subarray index, the total length between both sides, and the new merged array. These lines will run in a total of $1 * C_{5}$ time, where $C_{5}$ is the time to execute the variable assignments. Next, line 46 defines a loop with 2 assigments and a comparison, which at worst case will run in $n * C_{6}$ time, where $C_{6}$ is the time to complete the assignments and comparison. Lines 48-70 define a large if-else block. There will always be 1, 2, or 3 comparisons as defined by the if conditions in lines 48, 52, and 56, and there will always be 2 assignments regardless of the condition that is true. Therefore, at worst case, the if statements will run in $n * C_{7}$ time because it is nested inside of the loop, where $C_{7}$ is the time to compute the comparisons and the assignments. Line 71 is the end of the loop, which is an unconditional branch running in $n * C_{8}$ time, where $C_{8}$ is the time to perform the branch. Next, line 74 defines a new for loop with 2 assignments and 1 comparison. Similar to the first loop on line 46, this loop will run at worst $n$ times, which means it will require $n * C_{9}$ time, where $C_{9}$ is the time to execute the assignments and comparison. Line 75 contains an assignment within the loop, which will run in $n * C_{10}$ time, where $C_{10}$ is the time to execute the assignment. Lastly, line 76 is the end of the loop, which is an unconditional branch, running in $n * C_{11}$ time, where $C_{11}$ is the time to perform the branch. Overall, when adding up the runtimes of the $merge$ function and removing constants, the sum is $1 + 6n \approx n$ is $O(n)$ and the value of $??$.
+% Documentation: https://www.ling.upenn.edu/advice/latex/qtree/qtreenotes.pdf
+\Tree [.$T(n)$
+        [.$T(\frac{n}{2})$
+          [.$T(\frac{n}{4})$
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+          ]
+          [.$T(\frac{n}{4})$ 
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+          ]
+        ]
+        [.$T(\frac{n}{2})$
+          [.$T(\frac{n}{4})$
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+          ]
+          [.$T(\frac{n}{4})$ 
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+            [.{...} 
+              [.$T(\frac{n}{2^k})$ $O(1)$ ]
+            ]
+          ]
+        ]
+      ]
 
-When computing the runtime of merge sort by adding op the terms and dropping constants, the total is $4 * log_2n + n * log_2n \approx log_2n + n * log_2n$ is $O(n * log_2n)$.
+As shown in the recursion tree, the array is broken up into smaller subarrays until the subarray is small enough that it is solved using a constant time operation. Additionally, the last call is on an array of size $\frac{n}{2^k}$. Since the array is being divided in half each time, $k$ is the number of levels in the tree, which is $log_2n$.
+
+Next, after the 2 subarrays are sorted, they are merged together for the conquer phase, which is on lines 30-80 of Listing \ref{lst:mergeSortListing}. The beginning of the function (lines 32-40) are all assignments, which run in constant time. Next, there is a for loop that iterates through the length of the subarray being merged. The body is a large if-else block with comparisons and assignments, which is all $O(1)$ and makes the loop it is contained in run in $O(n)$ time. Lastly, lines 74-76 define a loop that iterates through each element in the subarray, which is also $O(n)$. Therefore, the runtime for the merge function is about $2n + 1$, which is $O(n)$.
+
+At each level of the tree, the merge function will work with exactly $n$ elements. For instance, in the first level of the tree, the left subarray will be merged from 2 subarrays of size $\frac{n}{4}$, which means that the merge function will work with $\frac{n}{2}$ elements. However, since there are 2 subarrays of size $\frac{n}{2}$, the merge function will be called again to handle the other subarray and, therefore, the level will end up merging $n$ elements. Thus, one can multiply $n$ by the number of levels to get the runtime complexity, which is $O(n * log_2n)$.
 
 As shown in Table \ref{comparisonsTable}, merge sort is significantly more efficient at sorting the magic items by using around 5,500 comparisons, which is a little less than the algorithm's runtime of $O(n * log_2n)$. The reason for the number of comparisons being less than 6246.67 ($666 * log_{2}666$) is explained on lines 48 and 52 in Listing \ref{lst:mergeSortListing} as the merging of an entire subarray before the other will result in the algorithm merging the remainder of the other subarray without needing to compare the elements. Regardless, the number of comparisons is still not far from $O(n * log_2n)$. Additionaly, merge sort is very similar to selection sort in that it will perform consistently for any permutation of an array of size $n$. This is shown in the smaller test cases, which perform almost identically despite being in differing orders. Also, one interesting point to note is the performance of insertion sort versus merge sort for the already sorted list. Since insertion sort has a best case of $\Omega(n)$, it is more efficient than merge sort when the array is already mostly sorted. This leads to the idea of hybrid algorithms that may use one sort up until a certain point and switch to a second algorithm that is more efficient in the end game of the sorting process.
 
