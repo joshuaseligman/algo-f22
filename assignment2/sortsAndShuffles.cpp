@@ -156,15 +156,20 @@ int merge(StringArr* data, int start, int end, int mid) {
 }
 
 int quickSort(StringArr* data) {
+    // Comparisons start at 0
+    int comparisons = 0;
+
     // Run the helper function for the entire array
-    return quickSortWithIndices(data, 0, data->length - 1);
+    quickSortWithIndices(data, 0, data->length - 1, &comparisons);
+
+    return comparisons;
 }
 
-int quickSortWithIndices(StringArr* data, int start, int end) {
+void quickSortWithIndices(StringArr* data, int start, int end, int* comparisons) {
     // Base case for arrays of size 1 or 0
     if (start >= end) {
         // No comparisons are needed
-        return 0;
+        return;
     }
 
     // The variable used for the pivot index
@@ -177,7 +182,7 @@ int quickSortWithIndices(StringArr* data, int start, int end) {
         // Initialize random seed
         srand(time(NULL));
 
-        // Generate 3 random indices to use for the comparisons
+        // Generate 3 random indices that are all unique to use to pick a pivot
         int pivotChoice1 = rand() % (end - start) + start;
         int pivotChoice2 = rand() % (end - start) + start;
         while (pivotChoice2 != pivotChoice1) {
@@ -189,35 +194,44 @@ int quickSortWithIndices(StringArr* data, int start, int end) {
         }
 
         // Find the median of the 3 indices picked and set the pivot index appropriately
-        if ((data->arr[pivotChoice1] <= data->arr[pivotChoice2] && data->arr[pivotChoice1] >= data->arr[pivotChoice3]) || 
-            (data->arr[pivotChoice1] >= data->arr[pivotChoice2] && data->arr[pivotChoice1] <= data->arr[pivotChoice3])) {
-                pivotIndex = pivotChoice1;
-        } else if ((data->arr[pivotChoice2] <= data->arr[pivotChoice1] && data->arr[pivotChoice2] >= data->arr[pivotChoice3]) || 
-                   (data->arr[pivotChoice2] >= data->arr[pivotChoice1] && data->arr[pivotChoice2] <= data->arr[pivotChoice3])) {
-                pivotIndex = pivotChoice2;
+        // This will hopefully create balanced partitions regardless of the status of the array
+        if (data->arr[pivotChoice1] <= data->arr[pivotChoice2] && data->arr[pivotChoice1] >= data->arr[pivotChoice3]) {
+            pivotIndex = pivotChoice1;
+
+            // We made 2 comparisons to choose the pivot
+            *comparisons += 2;
+        } else if (data->arr[pivotChoice1] <= data->arr[pivotChoice3] && data->arr[pivotChoice1] >= data->arr[pivotChoice2]) {
+            pivotIndex = pivotChoice1;
+
+            // Estimated 4 comparisons to choose the pivot
+            *comparisons += 4;
+        } else if (data->arr[pivotChoice2] <= data->arr[pivotChoice1] && data->arr[pivotChoice2] >= data->arr[pivotChoice3]) {
+            pivotIndex = pivotChoice2;
+
+            // Estimated 6 comparisons to choose the pivot
+            *comparisons += 6;
+        } else if (data->arr[pivotChoice2] >= data->arr[pivotChoice1] && data->arr[pivotChoice2] <= data->arr[pivotChoice3]) {
+            pivotIndex = pivotChoice2;
+
+            // Estimated 8 comparisons to choose the pivot
+            *comparisons += 8;
         } else {
             pivotIndex = pivotChoice3;
+
+            // Estimated 8 comparisons to choose the pivot
+            *comparisons += 8;
         }
     }
 
     // Partition the data around the pivot
-    int* partitionOut = partition(data, start, end, pivotIndex);
+    int partitionOut = partition(data, start, end, pivotIndex, comparisons);
 
     // Sort each of the partitions
-    int comp1 = quickSortWithIndices(data, start, partitionOut[0] - 1);
-    int comp2 = quickSortWithIndices(data, partitionOut[0] + 1, end);
-
-    // Sum up the comparisons
-    int totalComparisons = partitionOut[1] + comp1 + comp2;
-
-    // Memory management
-    delete(partitionOut);
-
-    // Return the number of comparisons made
-    return totalComparisons;
+    quickSortWithIndices(data, start, partitionOut - 1, comparisons);
+    quickSortWithIndices(data, partitionOut + 1, end, comparisons);
 }
 
-int* partition(StringArr* data, int start, int end, int pivotIndex) {
+int partition(StringArr* data, int start, int end, int pivotIndex, int* comparisons) {
     // Move the pivot to the end of the subarray
     std::string pivot = data->arr[pivotIndex];
     data->arr[pivotIndex] = data->arr[end];
@@ -225,9 +239,6 @@ int* partition(StringArr* data, int start, int end, int pivotIndex) {
 
     // We initially do not have any items in the low partition, so make it less than the start
     int lastLowPartitonIndex = start - 1;
-
-    // Initialize comparisons to 0
-    int comparisons = 0;
 
     // Iterate through the subarray, excluding the pivot
     for (int i = start; i <= end - 1; i++) {
@@ -242,19 +253,14 @@ int* partition(StringArr* data, int start, int end, int pivotIndex) {
             data->arr[lastLowPartitonIndex] = temp;
         }
         // Incement comparisons
-        comparisons++;
+        (*comparisons)++;
     }
 
     // Move the pivot into its approprate place between the partitions
     data->arr[end] = data->arr[lastLowPartitonIndex + 1];
     data->arr[lastLowPartitonIndex + 1] = pivot;
 
-    // Create the output and return it
-    int* outArr = new int[2];
-    outArr[0] = lastLowPartitonIndex + 1;
-    outArr[1] = comparisons;
-
-    return outArr;
+    return lastLowPartitonIndex + 1;
 }
 
 void knuthShuffle(StringArr* data) {

@@ -22,10 +22,10 @@ int merge(StringArr* data, int start, int end, int mid);
 int quickSort(StringArr* data);
 
 // Helper function for quicksort
-int quickSortWithIndices(StringArr* data, int start, int end);
+void quickSortWithIndices(StringArr* data, int start, int end, int* comparisons);
 
 // Helper function to partition the array in quicksort
-int* partition(StringArr* data, int start, int end, int pivotIndex);
+int partition(StringArr* data, int start, int end, int pivotIndex, int* comparisons);
 
 // Knuth shuffle
 void knuthShuffle(StringArr* data);
