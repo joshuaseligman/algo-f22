@@ -239,7 +239,7 @@ At each level of the tree, the merge function will work with exactly $n$ element
 As shown in Table \ref{comparisonsTable}, merge sort is significantly more efficient at sorting the magic items by using around 5,500 comparisons, which is a little less than the algorithm's runtime of $O(n * log_2n)$. The reason for the number of comparisons being less than 6246.67 ($666 * log_{2}666$) is explained on lines 48 and 52 in Listing \ref{lst:mergeSortListing} as the merging of an entire subarray before the other will result in the algorithm merging the remainder of the other subarray without needing to compare the elements. Regardless, the number of comparisons is still not far from $O(n * log_2n)$. Additionaly, merge sort is very similar to selection sort in that it will perform consistently for any permutation of an array of size $n$. This is shown in the smaller test cases, which perform almost identically despite being in differing orders. Also, one interesting point to note is the performance of insertion sort versus merge sort for the already sorted list. Since insertion sort has a best case of $\Omega(n)$, it is more efficient than merge sort when the array is already mostly sorted. This leads to the idea of hybrid algorithms that may use one sort up until a certain point and switch to a second algorithm that is more efficient in the end game of the sorting process.
 
 \section{Quicksort}
-\subsection{The Algorithm}
+\subsection{The Algorithm}\label{quicksortAlgo}
 Quicksort is similar to merge sort in that it is a divide and conquer sorting algorithm. Rather than dividing an array in half and then eventually merging the 2 subarrays back together, quicksort divides an array into 2 partitions around a pivot value so that all elements in the left partition are less than the pivot value and all elements in the right partition are greater than the pivot value. In other words, the elements are getting sorted as they are being divided up, which will result in the entire array being sorted once there are $n$ subarrays of size 1. The performance of quicksort is also dependent on the method used to choose the pivot, which will be discussed in detail in Section \ref{quicksortAnalysis}.
 
 \begin{algorithm}
@@ -272,7 +272,13 @@ Quicksort is similar to merge sort in that it is a divide and conquer sorting al
 \end{algorithm}
 
 \subsection{Asyptotic Analysis and Comparisons}\label{quicksortAnalysis}
+The C++ implementation for quicksort and partitioning can be found in Listing \ref{lst:quicksortListing}. Since quicksort divides the array into 2 partitions and continues to work until the subarray is of size 1, the recursion tree for quicksort will be the same as merge sort (see Figure \ref{figure:mergeTree} assuming that the partitions are balanced and approximately the same size. Additionally, the work done to partition the array is $O(n)$ because it iterates through the entire array once (length of subarrays * number of subarrays in the level of the tree). Therefore, on average, the runtime complexity for quicksort will be the same as merge sort at $O(n * log_2n)$.
 
+However, as mentioned in Section \ref{quicksortAlgo}, how the pivot is chosen will impact the runtime in the worst case scenario, which is an already sorted array or a reversed array. In these situations, if the pivot is either the first or last element in the array, the partitions would be of size 0 and size $n - 1$ because the pivot is either going to be greater than all the elements or less than all the elements. As a result, the algorithm would work like selection sort in that it would make sure the one element gets swapped into place and have to iterate through the rest of the array, which is not known to be sorted. Therefore, in these situations, quicksort downgrades to $O(n^2)$.
+
+Therefore, the main problem with quicksort is how to guarantee somewhat balanced partitions. One solution is to use the median of 3 method to pick the partition. The implementation for this approach is found on lines 21-71 of Listing \ref{lst:quicksortListing}. Instead of choosing 1 pivot, the median of 3 approach picks 3 random elements in the array for potential use as the actual pivot and then uses the middle element as the pivot. As a result, there will always be at least 1 element in each partition for all levels of the recursion tree. Even if the partitions are unbalanced, quicksort will still run in linearithmic time, but the logarithm will just have a different base to represent the uneven divide in the elements, and $O(n)$ work will still be done for partitioning at each level of the recursion tree. Also, as shown in the implementation of the median of 3 approach, only random number computations, assignments, and comparisons are needed, which all run in constant time and do not impact the overall runtime of quicksort.
+
+As shown in Table \ref{comparisonsTable}, the both the number of comparisons and runtime are most similar to those for merge sort, at approximately $n * log_2n$ comparisons, which is lines up with the algorithm's complexity of $O(n * log_2n)$. The number of comparisons for quicksort, however, is greater than that for merge sort for 2 main reasons: quicksort does not have an autocomplete on its partition like merge sort has for merging and there is a tradeoff with the number of comparisons made to prevent $O(n^2)$ runtime. First, since quicksort partitions the array when dividing, every element has to be compared to ensure it is placed in the correct partition. This is very different from merge sort, which just places the rest of a subarray into the merged array when the other subarray being merged is completely merged (lines 41-49 of Listing \ref{lst:mergeSortListing}). Also, as shown in lines 36-71, several comparisons have to be made to pick a pivot that prevents quicksort from downgrading to $O(n^2)$, which is a tradeoff that will be made every day of the week because of how much more efficient $O(n * log_2n)$ is compared to $O(n^2)$. Also, despite having more comparisons than merge sort, quick sort often ran in less time. Although constants are dropped when doing a Big-Oh analysis, the merge function has much larger constants than the partition function for quicksort. As shown in the merge function on lines 26-74 of Listing \ref{lst:mergeSortListing}, there are 2 loops that iterate through the length of the merged subarray, which means that merge sort actually does $2n$ work for each level of the recursion tree. On the other hand, quicksort's partition function on lines 82-114 of Listing \ref{lst:quicksortListing}, only iterates through the array once and does $n$ work at each level of the tree, which can save more time as the size of the array increases.
 
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
@@ -281,23 +287,29 @@ Quicksort is similar to merge sort in that it is a divide and conquer sorting al
     \hline
     Algorithm & List & Comparisons & Time \\
     \hline
-    Selection Sort & 666 magic items, shuffled & 221445 & 3625271 ns \\
+    Selection Sort & 666 magic items, shuffled & 221445 & 19916376 ns \\
     \hline
-    & 20 Yankees greats, sorted & 190 & 3673 ns \\
+    & 20 Yankees greats, sorted & 190 & 12564 ns \\
     \hline
-    & 20 Yankees greats, reversed & 190 & 3636 ns \\
+    & 20 Yankees greats, reversed & 190 & 12104 ns \\
     \hline
-    Insertion Sort & 666 magic items, shuffled & 104628 & 2523161 ns \\
+    Insertion Sort & 666 magic items, shuffled & 112474 & 8952454 ns \\
     \hline
-    & 20 Yankees greats, sorted & 19 & 795 ns \\
+    & 20 Yankees greats, sorted & 19 & 1586 ns \\
     \hline
-    & 20 Yankees greats, reversed & 190 & 2966 ns \\
+    & 20 Yankees greats, reversed & 190 & 13012 ns \\
     \hline
-    Merge Sort & 666 magic items, shuffled & 5417 & 1006113 ns \\
+    Merge Sort & 666 magic items, shuffled & 5404 & 1069105 ns \\
     \hline
-    & 20 Yankees greats, sorted & 48 & 6751 ns \\
+    & 20 Yankees greats, sorted & 48 & 9518 ns \\
     \hline
-    & 20 Yankees greats, reversed & 40 & 6745 ns \\
+    & 20 Yankees greats, reversed & 40 & 6164 ns \\
+    \hline
+    Quicksort & 666 magic items, shuffled & 8092 & 951497 ns \\
+    \hline
+    & 20 Yankees greats, sorted & 72 & 8052 ns \\
+    \hline
+    & 20 Yankees greats, reversed & 75 & 8463 ns \\
     \hline
   \end{tabular}
 \captionof{table}{A table of the number of comparisons made and time to complete each sort on a variety of lists.}
@@ -315,7 +327,7 @@ Quicksort is similar to merge sort in that it is a divide and conquer sorting al
   breaklines=true,                 % automatic line breaking only at whitespace
   captionpos=b,                    % sets the caption-position to bottom
   commentstyle=\color{mygreen},    % comment style
-  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  escapeinside={\%*}{*},          % if you want to add LaTeX within your code
   keywordstyle=\color{blue},       % keyword style
   stringstyle=\color{mymauve},     % string literal style
 }
