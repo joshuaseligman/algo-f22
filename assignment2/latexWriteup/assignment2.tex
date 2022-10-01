@@ -183,10 +183,14 @@ Merge sort is a divide and conquer sorting algorithm that continues to divide an
 \end{algorithm}
 
 \subsection{Asymptotic Analysis and Comparisons}\label{mergeSortAnalysis}
-The C++ implementation of merge sort can be found in Listing \ref{lst:mergeSortListing}, more specifically lines 6-24. As shown on lines 17 and 20, the array is always split in half for each successive call of merge sort until the subarray is of length 1. The recursion tree for merge sort is displayed below.
+The C++ implementation of merge sort can be found in Listing \ref{lst:mergeSortListing}, more specifically lines 6-24. As shown on lines 17 and 20, the array is always split in half for each successive call of merge sort until the subarray is of length 1. The recursion tree for merge sort is displayed in Figure \ref{figure:mergeTree}.
 
+\begin{figure}
+  \centering
+  \caption{Recursion tree for merge sort.}
+  \label{figure:mergeTree}
 % Documentation: https://www.ling.upenn.edu/advice/latex/qtree/qtreenotes.pdf
-\Tree [.$T(n)$
+  \Tree [.$T(n)$
         [.$T(\frac{n}{2})$
           [.$T(\frac{n}{4})$
             [.{...} 
@@ -224,6 +228,7 @@ The C++ implementation of merge sort can be found in Listing \ref{lst:mergeSortL
           ]
         ]
       ]
+\end{figure}
 
 As shown in the recursion tree, the array is broken up into smaller subarrays until the subarray is small enough that it is solved using a constant time operation. Additionally, the last call is on an array of size $\frac{n}{2^k}$. Since the array is being divided in half each time, $k$ is the number of levels in the tree, which is $log_2n$.
 
@@ -232,6 +237,42 @@ Next, after the 2 subarrays are sorted, they are merged together for the conquer
 At each level of the tree, the merge function will work with exactly $n$ elements. For instance, in the first level of the tree, the left subarray will be merged from 2 subarrays of size $\frac{n}{4}$, which means that the merge function will work with $\frac{n}{2}$ elements. However, since there are 2 subarrays of size $\frac{n}{2}$, the merge function will be called again to handle the other subarray and, therefore, the level will end up merging $n$ elements. Thus, one can multiply $n$ by the number of levels to get the runtime complexity, which is $O(n * log_2n)$.
 
 As shown in Table \ref{comparisonsTable}, merge sort is significantly more efficient at sorting the magic items by using around 5,500 comparisons, which is a little less than the algorithm's runtime of $O(n * log_2n)$. The reason for the number of comparisons being less than 6246.67 ($666 * log_{2}666$) is explained on lines 48 and 52 in Listing \ref{lst:mergeSortListing} as the merging of an entire subarray before the other will result in the algorithm merging the remainder of the other subarray without needing to compare the elements. Regardless, the number of comparisons is still not far from $O(n * log_2n)$. Additionaly, merge sort is very similar to selection sort in that it will perform consistently for any permutation of an array of size $n$. This is shown in the smaller test cases, which perform almost identically despite being in differing orders. Also, one interesting point to note is the performance of insertion sort versus merge sort for the already sorted list. Since insertion sort has a best case of $\Omega(n)$, it is more efficient than merge sort when the array is already mostly sorted. This leads to the idea of hybrid algorithms that may use one sort up until a certain point and switch to a second algorithm that is more efficient in the end game of the sorting process.
+
+\section{Quicksort}
+\subsection{The Algorithm}
+Quicksort is similar to merge sort in that it is a divide and conquer sorting algorithm. Rather than dividing an array in half and then eventually merging the 2 subarrays back together, quicksort divides an array into 2 partitions around a pivot value so that all elements in the left partition are less than the pivot value and all elements in the right partition are greater than the pivot value. In other words, the elements are getting sorted as they are being divided up, which will result in the entire array being sorted once there are $n$ subarrays of size 1. The performance of quicksort is also dependent on the method used to choose the pivot, which will be discussed in detail in Section \ref{quicksortAnalysis}.
+
+\begin{algorithm}
+  \caption{Quicksort Algorithm}
+  \label{algorithm:quicksort}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+      \Procedure{Quicksort}{$arr$}
+        \If{$length(arr) > 1$} \Comment{An array of size 1 is already sorted}
+          \State $p \gets choosePivotIndex(arr)$ \Comment{More details on how to choose a pivot element in Section \ref{quicksortAnalysis}}
+          \State $newPivotIndex \gets Partition(arr, p)$ \Comment{Partition the array around the pivot}
+          \State $Quicksort(arr[0:newPivotIndex - 1])$ \Comment{Run quicksort on the left partition}
+          \State $Quicksort(arr[newPivotIndex + 1:length(arr) - 1])$ \Comment {Run quicksort on the right partition}
+        \EndIf
+      \EndProcedure
+      \\
+      \Procedure{Partition}{$arr$, $pivotIndex$}
+        \State $swap(arr, pivotIndex, length(arr) - 1)$ \Comment{Move the pivot to the end of the array}
+        \State $lastLowPartitionIndex \gets -1$ \Comment{Initially no elements are in the low partition}
+        \For{$i \gets 0,~length(arr) - 2$} \Comment{Iterate through all but the pivot}
+          \If{$arr[i] < arr[length(arr) - 1]$}
+            \State $lastLowPartitionIndex++$ \Comment{Found another element for the low partition}
+            \State $swap(arr, i, lastLowPartitionIndex)$ \Comment{Place the element in the low partition}
+          \EndIf
+        \EndFor
+        \State $swap(arr, length(arr) - 1, lastLowPartitionIndex + 1)$ \Comment{Place the pivot in the appropriate place}
+        \State $return lastLowPartitionIndex + 1$
+      \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Asyptotic Analysis and Comparisons}\label{quicksortAnalysis}
+
 
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
