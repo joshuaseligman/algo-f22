@@ -1,4 +1,5 @@
 #include <iostream>
+#include <sstream>
 
 #include "fileUtil.h"
 #include "util.h"
@@ -8,27 +9,35 @@
 int main() {
     StringArr* data = readFile("testData1.txt");
 
-    for (int i = 0; i < data->length; i++) {
-        std::cout << data->arr[i] << std::endl;
+    // String split code from: https://www.javatpoint.com/how-to-split-strings-in-cpp
+    // A pointer to each part of the split string
+    char* ptr;
+    // Get the first token
+    ptr = strtok(data->arr[0].data(), " ");
+
+    int numResidents = -1;
+    int numHospitals = -1;
+
+    // Continue until the end of the string  
+    while (ptr != NULL) {
+        // String to integer conversion https://www.geeksforgeeks.org/converting-strings-numbers-c-cpp/
+        std::stringstream ss(ptr);
+        if (numResidents == -1) {
+            ss >> numResidents;
+        } else {
+            ss >> numHospitals;
+        }
+        ptr = strtok(NULL, " ");  
     }
 
-    ResidentArr* residents = createResidents(10);
-    for (int j = 0; j < residents->length; j++) {
-        std::cout << residents->arr[j].getName() << std::endl;;
-    }
-
-    HospitalArr* hospitals = createHospitals(5);
-    for (int j = 0; j < hospitals->length; j++) {
-        std::cout << hospitals->arr[j].getName() << std::endl;;
-    }
-
+    std::cout << numResidents << " " << numHospitals << std::endl;
 
     // Memory management and clean up
-    delete [] residents->arr;
-    delete residents;
+    // delete [] residents->arr;
+    // delete residents;
 
-    delete [] hospitals->arr;
-    delete hospitals;
+    // delete [] hospitals->arr;
+    // delete hospitals;
 
     delete [] data->arr;
     delete data;
