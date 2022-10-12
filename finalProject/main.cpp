@@ -17,10 +17,18 @@ int main() {
         std::cout << residents->arr[j].getName() << std::endl;;
     }
 
+    HospitalArr* hospitals = createHospitals(5);
+    for (int j = 0; j < hospitals->length; j++) {
+        std::cout << hospitals->arr[j].getName() << std::endl;;
+    }
+
 
     // Memory management and clean up
     delete [] residents->arr;
     delete residents;
+
+    delete [] hospitals->arr;
+    delete hospitals;
 
     delete [] data->arr;
     delete data;
