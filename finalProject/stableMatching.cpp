@@ -39,7 +39,7 @@ void stableMatchAlgo(StringArr* data) {
     }
 
     for (int i = 0; i < residents->length; i++) {
-        residents->arr[i].getHospitalPreferences().printList();
+        residents->arr[i].getHospitalPreferences()->printList();
     }
 
     // Memory management and clean up

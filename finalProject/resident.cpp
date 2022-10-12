@@ -9,6 +9,12 @@ Resident::Resident() {
     // Create the name of the resident and increment the index
     name = "r" + std::to_string(Resident::index);
     Resident::index++;
+
+    hospitalPreferences = new List<Hospital*>();
+}
+
+Resident::~Resident() {
+    delete hospitalPreferences;
 }
 
 void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
@@ -31,7 +37,7 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
 
         // Create a node and add it to the end of the preferences list because the preferences are in order
         Node<Hospital*>* hospitalNode = new Node<Hospital*>(&hospitals->arr[hospitalIndex]);
-        hospitalPreferences.append(hospitalNode);
+        hospitalPreferences->append(hospitalNode);
 
         ptr = strtok(NULL, " ");  
     }
@@ -42,6 +48,6 @@ std::string Resident::getName() {
     return name;
 }
 
-List<Hospital*> Resident::getHospitalPreferences() {
+List<Hospital*>* Resident::getHospitalPreferences() {
     return hospitalPreferences;
 }

@@ -2,6 +2,8 @@
 #include "hospital.h"
 #include "resident.h"
 
+#include <iostream>
+
 template <typename T>
 Node<T>::Node(T initialData) {
     // Initialize the node with the data and without a next node in the linked list

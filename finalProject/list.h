@@ -15,8 +15,13 @@ public:
     // Constructor for the list
     List();
 
+    ~List();
+
     // Append adds a new element to the list
     void append(Node<T>* newNode);
+
+    // Equivalent of dequeue for a queue
+    Node<T>* removeHead();
 
     // isEmpty checks to see if the list is empty
     bool isEmpty();

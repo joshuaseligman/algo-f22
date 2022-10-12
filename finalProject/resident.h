@@ -13,6 +13,8 @@ class Resident {
         // Constructor
         Resident();
 
+        ~Resident();
+
         // Add the preferences to the list
         void addPreferences(std::string preferences, HospitalArr* hospitals);
 
@@ -20,10 +22,10 @@ class Resident {
         std::string getName();
 
         // Getter for the preferences
-        List<Hospital*> getHospitalPreferences();
+        List<Hospital*>* getHospitalPreferences();
     private:
         // The name for printing the output
         std::string name;
 
-        List<Hospital*> hospitalPreferences;
+        List<Hospital*>* hospitalPreferences;
 };
