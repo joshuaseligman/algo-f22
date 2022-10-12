@@ -1,7 +1,10 @@
 #pragma once
 
-#include "resident.h"
-#include "hospital.h"
+#include <string>
+
+// Forward declarations to prevent circular dependencies
+class Resident;
+class Hospital;
 
 // Struct to create string arrays and store their length at the same time
 // Especially for use on the heap

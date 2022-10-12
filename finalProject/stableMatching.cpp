@@ -7,7 +7,7 @@
 #include <sstream>
 
 void stableMatchAlgo(StringArr* data) {
-        // String split code from: https://www.javatpoint.com/how-to-split-strings-in-cpp
+    // String split code from: https://www.javatpoint.com/how-to-split-strings-in-cpp
     // A pointer to each part of the split string
     char* ptr;
     // Get the first token
@@ -33,6 +33,14 @@ void stableMatchAlgo(StringArr* data) {
     // Create default residents and hospitals with no preferencs and no capacity
     ResidentArr* residents = createResidents(numResidents);
     HospitalArr* hospitals = createHospitals(numHospitals);
+
+    for (int i = 0; i < residents->length; i++) {
+        residents->arr[i].addPreferences(data->arr[i + 1], hospitals);
+    }
+
+    for (int i = 0; i < residents->length; i++) {
+        residents->arr[i].getHospitalPreferences().printList();
+    }
 
     // Memory management and clean up
     delete [] residents->arr;

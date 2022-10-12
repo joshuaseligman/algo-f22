@@ -12,7 +12,7 @@ private:
     // Tail points to the end of the list
     Node<T>* tail;
 public:
-    // We need a constructor
+    // Constructor for the list
     List();
 
     // Append adds a new element to the list

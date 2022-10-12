@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include <string.h>
 
 #include "list.h"
 #include "node.h"
@@ -38,7 +39,11 @@ void List<T>::printList() {
     // Get the head of the list and iterate through, printing the data in each node
     Node<T>* cur = head;
     while (cur != nullptr) {
-        std::cout << cur->data << " -> ";
+        if (strcmp(typeid(cur->data).name(), "P8Hospital") == 0) {
+            std::cout << ((Hospital*)cur->data)->getName() << " -> ";
+        } else {
+            std::cout << cur->data << " -> ";
+        }
         cur = cur->next;
     }
     // Finish the list printing
