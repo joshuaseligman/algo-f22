@@ -20,10 +20,12 @@ void stableMatchAlgo(StringArr* data) {
     while (ptr != NULL) {
         // String to integer conversion https://www.geeksforgeeks.org/converting-strings-numbers-c-cpp/
         std::stringstream ss(ptr);
-        if (numResidents == -1) {
-            ss >> numResidents;
-        } else {
-            ss >> numHospitals;
+        if (ss.str().compare("Config:") != 0) {
+            if (numResidents == -1) {
+                ss >> numResidents;
+            } else {
+                ss >> numHospitals;
+            }
         }
         ptr = strtok(NULL, " ");  
     }
@@ -35,7 +37,7 @@ void stableMatchAlgo(StringArr* data) {
     HospitalArr* hospitals = createHospitals(numHospitals);
 
     for (int i = 0; i < residents->length; i++) {
-        residents->arr[i].addPreferences(data->arr[i + 1], hospitals);
+        residents->arr[i].loadData(data->arr[i + 1], i, hospitals);
     }
 
     for (int i = 0; i < residents->length; i++) {

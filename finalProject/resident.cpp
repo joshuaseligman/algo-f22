@@ -4,17 +4,26 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 Resident::Resident() {
-    // Create the name of the resident and increment the index
-    name = "r" + std::to_string(Resident::index);
-    Resident::index++;
-
     hospitalPreferences = new List<Hospital*>();
 }
 
 Resident::~Resident() {
     delete hospitalPreferences;
+}
+
+void Resident::loadData(std::string data, int resIndex, HospitalArr* hospitals) {
+    // The part of the line before the colon is the name
+    int colonIndex = data.find(":");
+    name = data.substr(0, colonIndex);
+
+    // Set the index of the element (number in string - 1), but quicker to pass the index as is
+    index = resIndex;
+
+    // Load the preference data
+    addPreferences(data.substr(colonIndex + 2, std::string::npos), hospitals);
 }
 
 void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
@@ -41,6 +50,10 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
 
         ptr = strtok(NULL, " ");  
     }
+}
+
+int Resident::getIndex() {
+    return index;
 }
 
 std::string Resident::getName() {

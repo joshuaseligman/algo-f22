@@ -11,7 +11,7 @@ int main() {
         std::cout << data->arr[i] << std::endl;
     }
 
-    // stableMatchAlgo(data);
+    stableMatchAlgo(data);
 
     delete [] data->arr;
     delete data;
