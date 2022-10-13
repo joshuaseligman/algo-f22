@@ -11,6 +11,7 @@ Resident::Resident() {
 }
 
 Resident::~Resident() {
+    delete [] preferenceArr;
     delete hospitalPreferences;
 }
 
@@ -21,6 +22,9 @@ void Resident::loadData(std::string data, int resIndex, HospitalArr* hospitals) 
 
     // Set the index of the element (number in string - 1), but quicker to pass the index as is
     index = resIndex;
+
+    // Initialize the array for the preferences
+    preferenceArr = new bool[hospitals->length];
 
     // Load the preference data
     addPreferences(data.substr(colonIndex + 2, std::string::npos), hospitals);
@@ -48,6 +52,9 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
         Node<Hospital*>* hospitalNode = new Node<Hospital*>(&hospitals->arr[hospitalIndex]);
         hospitalPreferences->enqueue(hospitalNode);
 
+        // Add the preference to the status array
+        preferenceArr[hospitalIndex] = true;
+
         ptr = strtok(NULL, " ");  
     }
 }
@@ -63,4 +70,8 @@ std::string Resident::getName() {
 
 Queue<Hospital*>* Resident::getHospitalPreferences() {
     return hospitalPreferences;
+}
+
+bool* Resident::getPreferencesArr() {
+    return preferenceArr;
 }

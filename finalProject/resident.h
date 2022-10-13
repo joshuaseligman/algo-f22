@@ -24,6 +24,9 @@ class Resident {
 
         // Getter for the preferences
         Queue<Hospital*>* getHospitalPreferences();
+
+        // Getter for the preferences array
+        bool* getPreferencesArr();
     private:
         // The name for printing the output
         std::string name;
@@ -33,6 +36,9 @@ class Resident {
 
         // Queue of initial preferences
         Queue<Hospital*>* hospitalPreferences;
+
+        // Boolean array to determine which hospitals are still in the running for the resident
+        bool* preferenceArr;
 
         // Add the preferences to the list
         void addPreferences(std::string preferences, HospitalArr* hospitals);
