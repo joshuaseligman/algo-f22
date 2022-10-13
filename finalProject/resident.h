@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "list.h"
+#include "queue.h"
 #include "util.h"
 
 class Resident {
@@ -23,7 +23,7 @@ class Resident {
         std::string getName();
 
         // Getter for the preferences
-        List<Hospital*>* getHospitalPreferences();
+        Queue<Hospital*>* getHospitalPreferences();
     private:
         // The name for printing the output
         std::string name;
@@ -31,8 +31,8 @@ class Resident {
         // Index for referencing the resident from an array
         int index;
 
-        // List of initial preferences
-        List<Hospital*>* hospitalPreferences;
+        // Queue of initial preferences
+        Queue<Hospital*>* hospitalPreferences;
 
         // Add the preferences to the list
         void addPreferences(std::string preferences, HospitalArr* hospitals);

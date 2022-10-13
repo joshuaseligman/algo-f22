@@ -7,7 +7,7 @@
 #include <string>
 
 Resident::Resident() {
-    hospitalPreferences = new List<Hospital*>();
+    hospitalPreferences = new Queue<Hospital*>();
 }
 
 Resident::~Resident() {
@@ -46,7 +46,7 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
 
         // Create a node and add it to the end of the preferences list because the preferences are in order
         Node<Hospital*>* hospitalNode = new Node<Hospital*>(&hospitals->arr[hospitalIndex]);
-        hospitalPreferences->append(hospitalNode);
+        hospitalPreferences->enqueue(hospitalNode);
 
         ptr = strtok(NULL, " ");  
     }
@@ -61,6 +61,6 @@ std::string Resident::getName() {
     return name;
 }
 
-List<Hospital*>* Resident::getHospitalPreferences() {
+Queue<Hospital*>* Resident::getHospitalPreferences() {
     return hospitalPreferences;
 }
