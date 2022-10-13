@@ -40,6 +40,10 @@ void stableMatchAlgo(StringArr* data) {
         residents->arr[i].loadData(data->arr[i + 1], i, hospitals);
     }
 
+    for (int i = 0; i < hospitals->length; i++) {
+        hospitals->arr[i].loadData(data->arr[residents->length + 1 + i], i, residents);
+    }
+
     for (int i = 0; i < residents->length; i++) {
         residents->arr[i].getHospitalPreferences()->printQueue();
 

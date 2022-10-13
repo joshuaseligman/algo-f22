@@ -3,7 +3,9 @@
 #include <string>
 
 #include "queue.h"
-#include "util.h"
+
+class Hospital;
+struct HospitalArr;
 
 class Resident {
     public:
@@ -42,4 +44,10 @@ class Resident {
 
         // Add the preferences to the list
         void addPreferences(std::string preferences, HospitalArr* hospitals);
+};
+
+// Struct for creating an array of residents on the heap
+struct ResidentArr {
+    Resident* arr;
+    int length;
 };

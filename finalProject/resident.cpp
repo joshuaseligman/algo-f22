@@ -1,6 +1,7 @@
 #include "resident.h"
 #include "hospital.h"
-#include "util.h"
+
+#include "queue.h"
 
 #include <iostream>
 #include <sstream>

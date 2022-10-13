@@ -1,6 +1,8 @@
 #pragma once
 
 #include "util.h"
+#include "resident.h"
+#include "hospital.h"
 
 // The algorithm and all of its helpers
 void stableMatchAlgo(StringArr* data);
