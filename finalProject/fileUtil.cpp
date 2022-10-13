@@ -18,9 +18,12 @@ StringArr* readFile(std::string filePath) {
     if (file.is_open()) {
         // Read each line from the file
         while (getline(file, line)) {
-            // During the first read through, we only need to count the number of lines
-            // because we do not know how big to make the array
-            numItems++;
+            // Ignore empty lines
+            if (line.compare("") != 0) {
+                // During the first read through, we only need to count the number of lines
+                // because we do not know how big to make the array
+                numItems++;
+            }
         }
 
         // Create the struct to output the data
@@ -37,9 +40,11 @@ StringArr* readFile(std::string filePath) {
         // i is a counter to keep track of the index we are on when reading from the file
         int i = 0;
         while (getline(file, line)) {
-            // During the second read through, we will store the contents of the line in the array
-            outArr->arr[i] = line;
-            i++;
+            if (line.compare("") != 0) {
+                // During the second read through, we will store the contents of the line in the array
+                outArr->arr[i] = line;
+                i++;
+            }
         }
 
         // Close the file when done for safety
