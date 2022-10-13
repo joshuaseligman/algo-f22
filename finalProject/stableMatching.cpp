@@ -53,6 +53,13 @@ void stableMatchAlgo(StringArr* data) {
         std::cout << std::endl;
     }
 
+    for (int j = 0; j < hospitals->length; j++) {
+        for (int k = 0; k < residents->length; k++) {
+            std::cout << hospitals->arr[j].getResidentPreferences()[k] << " ";
+        }
+        std::cout << std::endl;
+    }
+
     // Memory management and clean up
     delete [] residents->arr;
     delete residents;

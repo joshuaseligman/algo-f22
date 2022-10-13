@@ -13,6 +13,8 @@ Hospital::Hospital() {
 
 Hospital::~Hospital() {
     delete [] residentPreferences;
+
+    delete [] assignedResidents;
 }
 
 void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents) {
@@ -25,21 +27,52 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
 
     // Initialize the preferences array to be the number of residents
     residentPreferences = new int[residents->length];
+    // Initialize everything to be 0 (does not want the resident at all)
+    for (int i = 0; i < residents->length; i++) {
+        residentPreferences[i] = 0;
+    }
 
     // Get the remainder of the string after the colon and the space
     std::string remainder = data.substr(colonIndex + 2, std::string::npos);
     int hyphenIndex = remainder.find("-");
 
-    // Ignore the space before the hyphen
+    // Ignore the space before the hyphen and save the capacity
     std::string capacityStr = remainder.substr(0, hyphenIndex - 1);
     std::stringstream ss(capacityStr);
     ss >> capacity;
 
-    std::cout << name << " " << index << " " << capacity << std::endl;
+    assignedResidents = new Resident[capacity];
+
+    addPreferences(remainder.substr(hyphenIndex + 2, std::string::npos), residents);
 }
 
 void Hospital::addPreferences(std::string preferences, ResidentArr* residents) {
+    char* ptr;
+    // Get the first token
+    ptr = strtok(preferences.data(), " ");
 
+    // Initialize the current preference to be 1 (lower is better) (0 is does not want the resident)
+    int curPreference = 1;
+
+    // Continue until the end of the string  
+    while (ptr != NULL) {
+        // Create the string stream and remove the first character ('h')
+        std::stringstream ss(ptr);
+        ss.get();
+
+        // Get the hospital index
+        int residentIndex;
+        ss >> residentIndex;
+
+        // Decrement because the first hospital is labeled as h1, but stored in index 0
+        residentIndex--;
+
+        // Set the preference within the array
+        residentPreferences[residentIndex] = curPreference;
+        curPreference++;
+
+        ptr = strtok(NULL, " ");  
+    }
 }
 
 std::string Hospital::getName() {
