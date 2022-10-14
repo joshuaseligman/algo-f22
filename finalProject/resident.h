@@ -29,6 +29,12 @@ class Resident {
 
         // Getter for the preferences array
         bool* getPreferencesArr();
+
+        // Getter for the assignment
+        Hospital* getAssignment();
+
+        // Setter for the assignment
+        void setAssignment(Hospital* newAssignment);
     private:
         // The name for printing the output
         std::string name;
@@ -41,6 +47,9 @@ class Resident {
 
         // Boolean array to determine which hospitals are still in the running for the resident
         bool* preferenceArr;
+
+        // The hospital the resident is assigned to
+        Hospital* assignment;
 
         // Add the preferences to the list
         void addPreferences(std::string preferences, HospitalArr* hospitals);

@@ -71,6 +71,8 @@ void Queue<T>::printQueue() {
     while (cur != nullptr) {
         if (strcmp(typeid(cur->data).name(), "P8Hospital") == 0) {
             std::cout << ((Hospital*)cur->data)->getName() << " -> ";
+        } else if (strcmp(typeid(cur->data).name(), "P8Resident") == 0) {
+            std::cout << ((Resident*)cur->data)->getName() << " -> ";
         } else {
             std::cout << cur->data << " -> ";
         }

@@ -8,7 +8,7 @@
 Hospital::Hospital() {
     // Initialize these variables to be nothing
     numAssigned = 0;
-    lowestPreferredAssignedResident = nullptr;
+    lowestPreferredAssignedResidentIndex = -1;
 }
 
 Hospital::~Hospital() {
@@ -75,6 +75,37 @@ void Hospital::addPreferences(std::string preferences, ResidentArr* residents) {
     }
 }
 
+bool Hospital::isFull() {
+    return capacity == numAssigned;
+}
+
+void Hospital::replaceLowest(Resident* newResident) {
+    assignedResidents[lowestPreferredAssignedResidentIndex] = *newResident;
+    newResident->setAssignment(this);
+
+    setLowestPreferredAssignedResidentIndex();
+}
+
+void Hospital::addResident(Resident* newResident) {
+    assignedResidents[numAssigned] = *newResident;
+    newResident->setAssignment(this);
+    numAssigned++;
+
+    setLowestPreferredAssignedResidentIndex();
+}
+
+void Hospital::setLowestPreferredAssignedResidentIndex() {
+    int lowestIndex = 0;
+
+    for (int i = 1; i < numAssigned; i++) {
+        if (residentPreferences[assignedResidents[i].getIndex()] > 0 ||
+            residentPreferences[assignedResidents[i].getIndex()] > residentPreferences[assignedResidents[lowestIndex].getIndex()]) {
+            lowestIndex = i;
+        }
+    }
+    lowestPreferredAssignedResidentIndex = lowestIndex;
+}
+
 std::string Hospital::getName() {
     // Return the hospital's name
     return name;
@@ -100,6 +131,6 @@ Resident* Hospital::getAssignedResidents() {
     return assignedResidents;
 }
 
-Resident* Hospital::getLowestPreferredAssignedResident() {
-    return lowestPreferredAssignedResident;
+int Hospital::getLowestPreferredAssignedResidentIndex() {
+    return lowestPreferredAssignedResidentIndex;
 }

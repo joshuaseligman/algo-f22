@@ -60,6 +60,9 @@ void stableMatchAlgo(StringArr* data) {
         std::cout << std::endl;
     }
 
+    // Call the actual algorithm
+    generateStableMatches(residents, hospitals);
+
     // Memory management and clean up
     delete [] residents->arr;
     delete residents;
@@ -90,4 +93,68 @@ HospitalArr* createHospitals(int numHospitals) {
     output->length = numHospitals;
 
     return output;
+}
+
+void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
+    Queue<Resident*> residentQueue;
+
+    // Add the residents to a queue for determining the next resident to propose
+    for (int i = 0; i < residents->length; i++) {
+        Node<Resident*>* n = new Node(&residents->arr[i]);
+        residentQueue.enqueue(n);
+    }
+
+    std::cout << std::endl;
+
+    while (!residentQueue.isEmpty()) {
+        residentQueue.printQueue();
+
+        Node<Resident*>* resident = residentQueue.dequeue();
+
+        while (resident->data->getAssignment() == nullptr && !resident->data->getHospitalPreferences()->isEmpty()) {
+            for (int j = 0; j < hospitals->length; j++) {
+                std::cout << resident->data->getPreferencesArr()[j] << " ";
+            }
+            std::cout << std::endl;
+
+            Node<Hospital*>* preference = resident->data->getHospitalPreferences()->dequeue();
+
+            // The hospital is full with more preferable residents, so the current resident is not getting in
+            if (resident->data->getPreferencesArr()[preference->data->getIndex()] == 0) {
+                // Clean up memory and try the next hospital
+                delete preference;
+                continue;
+            }
+
+            if (preference->data->isFull()) {
+                // If the hospital is full, then replace the lowest preferred resident with the current resident
+                Resident* lowest = &residents->arr[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()];
+                lowest->setAssignment(nullptr);
+
+                preference->data->replaceLowest(resident->data);
+                // Since the lowest preferred resident was replaced, we need to come back to it later
+                residentQueue.enqueue(new Node<Resident*>(lowest));
+            } else {
+                // Add the new resident to the 
+                preference->data->addResident(resident->data);
+            }
+
+            std::cout << "Assigned " << resident->data->getName() << " to hospital " << resident->data->getAssignment()->getName() << std::endl;
+
+            if (preference->data->isFull()) {
+                for (int i = 0; i < residents->length; i++) {
+                    if (preference->data->getResidentPreferences()[residents->arr[i].getIndex()] >preference->data->getResidentPreferences()[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()]) {
+
+
+                        residents->arr[i].getPreferencesArr()[preference->data->getIndex()] = 0;
+                        preference->data->getResidentPreferences()[residents->arr[i].getIndex()] = 0;
+                    }
+                }
+            }
+        }
+
+        delete resident;
+    }
+
+    std::cout << "Finished algo: " << std::endl;
 }

@@ -9,6 +9,7 @@
 
 Resident::Resident() {
     hospitalPreferences = new Queue<Hospital*>();
+    assignment = nullptr;
 }
 
 Resident::~Resident() {
@@ -75,4 +76,12 @@ Queue<Hospital*>* Resident::getHospitalPreferences() {
 
 bool* Resident::getPreferencesArr() {
     return preferenceArr;
+}
+
+Hospital* Resident::getAssignment() {
+    return assignment;
+}
+
+void Resident::setAssignment(Hospital* newAssignment) {
+    assignment = newAssignment;
 }
