@@ -13,8 +13,6 @@ Hospital::Hospital() {
 
 Hospital::~Hospital() {
     delete [] residentPreferences;
-
-    delete [] assignedResidents;
 }
 
 void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents) {
@@ -42,6 +40,11 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
     ss >> capacity;
 
     assignedResidents = new Resident[capacity];
+
+    // Clear the assigned residents array
+    for (int i = 0; i < capacity; i++) {
+        assignedResidents[i].~Resident();
+    }
 
     addPreferences(remainder.substr(hyphenIndex + 2, std::string::npos), residents);
 }
