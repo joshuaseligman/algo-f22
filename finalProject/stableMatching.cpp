@@ -156,5 +156,10 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         delete resident;
     }
 
-    std::cout << "Finished algo" << std::endl;
+    std::cout << "Finished algo" << std::endl << std::endl;
+
+    std::cout << "Final results:" << std::endl;
+    for (int i = 0; i < residents->length; i++) {
+        std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+    }
 }
