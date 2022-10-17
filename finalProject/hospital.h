@@ -45,6 +45,9 @@ class Hospital {
 
         // Getter for the loweset preferred resident currently assigned to the hospital
         int getLowestPreferredAssignedResidentIndex();
+
+        // Setter for the lowest preferred assigned resident index
+        void setLowestPreferredAssignedResidentIndex();
     private:
         // The name for printing the output
         std::string name;
@@ -69,9 +72,6 @@ class Hospital {
 
         // Add the preferences to the list
         void addPreferences(std::string preferences, ResidentArr* residents);
-
-        // Setter for the lowest preferred assigned resident index
-        void setLowestPreferredAssignedResidentIndex();
 };
 
 // Struct for working with hospitals on the heap

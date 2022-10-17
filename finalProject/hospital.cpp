@@ -41,11 +41,6 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
 
     assignedResidents = new Resident[capacity];
 
-    // Clear the assigned residents array
-    for (int i = 0; i < capacity; i++) {
-        assignedResidents[i].~Resident();
-    }
-
     addPreferences(remainder.substr(hyphenIndex + 2, std::string::npos), residents);
 }
 
@@ -86,9 +81,6 @@ void Hospital::replaceLowest(Resident* newResident) {
     // Add the new resident to where the lowest resident is currently
     assignedResidents[lowestPreferredAssignedResidentIndex] = *newResident;
     newResident->setAssignment(this);
-
-    // Update the lowest assigned resident index
-    setLowestPreferredAssignedResidentIndex();
 }
 
 void Hospital::addResident(Resident* newResident) {
@@ -96,9 +88,6 @@ void Hospital::addResident(Resident* newResident) {
     assignedResidents[numAssigned] = *newResident;
     newResident->setAssignment(this);
     numAssigned++;
-
-    // Update the lowest assigned resident index
-    setLowestPreferredAssignedResidentIndex();
 }
 
 void Hospital::setLowestPreferredAssignedResidentIndex() {

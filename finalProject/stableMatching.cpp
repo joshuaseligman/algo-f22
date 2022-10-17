@@ -128,6 +128,9 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
             }
 
             if (preference->data->isFull()) {
+                // Get the lowest preferred assigned resident index
+                preference->data->setLowestPreferredAssignedResidentIndex();
+
                 // If the hospital is full, then replace the lowest preferred resident with the current resident
                 Resident* lowest = &residents->arr[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()];
                 lowest->setAssignment(nullptr);
@@ -141,9 +144,12 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
             }
 
             // Print the assignment as it happens
-            std::cout << "Assigned " << resident->data->getName() << " to hospital " << resident->data->getAssignment()->getName() << std::endl;
+            std::cout << "Assigned " << resident->data->getName() << " to " << resident->data->getAssignment()->getName() << std::endl;
 
             if (preference->data->isFull()) {
+                // Get the lowest preferred assigned resident index
+                preference->data->setLowestPreferredAssignedResidentIndex();
+
                 // We need to iterate through all of the residents
                 for (int i = 0; i < residents->length; i++) {
                     // Check if the current resident is less preferred compared to the lowest preferred resident
@@ -155,8 +161,12 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                     }
                 }
             }
+
+            // Clean up memory because the node is no longer needed
+            delete preference;
         }
 
+        // The resident is done for now and a new node has already been created if needed
         delete resident;
     }
 
