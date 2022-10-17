@@ -175,6 +175,10 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     // Print the final results
     std::cout << "Final results:" << std::endl;
     for (int i = 0; i < residents->length; i++) {
-        std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+        if (residents->arr[i].getAssignment() != nullptr) {
+            std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+        } else {
+            std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
+        }
     }
 }

@@ -5,7 +5,7 @@
 #include <iostream>
 
 int main() {
-    StringArr* data = readFile("testData4.txt");
+    StringArr* data = readFile("testData5.txt");
 
     for (int i = 0; i < data->length; i++) {
         std::cout << data->arr[i] << std::endl;
