@@ -12,8 +12,8 @@ r8: h1 h3 h2 h5 h4
 r9: h4 h1 h5
 r10: h3 h1 h5 h2 h4
 r11: h5 h4 h1 h3 h2
-h1: 4 - r3 r7 r9 r11 r5 r4 r10 r8 r6 r1 r2
-h2: 3 - r5 r7 r10 r6 r8 r2 r3 r11
-h3: 3 - r11 r6 r8 r3 r2 r4 r7 r1 r10
-h4: 2 - r10 r1 r2 r11 r4 r9 r5 r3 r6 r8
-h5: 1 - r2 r4 r10 r7 r6 r1 r8 r3 r11 r9
+h1: 4
+h2: 3
+h3: 3
+h4: 2
+h5: 1

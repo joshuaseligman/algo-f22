@@ -18,12 +18,6 @@ class Hospital {
 
         // Returns if the hospital is full or not
         bool isFull();
-
-        // Replaces the lowest preferred resident with a new resident
-        void replaceLowest(Resident* newResident);
-
-        // Adds the resident to the hospital
-        void addResident(Resident* newResident);
         
         // Getter for the name
         std::string getName();
@@ -36,18 +30,6 @@ class Hospital {
 
         // Getter for the number of assigned residents
         int getNumAssigned();
-
-        // Getter for the array of preferences for the hospital
-        int* getResidentPreferences();
-
-        // Getter for the array of the residents provisionally assigned to the hospital
-        Resident* getAssignedResidents();
-
-        // Getter for the loweset preferred resident currently assigned to the hospital
-        int getLowestPreferredAssignedResidentIndex();
-
-        // Setter for the lowest preferred assigned resident index
-        void setLowestPreferredAssignedResidentIndex();
     private:
         // The name for printing the output
         std::string name;
@@ -60,18 +42,6 @@ class Hospital {
 
         // Number of residents already assigned to the hospital
         int numAssigned;
-
-        // Array of preferences for the hospital
-        int* residentPreferences;
-
-        // Array of the residents provisionally assigned to the hospital
-        Resident* assignedResidents;
-
-        // The index of the loweset preferred resident currently assigned to the hospital
-        int lowestPreferredAssignedResidentIndex;
-
-        // Add the preferences to the list
-        void addPreferences(std::string preferences, ResidentArr* residents);
 };
 
 // Struct for working with hospitals on the heap

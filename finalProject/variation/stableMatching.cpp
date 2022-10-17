@@ -53,15 +53,12 @@ void stableMatchAlgo(StringArr* data) {
         std::cout << std::endl;
     }
 
-    for (int j = 0; j < hospitals->length; j++) {
-        for (int k = 0; k < residents->length; k++) {
-            std::cout << hospitals->arr[j].getResidentPreferences()[k] << " ";
-        }
-        std::cout << std::endl;
+    for (int i = 0; i < hospitals->length; i++) {
+        std::cout << hospitals->arr[i].getName() << "; capacity: " << hospitals->arr[i].getCapacity() << std::endl;
     }
 
     // Call the actual algorithm
-    generateStableMatches(residents, hospitals);
+    // generateStableMatches(residents, hospitals);
 
     // Memory management and clean up
     delete [] residents->arr;
@@ -96,89 +93,89 @@ HospitalArr* createHospitals(int numHospitals) {
 }
 
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
-    Queue<Resident*> residentQueue;
+    // Queue<Resident*> residentQueue;
 
-    // Add the residents to a queue for determining the next resident to propose
-    for (int i = 0; i < residents->length; i++) {
-        Node<Resident*>* n = new Node(&residents->arr[i]);
-        residentQueue.enqueue(n);
-    }
+    // // Add the residents to a queue for determining the next resident to propose
+    // for (int i = 0; i < residents->length; i++) {
+    //     Node<Resident*>* n = new Node(&residents->arr[i]);
+    //     residentQueue.enqueue(n);
+    // }
 
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
-    while (!residentQueue.isEmpty()) {
-        residentQueue.printQueue();
+    // while (!residentQueue.isEmpty()) {
+    //     residentQueue.printQueue();
 
-        Node<Resident*>* resident = residentQueue.dequeue();
+    //     Node<Resident*>* resident = residentQueue.dequeue();
 
-        while (resident->data->getAssignment() == nullptr && !resident->data->getHospitalPreferences()->isEmpty()) {
-            for (int j = 0; j < hospitals->length; j++) {
-                std::cout << resident->data->getPreferencesArr()[j] << " ";
-            }
-            std::cout << std::endl;
+    //     while (resident->data->getAssignment() == nullptr && !resident->data->getHospitalPreferences()->isEmpty()) {
+    //         for (int j = 0; j < hospitals->length; j++) {
+    //             std::cout << resident->data->getPreferencesArr()[j] << " ";
+    //         }
+    //         std::cout << std::endl;
 
-            // Get the hospital at the front of the preference list
-            Node<Hospital*>* preference = resident->data->getHospitalPreferences()->dequeue();
+    //         // Get the hospital at the front of the preference list
+    //         Node<Hospital*>* preference = resident->data->getHospitalPreferences()->dequeue();
 
-            // The hospital is full with more preferable residents, so the current resident is not getting in
-            if (resident->data->getPreferencesArr()[preference->data->getIndex()] == 0) {
-                // Clean up memory and try the next hospital
-                delete preference;
-                continue;
-            }
+    //         // The hospital is full with more preferable residents, so the current resident is not getting in
+    //         if (resident->data->getPreferencesArr()[preference->data->getIndex()] == 0) {
+    //             // Clean up memory and try the next hospital
+    //             delete preference;
+    //             continue;
+    //         }
 
-            if (preference->data->isFull()) {
-                // Get the lowest preferred assigned resident index
-                preference->data->setLowestPreferredAssignedResidentIndex();
+    //         if (preference->data->isFull()) {
+    //             // Get the lowest preferred assigned resident index
+    //             preference->data->setLowestPreferredAssignedResidentIndex();
 
-                // If the hospital is full, then replace the lowest preferred resident with the current resident
-                Resident* lowest = &residents->arr[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()];
-                lowest->setAssignment(nullptr);
+    //             // If the hospital is full, then replace the lowest preferred resident with the current resident
+    //             Resident* lowest = &residents->arr[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()];
+    //             lowest->setAssignment(nullptr);
 
-                preference->data->replaceLowest(resident->data);
-                // Since the lowest preferred resident was replaced, we need to come back to it later
-                residentQueue.enqueue(new Node<Resident*>(lowest));
-            } else {
-                // Add the new resident to the 
-                preference->data->addResident(resident->data);
-            }
+    //             preference->data->replaceLowest(resident->data);
+    //             // Since the lowest preferred resident was replaced, we need to come back to it later
+    //             residentQueue.enqueue(new Node<Resident*>(lowest));
+    //         } else {
+    //             // Add the new resident to the 
+    //             preference->data->addResident(resident->data);
+    //         }
 
-            // Print the assignment as it happens
-            std::cout << "Assigned " << resident->data->getName() << " to " << resident->data->getAssignment()->getName() << std::endl;
+    //         // Print the assignment as it happens
+    //         std::cout << "Assigned " << resident->data->getName() << " to " << resident->data->getAssignment()->getName() << std::endl;
 
-            if (preference->data->isFull()) {
-                // Get the lowest preferred assigned resident index
-                preference->data->setLowestPreferredAssignedResidentIndex();
+    //         if (preference->data->isFull()) {
+    //             // Get the lowest preferred assigned resident index
+    //             preference->data->setLowestPreferredAssignedResidentIndex();
 
-                // We need to iterate through all of the residents
-                for (int i = 0; i < residents->length; i++) {
-                    // Check if the current resident is less preferred compared to the lowest preferred resident
-                    if (preference->data->getResidentPreferences()[residents->arr[i].getIndex()] > preference->data->getResidentPreferences()[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()]) {
+    //             // We need to iterate through all of the residents
+    //             for (int i = 0; i < residents->length; i++) {
+    //                 // Check if the current resident is less preferred compared to the lowest preferred resident
+    //                 if (preference->data->getResidentPreferences()[residents->arr[i].getIndex()] > preference->data->getResidentPreferences()[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()]) {
 
-                        // Take the resident out of the running if that is the case
-                        residents->arr[i].getPreferencesArr()[preference->data->getIndex()] = 0;
-                        preference->data->getResidentPreferences()[residents->arr[i].getIndex()] = INT_MAX;
-                    }
-                }
-            }
+    //                     // Take the resident out of the running if that is the case
+    //                     residents->arr[i].getPreferencesArr()[preference->data->getIndex()] = 0;
+    //                     preference->data->getResidentPreferences()[residents->arr[i].getIndex()] = INT_MAX;
+    //                 }
+    //             }
+    //         }
 
-            // Clean up memory because the node is no longer needed
-            delete preference;
-        }
+    //         // Clean up memory because the node is no longer needed
+    //         delete preference;
+    //     }
 
-        // The resident is done for now and a new node has already been created if needed
-        delete resident;
-    }
+    //     // The resident is done for now and a new node has already been created if needed
+    //     delete resident;
+    // }
 
-    std::cout << "Finished algo" << std::endl << std::endl;
+    // std::cout << "Finished algo" << std::endl << std::endl;
 
-    // Print the final results
-    std::cout << "Final results:" << std::endl;
-    for (int i = 0; i < residents->length; i++) {
-        if (residents->arr[i].getAssignment() != nullptr) {
-            std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
-        } else {
-            std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
-        }
-    }
+    // // Print the final results
+    // std::cout << "Final results:" << std::endl;
+    // for (int i = 0; i < residents->length; i++) {
+    //     if (residents->arr[i].getAssignment() != nullptr) {
+    //         std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+    //     } else {
+    //         std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
+    //     }
+    // }
 }
