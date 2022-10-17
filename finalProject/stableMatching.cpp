@@ -117,6 +117,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
             }
             std::cout << std::endl;
 
+            // Get the hospital at the front of the preference list
             Node<Hospital*>* preference = resident->data->getHospitalPreferences()->dequeue();
 
             // The hospital is full with more preferable residents, so the current resident is not getting in
@@ -139,15 +140,18 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                 preference->data->addResident(resident->data);
             }
 
+            // Print the assignment as it happens
             std::cout << "Assigned " << resident->data->getName() << " to hospital " << resident->data->getAssignment()->getName() << std::endl;
 
             if (preference->data->isFull()) {
+                // We need to iterate through all of the residents
                 for (int i = 0; i < residents->length; i++) {
-                    if (preference->data->getResidentPreferences()[residents->arr[i].getIndex()] >preference->data->getResidentPreferences()[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()]) {
+                    // Check if the current resident is less preferred compared to the lowest preferred resident
+                    if (preference->data->getResidentPreferences()[residents->arr[i].getIndex()] > preference->data->getResidentPreferences()[preference->data->getAssignedResidents()[preference->data->getLowestPreferredAssignedResidentIndex()].getIndex()]) {
 
-
+                        // Take the resident out of the running if that is the case
                         residents->arr[i].getPreferencesArr()[preference->data->getIndex()] = 0;
-                        preference->data->getResidentPreferences()[residents->arr[i].getIndex()] = 0;
+                        preference->data->getResidentPreferences()[residents->arr[i].getIndex()] = INT_MAX;
                     }
                 }
             }
@@ -158,6 +162,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
 
     std::cout << "Finished algo" << std::endl << std::endl;
 
+    // Print the final results
     std::cout << "Final results:" << std::endl;
     for (int i = 0; i < residents->length; i++) {
         std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;

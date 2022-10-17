@@ -27,7 +27,7 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
     residentPreferences = new int[residents->length];
     // Initialize everything to be 0 (does not want the resident at all)
     for (int i = 0; i < residents->length; i++) {
-        residentPreferences[i] = 0;
+        residentPreferences[i] = INT_MAX;
     }
 
     // Get the remainder of the string after the colon and the space
@@ -83,34 +83,38 @@ bool Hospital::isFull() {
 }
 
 void Hospital::replaceLowest(Resident* newResident) {
+    // Add the new resident to where the lowest resident is currently
     assignedResidents[lowestPreferredAssignedResidentIndex] = *newResident;
     newResident->setAssignment(this);
 
+    // Update the lowest assigned resident index
     setLowestPreferredAssignedResidentIndex();
 }
 
 void Hospital::addResident(Resident* newResident) {
+    // Add the resident to the array
     assignedResidents[numAssigned] = *newResident;
     newResident->setAssignment(this);
     numAssigned++;
 
+    // Update the lowest assigned resident index
     setLowestPreferredAssignedResidentIndex();
 }
 
 void Hospital::setLowestPreferredAssignedResidentIndex() {
     int lowestIndex = 0;
 
+    // Iterate through the array to find the worst preferred resident assigned to the hospital
     for (int i = 1; i < numAssigned; i++) {
-        if (residentPreferences[assignedResidents[i].getIndex()] > 0 ||
-            residentPreferences[assignedResidents[i].getIndex()] > residentPreferences[assignedResidents[lowestIndex].getIndex()]) {
+        if (residentPreferences[assignedResidents[i].getIndex()] > residentPreferences[assignedResidents[lowestIndex].getIndex()]) {
             lowestIndex = i;
         }
     }
+    // Update the value
     lowestPreferredAssignedResidentIndex = lowestIndex;
 }
 
 std::string Hospital::getName() {
-    // Return the hospital's name
     return name;
 }
 
