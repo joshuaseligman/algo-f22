@@ -38,6 +38,9 @@ class Hospital {
 
         // Constant for 3 levels (each resident gets 3 preferences as well)
         const int NUM_LEVELS = 3;
+
+        // Adds a resident to the given level
+        void addResident(Resident* resident, int level);
     private:
         // The name for printing the output
         std::string name;
@@ -47,9 +50,6 @@ class Hospital {
 
         // The capacity of the hospital
         int capacity;
-
-        // Number of residents already assigned to the hospital
-        int numAssigned;
 
         // Array for each level of assigned residents
         List<Resident*>* leveledAssignments;
