@@ -2,29 +2,31 @@
 #include <iostream>
 #include <string.h>
 
-#include "queue.h"
+#include "list.h"
 #include "node.h"
 #include "resident.h"
 #include "hospital.h"
 
-// Instantiate the queue with the head pointing to nothing
+// Instantiate the list with the head pointing to nothing
 template <typename T>
-Queue<T>::Queue() {
+List<T>::List() {
     head = nullptr;
     tail = nullptr;
+
+    size = 0;
 }
 
 template <typename T>
-Queue<T>::~Queue() {
+List<T>::~List() {
     while (!isEmpty()) {
         Node<T>* n = dequeue();
         delete n;
     }
 }
 
-// Creates a new node and adds it to the queue
+// Creates a new node and adds it to the list
 template <typename T>
-void Queue<T>::enqueue(Node<T>* newNode) {    
+void List<T>::enqueue(Node<T>* newNode) {    
     if (isEmpty()) {
         // Immediately set the head and tail to be the new node if we are empty
         head = newNode;
@@ -34,39 +36,45 @@ void Queue<T>::enqueue(Node<T>* newNode) {
         tail->next = newNode;
         tail = newNode;
     }
+
+    // Increment the size
+    size++;
 }
 
 template <typename T>
-Node<T>* Queue<T>::dequeue() {
+Node<T>* List<T>::dequeue() {
     if (isEmpty()) {
-        // Throw an exception if the queue is already empty
-        throw std::invalid_argument("Tried to remove from an empty queue.");
+        // Throw an exception if the list is already empty
+        throw std::invalid_argument("Tried to remove from an empty list.");
     } else {
-        // We need to collect the data in the node before removing it from the queue
+        // We need to collect the data in the node before removing it from the list
         Node<T>* frontNode = head;
         head = head->next;
         if (head == nullptr) {
-            // Tail has to become nullptr because the queue is now empty
+            // Tail has to become nullptr because the list is now empty
             tail = nullptr;
         }
 
         // We have to remove whatever next is pointing to because the node is no longer
-        // a part of the linked queue
+        // a part of the linked list
         frontNode->next = nullptr;
+
+        // Decrement the size
+        size--;
 
         return frontNode;
     }
 }
 
-// Checks to see if the queue is empty or not
+// Checks to see if the list is empty or not
 template <typename T>
-bool Queue<T>::isEmpty() {
+bool List<T>::isEmpty() {
     return head == nullptr;
 }
 
 template <typename T>
-void Queue<T>::printQueue() {
-    // Get the head of the queue and iterate through, printing the data in each node
+void List<T>::printList() {
+    // Get the head of the list and iterate through, printing the data in each node
     Node<T>* cur = head;
     while (cur != nullptr) {
         if (strcmp(typeid(cur->data).name(), "P8Hospital") == 0) {
@@ -82,6 +90,11 @@ void Queue<T>::printQueue() {
     std::cout << "nullptr" << std::endl;
 }
 
-// Define acceptable data types that the Queue can accept for the template
-template class Queue<Hospital*>;
-template class Queue<Resident*>;
+template <typename T>
+int List<T>::getSize() {
+    return size;
+}
+
+// Define acceptable data types that the List can accept for the template
+template class List<Hospital*>;
+template class List<Resident*>;

@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "queue.h"
+#include "list.h"
 
 class Hospital;
 struct HospitalArr;
@@ -25,7 +25,7 @@ class Resident {
         std::string getName();
 
         // Getter for the preferences
-        Queue<Hospital*>* getHospitalPreferences();
+        List<Hospital*>* getHospitalPreferences();
 
         // Getter for the preferences array
         bool* getPreferencesArr();
@@ -42,8 +42,8 @@ class Resident {
         // Index for referencing the resident from an array
         int index;
 
-        // Queue of initial preferences
-        Queue<Hospital*>* hospitalPreferences;
+        // List of initial preferences
+        List<Hospital*>* hospitalPreferences;
 
         // Boolean array to determine which hospitals are still in the running for the resident
         bool* preferenceArr;

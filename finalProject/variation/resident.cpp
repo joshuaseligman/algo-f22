@@ -1,14 +1,14 @@
 #include "resident.h"
 #include "hospital.h"
 
-#include "queue.h"
+#include "list.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
 
 Resident::Resident() {
-    hospitalPreferences = new Queue<Hospital*>();
+    hospitalPreferences = new List<Hospital*>();
     assignment = nullptr;
 }
 
@@ -70,7 +70,7 @@ std::string Resident::getName() {
     return name;
 }
 
-Queue<Hospital*>* Resident::getHospitalPreferences() {
+List<Hospital*>* Resident::getHospitalPreferences() {
     return hospitalPreferences;
 }
 

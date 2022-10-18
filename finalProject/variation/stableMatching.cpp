@@ -45,7 +45,7 @@ void stableMatchAlgo(StringArr* data) {
     }
 
     for (int i = 0; i < residents->length; i++) {
-        residents->arr[i].getHospitalPreferences()->printQueue();
+        residents->arr[i].getHospitalPreferences()->printList();
 
         for (int j = 0; j < hospitals->length; j++) {
             std::cout << residents->arr[i].getPreferencesArr()[j] << " ";
@@ -93,20 +93,20 @@ HospitalArr* createHospitals(int numHospitals) {
 }
 
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
-    // Queue<Resident*> residentQueue;
+    // List<Resident*> residentList;
 
-    // // Add the residents to a queue for determining the next resident to propose
+    // // Add the residents to a List for determining the next resident to propose
     // for (int i = 0; i < residents->length; i++) {
     //     Node<Resident*>* n = new Node(&residents->arr[i]);
-    //     residentQueue.enqueue(n);
+    //     residentList.enqueue(n);
     // }
 
     // std::cout << std::endl;
 
-    // while (!residentQueue.isEmpty()) {
-    //     residentQueue.printQueue();
+    // while (!residentList.isEmpty()) {
+    //     residentList.printList();
 
-    //     Node<Resident*>* resident = residentQueue.dequeue();
+    //     Node<Resident*>* resident = residentList.dequeue();
 
     //     while (resident->data->getAssignment() == nullptr && !resident->data->getHospitalPreferences()->isEmpty()) {
     //         for (int j = 0; j < hospitals->length; j++) {
@@ -134,7 +134,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
 
     //             preference->data->replaceLowest(resident->data);
     //             // Since the lowest preferred resident was replaced, we need to come back to it later
-    //             residentQueue.enqueue(new Node<Resident*>(lowest));
+    //             residentList.enqueue(new Node<Resident*>(lowest));
     //         } else {
     //             // Add the new resident to the 
     //             preference->data->addResident(resident->data);
