@@ -1,5 +1,6 @@
 #include "hospital.h"
 #include "resident.h"
+#include "list.h"
 
 #include <string>
 #include <sstream>
@@ -8,10 +9,12 @@
 Hospital::Hospital() {
     // Initialize these variables to be nothing
     numAssigned = 0;
+
+    leveledAssignments = new List<Resident*>[NUM_LEVELS];
 }
 
 Hospital::~Hospital() {
-    
+    delete [] leveledAssignments;
 }
 
 void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents) {
@@ -48,4 +51,8 @@ int Hospital::getCapacity() {
 
 int Hospital::getNumAssigned() {
     return numAssigned;
+}
+
+List<Resident*>* Hospital::getAssignments() {
+    return leveledAssignments;
 }

@@ -55,6 +55,10 @@ void stableMatchAlgo(StringArr* data) {
 
     for (int i = 0; i < hospitals->length; i++) {
         std::cout << hospitals->arr[i].getName() << "; capacity: " << hospitals->arr[i].getCapacity() << std::endl;
+
+        for (int j = 0; j < hospitals->arr[j].NUM_LEVELS; j++) {
+            hospitals->arr[i].getAssignments()[j].printList();
+        }
     }
 
     // Call the actual algorithm
@@ -95,7 +99,7 @@ HospitalArr* createHospitals(int numHospitals) {
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     // List<Resident*> residentList;
 
-    // // Add the residents to a List for determining the next resident to propose
+    // Add the residents to a list for determining the next resident to propose
     // for (int i = 0; i < residents->length; i++) {
     //     Node<Resident*>* n = new Node(&residents->arr[i]);
     //     residentList.enqueue(n);

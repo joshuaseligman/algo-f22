@@ -1,5 +1,7 @@
 #pragma once
 
+#include "list.h"
+
 #include <string>
 
 class Resident;
@@ -30,6 +32,12 @@ class Hospital {
 
         // Getter for the number of assigned residents
         int getNumAssigned();
+
+        // Getter for the assignments
+        List<Resident*>* getAssignments();
+
+        // Constant for 3 levels (each resident gets 3 preferences as well)
+        const int NUM_LEVELS = 3;
     private:
         // The name for printing the output
         std::string name;
@@ -42,6 +50,9 @@ class Hospital {
 
         // Number of residents already assigned to the hospital
         int numAssigned;
+
+        // Array for each level of assigned residents
+        List<Resident*>* leveledAssignments;
 };
 
 // Struct for working with hospitals on the heap
