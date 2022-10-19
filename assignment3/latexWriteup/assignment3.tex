@@ -99,7 +99,7 @@ Linear search is a searching algorithm that walks through an array and continues
         \If{$i == len(arr)$}
           \State $i = -1$ \Comment{Set $i$ to -1 to note that the target is not in the array}
         \EndIf
-        \State return $i$
+        \State \Return $i$
       \EndProcedure
   \end{algorithmic}
 \end{algorithm}
@@ -107,176 +107,33 @@ Linear search is a searching algorithm that walks through an array and continues
 \subsection{Asymptotic Analysis and Comparisons}
 As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. Also, worst case, the number of iterations will be equal to the number of elements in the array. Listing \ref{lst:linearSearch} provides the C++ implementation of linear search and demonstrates the need to iterate through the entire list with its loop on lines 6-12. Therefore, as its name implies, linear search runs in linear time $O(n)$.
 
-
-\section{Insertion Sort}\label{insertionSortSection}
-\subsection{The Algorithm}\label{insertionSortAlgo}
-Insertion sort in a sorting algorithm that places an element in its sorted position by sliding previously sorted elements over until the sorted position is found. As shown in Algorithm \ref{algorithm:insertionSort}, the element that is being sorted is only compared to elements in positions $[0, i - 1]$ because these are the elements that have been worked with so far and are known to be in order. Therefore, the elements in this area, as described before, are shifted over until one is less than the value being sorted or until $j < 0$, which will break out of the while loop. Unlike selection sort, the performance of insertion sort varies based on the state of the input array, which will be explored more in detail in Section \ref{insertionAnalysis}.
-
-\begin{algorithm}
-  \caption{Insertion Sort Algorithm}
-  \label{algorithm:insertionSort}
-  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
-  \begin{algorithmic}[1]
-      \Procedure{InsertionSort}{$arr$}
-        \For{$i \gets 1,~n - 1$} \Comment{Start at index 1 because the first element is already sorted}
-          \State $currentVal \gets arr[i]$
-          \State $j \gets i - 1$
-          \While{$j \geq 0 ~\textbf{and} ~currentVal < arr[j]$} \Comment{Find the position to place the element}
-            \State $arr[j + 1] \gets arr[j]$ \Comment{Shift the element over because it is greater than the current value}
-            \State $j \gets j - 1$
-          \EndWhile
-          \State $arr[j + 1] \gets currentVal$ \Comment{Place the element in its sorted position}
-        \EndFor
-      \EndProcedure
-  \end{algorithmic}
-\end{algorithm}
-
-\subsection{Asymptotic Analysis and Comparisons}\label{insertionAnalysis}
-The code implementation of insertion sort is in Listing \ref{lst:insertionSortListing} on lines 4-33. The worst case for insertion sort is when the list is in reverse order. In this scenario, every element that gets compared to in the inner loop will be greater than the element being sorted, which means that the inner loop will run until $j < 0$ so the item gets placed in the front of the array. As explored in Section \ref{selectionAnalysis}, the total number of iterations in the case of a reversed list for insertion sort will be $\sum_{k = 1} ^{n - 1} k$, which solves to be an $O(n^2)$ runtime. However, the best case for insertion sort is when the array is already sorted. In this situation, the outer loop will still be run, but the inner loop will never be entered because the element being sorted is always going to be greater than or equal to the element in the position before it. Therefore, since the array is only being iterated through from the outer loop, the runtime of insertion sort improves to $\Omega(n)$.
-
-In Table \ref{comparisonsTable}, insertion sort is shown to have 3 very different outcomes for the lists that were used for testing relative to selection sort. First, insertion sort used about half the number of comparisons as selection sort for a list of 666 shuffled magic items. This is because the inner loop of insertion sort may terminate when $arr[j] < currentVal$ (see line 16 in Listing \ref{lst:insertionSortListing}) and in a randomly shuffled list, the probability of $arr[j] < currentVal$ will be around 50\%. Therefore, insertion sort will on average be about 50\% more efficient than selection sort, but is still classified as $O(n^2)$ beause it is still running at a function of $n^2$. Next, when the list is already sorted, insertion sort only makes $n-1$ comparisons. As previously mentioned, the best case for insertion sort is $\Omega(n)$ because the inner loop will never be entered as the second condition for $arr[j] < currentVal$ will always return false. This means there will be only 1 comparison made for each iteration of the outer loop, which equates to $n - 1$ comparisions. Lastly, the worst case for insertion sort is when the list is in reverse order because every element will have to compare itself with all of the elements in the sorted portion of the array. This causes insertion sort to have the same number of comparisons as selection sort for a reversed list at $\frac{1}{2}n^2 - \frac{1}{2}n$, which is also the same number of iterations as the inner loop for insertion sort and makes insertion sort $O(n^2)$.
-
-\section{Merge Sort}
-\subsection{The Algorithm}
-Merge sort is a divide and conquer sorting algorithm that continues to divide an array up until it has $n$ subarrays of size 1, which, by definition, are all sorted. From there, the subarrays are merged together by comparing the elements in each subarray to determine the sorted order of the combined subarrays. Eventually, the full array will be merged back together will all of the elements fully sorted. As displayed in Algorithm \ref{algorithm:mergeSort} in the $MergeSort$ procedure, since the sort is a divide and conquer algorithm, merge sort takes advantage of recursion to make the problem smaller until it reaches its base case of $length(arr) <= 1$, which is shown on line 2. Additionally, on lines 4 and 5, merge sort always divides a given array in half, which makes its performance very predictable and consistent, which will be discussed more in detail in Section \ref{mergeSortAnalysis}.
+\section{Binary Search}
+\subsection{The Algorithm}\label{binarySearch}
+Binary search is a searching algorithm that takes an already sorted list and progressively cuts it in half until there is only 1 element left, which is the one that is being searched for. As shown in Algorithm \ref{algorithm:binarySearch}, each recursive call on lines 8 and 10 moves the start or stop limits to a single side of the midpoint, which effectively cuts the array in half at each level of the recursion tree.
 
 \begin{algorithm}
-  \caption{Merge Sort Algorithm}
-  \label{algorithm:mergeSort}
+  \caption{Binary Search Algorithm}
+  \label{algorithm:binarySearch}
   %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
   \begin{algorithmic}[1]
-      \Procedure{MergeSort}{$arr$}
-        \If{$length(arr) > 1$} \Comment{An array of size 1 is already sorted}
-          \State $mid = floor((length(arr)) / 2)$ \Comment{Get the middle index of the array for splitting it in half}
-          \State $MergeSort(arr[0:mid])$ \Comment{Perform merge sort on the first half of the array (index 0 - mid, inclusive)}
-          \State $MergeSort(arr[mid + 1:length(arr) - 1])$ \Comment{Perform merge sort on the second half of the array}
-          \State $Merge(arr, mid)$ \Comment{Merge the 2 subarrays together in order}
-        \EndIf
-      \EndProcedure
-      \\
-      \Procedure{Merge}{$arr$, $mid$}
-        \State $leftIndex \gets 0$ \Comment{Index for the left subarray}
-        \State $rightIndex \gets mid + 1$ \Comment{Index for the right subarray}
-        \State $newArr \gets [~]$
-        \For{$i \gets 0,~length(arr) - 1$} \Comment{Iterate through all elements}
-          \If{$rightIndex >= length(arr)$} \Comment{All the right subarray items are already in $newArr$}
-            \State $newArr[i] = arr[leftIndex]$ \Comment{Add the next item from the left subarray}
-            \State $leftIndex++$
-          \ElsIf{$leftIndex > mid$} \Comment{All the right subarray items are already in $newArr$}
-            \State $newArr[i] = arr[rightIndex]$ \Comment{Add the next item from the right subarray}
-            \State $rightIndex++$
-          \ElsIf{$arr[leftIndex] < arr[rightIndex]$} \Comment{The next element from the left subarray is less than the next element from the right subarray}
-            \State $newArr[i] = arr[leftIndex]$ \Comment{Add the next item from the left subarray}
-            \State $leftIndex++$
-          \Else
-            \State $newArr[i] = arr[rightIndex]$ \Comment{Add the next item from the right subarray}
-            \State $rightIndex++$
+      \Procedure{BinarySerach}{$arr$, $target$, $start$, $stop$}
+        \State $out \gets -1$ \Comment{Assume the element is not found, by setting the default output to -1}
+        \If{start <= stop} \Comment{Working in a valid range}
+          \State $mid \gets \lfloor(start + stop) / 2\rfloor$ \Comment{Get the middle of the range}
+          \If{$target == arr[mid]$}
+            \State $out \gets mid$ \Comment{Target found at position $mid$}
+          \ElsIf{$target < arr[mid]$} \Comment{Target is in bottom half of the array}
+            \State $out \gets BinarySearch(arr, target, start, mid - 1)$ \Comment{Do binary search on lower half of array}
+          \Else \Comment{Torget is in top half of the array}
+            \State $out \gets BinarySearch(arr, target, mid + 1, stop)$ \Comment{Do binary search on top half of array}
           \EndIf
-        \EndFor
-        \For{$j \gets 0,~length(arr) - 1$}
-          \State $arr[j] \gets newArr[j]$ \Comment{Transfer the sorted elements to the original array}
-        \EndFor
-      \EndProcedure
-  \end{algorithmic}
-\end{algorithm}
-
-\subsection{Asymptotic Analysis and Comparisons}\label{mergeSortAnalysis}
-The C++ implementation of merge sort can be found in Listing \ref{lst:mergeSortListing}, more specifically lines 6-24. As shown on lines 17 and 20, the array is always split in half for each successive call of merge sort until the subarray is of length 1. The recursion tree for merge sort is displayed in Figure \ref{figure:mergeTree}.
-
-\begin{figure}
-  \centering
-  \caption{Recursion tree for merge sort.}
-  \label{figure:mergeTree}
-% Documentation: https://www.ling.upenn.edu/advice/latex/qtree/qtreenotes.pdf
-  \Tree [.$T(n)$
-        [.$T(\frac{n}{2})$
-          [.$T(\frac{n}{4})$
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-          ]
-          [.$T(\frac{n}{4})$ 
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-          ]
-        ]
-        [.$T(\frac{n}{2})$
-          [.$T(\frac{n}{4})$
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-          ]
-          [.$T(\frac{n}{4})$ 
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-            [.{...} 
-              [.$T(\frac{n}{2^k})$ $O(1)$ ]
-            ]
-          ]
-        ]
-      ]
-\end{figure}
-
-As shown in the recursion tree, the array is broken up into smaller subarrays until the subarray is small enough that it is solved using a constant time operation. Additionally, the last call is on an array of size $\frac{n}{2^k}$. Since the array is being divided in half each time, $k$ is the number of levels in the tree, which is $log_2n$.
-
-Next, after the 2 subarrays are sorted, they are merged together for the conquer phase, which is on lines 26-74 of Listing \ref{lst:mergeSortListing}. The beginning of the function (lines 28-36) are all assignments, which run in constant time. Next, there is a for loop that iterates through the length of the subarray being merged. The body is a large if-else block with comparisons and assignments, which is all $O(1)$ and makes the loop it is contained in run in $O(n)$ time. Lastly, lines 71-73 define a loop that iterates through each element in the subarray, which is also $O(n)$. Therefore, the runtime for the merge function is about $2n + 1$, which is $O(n)$.
-
-At each level of the tree, the merge function will work with exactly $n$ elements. For instance, in the first level of the tree, the left subarray will be merged from 2 subarrays of size $\frac{n}{4}$, which means that the merge function will work with $\frac{n}{2}$ elements. However, since there are 2 subarrays of size $\frac{n}{2}$, the merge function will be called again to handle the other subarray and, therefore, the level will end up merging $n$ elements. Thus, one can multiply $n$ by the number of levels to get the runtime complexity, which is $O(n * log_2n)$.
-
-As shown in Table \ref{comparisonsTable}, merge sort is significantly more efficient at sorting the magic items by using around 5,400 comparisons, which is a little less than the algorithm's runtime of $O(n * log_2n)$. The reason for the number of comparisons being less than 6246.67 ($666 * log_{2}666$) is explained on lines 41 and 45 in Listing \ref{lst:mergeSortListing} as the merging of an entire subarray before the other will result in the algorithm merging the remainder of the other subarray without needing to compare the elements. Regardless, the number of comparisons is still not far from $O(n * log_2n)$. Additionaly, merge sort is very similar to selection sort in that it will perform consistently for any permutation of an array of size $n$. This is shown in the smaller test cases, which perform almost identically despite being in differing orders. Also, one interesting point to note is the performance of insertion sort versus merge sort for the already sorted list. Since insertion sort has a best case of $\Omega(n)$, it is more efficient than merge sort when the array is already mostly sorted. This leads to the idea of hybrid algorithms that may use one sort up until a certain point and switch to a second algorithm that is more efficient in the end game of the sorting process.
-
-\section{Quicksort}
-\subsection{The Algorithm}\label{quicksortAlgo}
-Quicksort is similar to merge sort in that it is a divide and conquer sorting algorithm. Rather than dividing an array in half and then eventually merging the 2 subarrays back together, quicksort divides an array into 2 partitions around a pivot value so that all elements in the left partition are less than the pivot value and all elements in the right partition are greater than the pivot value. In other words, the elements are getting sorted as they are being divided up, which will result in the entire array being sorted once there are $n$ subarrays of size 1. The performance of quicksort is also dependent on the method used to choose the pivot, which will be discussed in detail in Section \ref{quicksortAnalysis}.
-
-\begin{algorithm}
-  \caption{Quicksort Algorithm}
-  \label{algorithm:quicksort}
-  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
-  \begin{algorithmic}[1]
-      \Procedure{Quicksort}{$arr$}
-        \If{$length(arr) > 1$} \Comment{An array of size 1 is already sorted}
-          \State $p \gets choosePivotIndex(arr)$ \Comment{More details on how to choose a pivot element in Section \ref{quicksortAnalysis}}
-          \State $newPivotIndex \gets Partition(arr, p)$ \Comment{Partition the array around the pivot}
-          \State $Quicksort(arr[0:newPivotIndex - 1])$ \Comment{Run quicksort on the left partition}
-          \State $Quicksort(arr[newPivotIndex + 1:length(arr) - 1])$ \Comment {Run quicksort on the right partition}
         \EndIf
-      \EndProcedure
-      \\
-      \Procedure{Partition}{$arr$, $pivotIndex$}
-        \State $swap(arr, pivotIndex, length(arr) - 1)$ \Comment{Move the pivot to the end of the array}
-        \State $lastLowPartitionIndex \gets -1$ \Comment{Initially no elements are in the low partition}
-        \For{$i \gets 0,~length(arr) - 2$} \Comment{Iterate through all but the pivot}
-          \If{$arr[i] < arr[length(arr) - 1]$}
-            \State $lastLowPartitionIndex++$ \Comment{Found another element for the low partition}
-            \State $swap(arr, i, lastLowPartitionIndex)$ \Comment{Place the element in the low partition}
-          \EndIf
-        \EndFor
-        \State $swap(arr, length(arr) - 1, lastLowPartitionIndex + 1)$ \Comment{Place the pivot in the appropriate place}
-        \State $return lastLowPartitionIndex + 1$
+        \State \Return $out$
       \EndProcedure
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{Asyptotic Analysis and Comparisons}\label{quicksortAnalysis}
-The C++ implementation for quicksort and partitioning can be found in Listing \ref{lst:quicksortListing}. Since quicksort divides the array into 2 partitions and continues to work until the subarray is of size 1, the recursion tree for quicksort will be the same as merge sort (see Figure \ref{figure:mergeTree}) assuming that the partitions are balanced and approximately the same size. Additionally, the work done to partition the array is $O(n)$ because it iterates through the entire array once (length of subarrays * number of subarrays in the level of the tree). Therefore, on average, the runtime complexity for quicksort will be the same as merge sort at $O(n * log_2n)$.
-
-However, as mentioned in Section \ref{quicksortAlgo}, how the pivot is chosen will impact the runtime in the worst case scenario, which is an already sorted array or a reversed array. In these situations, if the pivot is either the first or last element in the array, the partitions would be of size 0 and size $n - 1$ because the pivot is either going to be greater than all the elements or less than all the elements. As a result, the algorithm would work like selection sort in that it would make sure the one element gets swapped into place and have to iterate through the rest of the array, which is not known to be sorted. Therefore, in these situations, quicksort downgrades to $O(n^2)$.
-
-Therefore, the main problem with quicksort is how to guarantee somewhat balanced partitions. One solution is to use the median of 3 method to pick the partition. The implementation for this approach is found on lines 21-71 of Listing \ref{lst:quicksortListing}. Instead of choosing 1 pivot, the median of 3 approach picks 3 random elements in the array for potential use as the actual pivot and then uses the middle element as the pivot. As a result, there will always be at least 1 element in each partition for all levels of the recursion tree. Even if the partitions are unbalanced, quicksort will still run in linearithmic time, but the logarithm will just have a different base to represent the uneven divide in the elements, and $O(n)$ work will still be done for partitioning at each level of the recursion tree. Also, as shown in the implementation of the median of 3 approach, only random number computations, assignments, and comparisons are needed, which all run in constant time and do not impact the overall runtime complexity of quicksort.
-
-As shown in Table \ref{comparisonsTable}, both the number of comparisons and runtime are most similar to those for merge sort, at approximately $n * log_2n$ comparisons, which lines up with the algorithm's complexity of $O(n * log_2n)$. The number of comparisons for quicksort, however, is greater than that for merge sort for 2 main reasons: quicksort does not have an autocomplete on its partition like merge sort has for merging and there is a tradeoff with the number of comparisons made to prevent $O(n^2)$ runtime. First, since quicksort partitions the array when dividing, every element has to be compared to ensure it is placed in the correct partition. This is very different from merge sort, which just places the rest of a subarray into the merged array when the other subarray being merged is completely merged (lines 41-49 of Listing \ref{lst:mergeSortListing}). Also, as shown in lines 36-71, several comparisons have to be made to pick a pivot that prevents quicksort from downgrading to $O(n^2)$, which is a tradeoff that is made because of how much more efficient $O(n * log_2n)$ is compared to $O(n^2)$. Also, despite having more comparisons than merge sort, quick sort often ran in less time. Although constants are dropped when doing a Big-Oh analysis, the merge function has much larger constants than the partition function for quicksort. As shown in the merge function on lines 26-74 of Listing \ref{lst:mergeSortListing}, there are 2 loops that iterate through the length of the merged subarray, which means that merge sort actually does $2n$ work for each level of the recursion tree. On the other hand, quicksort's partition function on lines 82-114 of Listing \ref{lst:quicksortListing} only iterates through the array once and does $n$ work at each level of the tree, which can save more time as the size of the array increases.
+\subsection{Asymptotic Analysis and Comparisons}
 
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
