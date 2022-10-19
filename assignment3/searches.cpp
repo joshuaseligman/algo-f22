@@ -43,29 +43,21 @@ int binarySearchHelper(StringArr* data, std::string target, int start, int stop,
         // Do integer division to get the midpoint of the array we are considering
         int mid = (start + stop) / 2;
 
-        if (target.compare(data->arr[mid]) == 0) {
-            // Increment the number of comparisons
-            if (comparisons != nullptr) {
-                (*comparisons)++;
-            }
+        // Make the comparison once up top
+        int compStr = target.compare(data->arr[mid]);
+        // Increment the number of comparisons
+        if (comparisons != nullptr) {
+            (*comparisons)++;
+        }
 
+        if (compStr == 0) {
             // The index was found, which is the midpoint
             out = mid;
-        } else if (target.compare(data->arr[mid]) < 0) { // The target is in the first half of the array
-            // We have made 2 comparisons
-            if (comparisons != nullptr) {
-                *comparisons += 2;
-            }
-
+        } else if (compStr < 0) { // The target is in the first half of the array
             // Run the binary search on the first half of the array
             out = binarySearchHelper(data, target, start, mid - 1, comparisons);
         } else { // The target is in the second half of the array
-            // 2 comparisons have been made so far
-            if (comparisons != nullptr) {
-                *comparisons += 2;
-            }
-
-            // Run the binary search on the second half of the array
+                        // Run the binary search on the second half of the array
             out = binarySearchHelper(data, target, mid + 1, stop, comparisons);
         }
     }
