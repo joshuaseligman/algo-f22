@@ -35,6 +35,8 @@
 \usepackage{lastpage}
 \usepackage{color}
 \usepackage{qtree}
+\usepackage{xcolor}
+\usepackage{colortbl}
 
 \allsectionsfont{\normalfont\scshape} % Make all section titles in default font and small caps.
 
@@ -105,26 +107,26 @@ Linear search is a searching algorithm that walks through an array and continues
 \end{algorithm}
 
 \subsection{Asymptotic Analysis and Comparisons}
-As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. Also, worst case, the number of iterations will be equal to the number of elements in the array. Listing \ref{lst:linearSearch} provides the C++ implementation of linear search and demonstrates the need to iterate through the entire list with its loop on lines 6-12. Therefore, as its name implies, linear search runs in linear time $O(n)$.
+As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. Also, at the worst case, the number of iterations will be equal to the number of elements in the array. Listing \ref{lst:linearSearch} provides the C++ implementation of linear search and demonstrates the need to iterate through the entire list with its loop on lines 6-12. Therefore, as its name implies, linear search runs in linear time $O(n)$.
 
 \section{Binary Search}
 \subsection{The Algorithm}\label{binarySearch}
-Binary search is a searching algorithm that takes an already sorted list and progressively cuts it in half until there is only 1 element left, which is the one that is being searched for. As shown in Algorithm \ref{algorithm:binarySearch}, each recursive call on lines 8 and 10 moves the start or stop limits to a single side of the midpoint, which effectively cuts the array in half at each level of the recursion tree.
+Binary search is a searching algorithm that takes an already sorted list and progressively cuts it in half until there is only 1 element left, which is the one that is being searched for. As shown in Algorithm \ref{algorithm:binarySearch}, each recursive call on lines 8 and 10 makes the problem smaller by moving the start or stop limits to a single side of the midpoint, which effectively cuts the array in half at each level of the recursion tree. Also, Figure \ref{figure:binarySearch} illustrates how binary search divides the array in half to eventually find the target element.
 
 \begin{algorithm}
   \caption{Binary Search Algorithm}
   \label{algorithm:binarySearch}
   %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
   \begin{algorithmic}[1]
-      \Procedure{BinarySerach}{$arr$, $target$, $start$, $stop$}
+      \Procedure{BinarySearch}{$arr$, $target$, $start$, $stop$}
         \State $out \gets -1$ \Comment{Assume the element is not found, by setting the default output to -1}
         \If{start <= stop} \Comment{Working in a valid range}
-          \State $mid \gets \lfloor(start + stop) / 2\rfloor$ \Comment{Get the middle of the range}
+          \State $mid \gets \lfloor\frac{(start + stop)}{2}\rfloor$ \Comment{Get the middle of the range}
           \If{$target == arr[mid]$}
             \State $out \gets mid$ \Comment{Target found at position $mid$}
           \ElsIf{$target < arr[mid]$} \Comment{Target is in bottom half of the array}
             \State $out \gets BinarySearch(arr, target, start, mid - 1)$ \Comment{Do binary search on lower half of array}
-          \Else \Comment{Torget is in top half of the array}
+          \Else \Comment{Target is in top half of the array}
             \State $out \gets BinarySearch(arr, target, mid + 1, stop)$ \Comment{Do binary search on top half of array}
           \EndIf
         \EndIf
@@ -133,7 +135,27 @@ Binary search is a searching algorithm that takes an already sorted list and pro
   \end{algorithmic}
 \end{algorithm}
 
+\begin{center}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    % Documentation for coloring the cells of a table: https://mirror.math.princeton.edu/pub/CTAN/macros/latex/contrib/colortbl/colortbl.pdf
+    \hline
+    \rowcolor{blue!20}0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 \\
+    \hline
+    0 & 1 & 2 & 3 & 4 & \cellcolor{blue!20}5 & \cellcolor{blue!20}6 & \cellcolor{blue!20}7 & \cellcolor{blue!20}8 & \cellcolor{blue!20}9 \\
+    \hline
+    0 & 1 & 2 & 3 & 4 & \cellcolor{blue!20}5 & \cellcolor{blue!20}6 & 7 & 8 & 9 \\
+    \hline
+    0 & 1 & 2 & 3 & 4 & 5 & \cellcolor{blue!20}6 & 7 & 8 & 9 \\
+    \hline
+  \end{tabular}
+\captionof{figure}{A visualization of the binary search algorithm. The blue shaded areas are the parts of the array being considered at each step of the recursion tree until there is only the target element left.}
+\label{figure:binarySearch}
+\end{center}
+
 \subsection{Asymptotic Analysis and Comparisons}
+Binary search, similar to merge sort and quicksort, divides the array in half at each step of the recursion tree. This makes the recurrence relation of binary search to be $T(n) = T(\frac{n}{2}) + C$, where $T(\frac{n}{2})$ is the time to perform binary search on the half of the array and $C$ is the constant time to perform the comparisons. Thus, since the array is being divided in half until the size of the array being considered is 1, the number of times binary search will be recursively called at worst case will be $log_2n$ times, which makes it run in $O(log_2n)$ time.
+
+$O(log_2n)$ is a huge improvement over $O(n)$ for linear search. However, the one tradeoff is that binary search needs to have an already sorted array. Thus, if the array is not sorted, an additional $n * log_2n$ time will need to be added to put the array in a state to use binary search. Therefore, linear search may be the better option for one and done search operations, but binary search with a sort will catch up as the number of search operations increases. The mathematical equation to determine this point is $x * n > x * log_2n + n * log_2n$, where $x$ is the number of searching operations that have to be done on the unsorted array.
 
 \section{Appendix}
 \subsection{Comparisons Table}\label{comparisonsTable}
