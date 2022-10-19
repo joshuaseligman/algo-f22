@@ -107,7 +107,7 @@ Linear search is a searching algorithm that walks through an array and continues
 \end{algorithm}
 
 \subsection{Asymptotic Analysis and Comparisons}
-As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. Also, at the worst case, the number of iterations will be equal to the number of elements in the array. Listing \ref{lst:linearSearch} provides the C++ implementation of linear search and demonstrates the need to iterate through the entire list with its loop on lines 6-12. Therefore, as its name implies, linear search runs in linear time $O(n)$.
+As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. The performance of linear search varies drastically on the position of the target element relative to the front of the array. For instance, linear search will be really fast when the target is near the front as the algorithm terminates upon finding the element. However, if the target is near the end of the array, the algorithm will have to iterate through nearly the entire array. Thus, for a randomly sorted list, the average expected case will be $\frac{n}{2}$ iterations. Also, at the worst case, the number of iterations will be equal to the number of elements in the array. Therefore, as its name implies, linear search runs in linear time $O(n)$.
 
 \section{Binary Search}
 \subsection{The Algorithm}\label{binarySearch}
@@ -211,5 +211,8 @@ $O(log_2n)$ is a huge improvement over $O(n)$ for linear search. However, the on
 
 \subsection{Linear Search}
 \lstinputlisting[caption = Linear Search (C++), label = lst:linearSearch, language = C++, firstline = 6, lastline = 30, firstnumber = 1]{./../searches.cpp}
+
+\subsection{Binary Search}
+\lstinputlisting[caption = Binary Search (C++), label = lst:binarySerach, language = C++, firstline = 32, lastline = 67, firstnumber = 1]{./../searches.cpp}
 
 \end{document}
