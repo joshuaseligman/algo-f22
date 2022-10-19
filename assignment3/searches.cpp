@@ -35,28 +35,35 @@ int binarySearch(StringArr* data, std::string target, int* comparisons) {
 }
 
 int binarySearchHelper(StringArr* data, std::string target, int start, int stop, int* comparisons) {
-    // Do integer division to get the midpoint of the array we are considering
-    int mid = (start + stop) / 2;
-
     // Assume nothing is found, which initializes it to 0
     int out = -1;
 
     // Only search if start <= stop. Otherwise, the element doesn't exist ond out is already set to -1
     if (start <= stop) {
+        // Do integer division to get the midpoint of the array we are considering
+        int mid = (start + stop) / 2;
+
         if (target.compare(data->arr[mid]) == 0) {
             // Increment the number of comparisons
-            (*comparisons)++;
+            if (comparisons != nullptr) {
+                (*comparisons)++;
+            }
 
             // The index was found, which is the midpoint
             out = mid;
-        } else if (target.compare(data->arr[mid]) < 0) {
+        } else if (target.compare(data->arr[mid]) < 0) { // The target is in the first half of the array
             // We have made 2 comparisons
-            *comparisons += 2;
+            if (comparisons != nullptr) {
+                *comparisons += 2;
+            }
 
             // Run the binary search on the first half of the array
             out = binarySearchHelper(data, target, start, mid - 1, comparisons);
-        } else {
-            *comparisons += 2;
+        } else { // The target is in the second half of the array
+            // 2 comparisons have been made so far
+            if (comparisons != nullptr) {
+                *comparisons += 2;
+            }
 
             // Run the binary search on the second half of the array
             out = binarySearchHelper(data, target, mid + 1, stop, comparisons);

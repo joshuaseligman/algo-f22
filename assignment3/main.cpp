@@ -11,7 +11,7 @@
 #include "searches.h"
 
 void runSearch(int (*search)(StringArr*, std::string, int*), StringArr* input, std::set<std::string> targets, std::string searchName) {
-    std::cout << searchName << " Search" << std::endl;
+    std::cout << searchName << std::endl;
 
     int totalComparisons = 0;
 
@@ -43,20 +43,35 @@ int main() {
         randomItems.insert(magicItems->arr[randomIndex]);
     }
 
-    runSearch(linearSearch, magicItems, randomItems, "Linear");
-    std::cout << std::endl;
-
+    // Sort the magic items to get the same position for both linear and binary search
     quickSort(magicItems);
 
-    runSearch(binarySearch, magicItems, randomItems, "Binary");
+    runSearch(linearSearch, magicItems, randomItems, "Linear Search");
     std::cout << std::endl;
+
+    runSearch(binarySearch, magicItems, randomItems, "Binary Search (recursion)");
+    std::cout << std::endl;
+
+    // Single edge cases
+    std::cout << "Linear search edge cases:" << std::endl; 
 
     // Test case for an element that doesn't exist
     int comparisons = 0;
-    std::cout << "test - position: " << linearSearch(magicItems, "test", &comparisons) << "; comparisons: " << comparisons << std::endl;
+    std::cout << "test - position: " << linearSearch(magicItems, "test", &comparisons) << "; comparisons: " << comparisons << std::endl << std::endl;
+
+    std::cout << "Binary search edge cases:" << std::endl;
+
+    // Test case for the first element in the list
+    comparisons = 0;
+    std::cout << magicItems->arr[0] << " - position: " << binarySearch(magicItems, magicItems->arr[0], &comparisons) << "; comparisons: " << comparisons << std::endl;
+
+    // Test case for the last element in the list
+    comparisons = 0;
+    std::cout << magicItems->arr[magicItems->length - 1] << " - position: " << binarySearch(magicItems, magicItems->arr[magicItems->length - 1], &comparisons) << "; comparisons: " << comparisons << std::endl;
+
+    // Test case for an element that doesn't exist
     comparisons = 0;
     std::cout << "test - position: " << binarySearch(magicItems, "test", &comparisons) << "; comparisons: " << comparisons << std::endl;
-
 
     // Memory management
     delete [] magicItems->arr;
