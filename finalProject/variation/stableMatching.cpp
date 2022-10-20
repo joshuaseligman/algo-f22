@@ -166,6 +166,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                     cur = cur->next;
 
                     nextHospital->removeResident(residentToRemove, j);
+                    residentToRemove->getHospitalPreferences()->remove(nextHospital);
                     std::cout << "Removed " << residentToRemove->getName() << " from " << nextHospital->getName() << std::endl;
                 }
             }
@@ -177,17 +178,17 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         std::cout << std::endl;
     }
 
-    // std::cout << "Finished algo" << std::endl << std::endl;
+    std::cout << "Finished algo" << std::endl << std::endl;
 
     // Print the final results
-    // std::cout << "Final results:" << std::endl;
-    // for (int i = 0; i < residents->length; i++) {
-    //     if (residents->arr[i].getAssignment() != nullptr) {
-    //         std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
-    //     } else {
-    //         std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
-    //     }
-    // }
+    std::cout << "Final results:" << std::endl;
+    for (int i = 0; i < residents->length; i++) {
+        if (residents->arr[i].getAssignment() != nullptr) {
+            std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+        } else {
+            std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
+        }
+    }
 
     delete [] mutableHospitals.arr;
 }

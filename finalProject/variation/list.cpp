@@ -70,45 +70,48 @@ template <typename T>
 void List<T>::remove(T removeData) {
     printList();
 
-    Node<T>* cur = head;
-    Node<T>* prev = nullptr;
+    // Make sure the list isn't already empty
+    if (!isEmpty()) {
+        Node<T>* cur = head;
+        Node<T>* prev = nullptr;
 
-    // Remove the element from the list of size 1
-    if (cur->next == nullptr) {
-        head = nullptr;
-        tail = nullptr;
+        if (cur->next == nullptr) {
+            // Remove the element from the list of size 1
+            head = nullptr;
+            tail = nullptr;
 
-        delete cur;
-
-        // Update the size
-        size--;
-    } else if (removeData == head->data) {
-        // Set the new head
-        head = head->next;
-        delete cur;
-
-        size--;
-    } else {
-        // Go through the list until the end or until the element is found
-        while (cur != nullptr && cur->data != removeData) {
-            prev = cur;
-            cur = cur->next;
-        }
-
-        if (cur != nullptr) {
-            // If not at the end of the list, remove the node
-            prev->next = cur->next;
-
-            // Update the tail if needed
-            if (prev->next == nullptr) {
-                tail = prev;
-            }
-
-            // Memory management
             delete cur;
 
             // Update the size
             size--;
+        } else if (removeData == head->data) {
+            // Set the new head
+            head = head->next;
+            delete cur;
+
+            size--;
+        } else {
+            // Go through the list until the end or until the element is found
+            while (cur != nullptr && cur->data != removeData) {
+                prev = cur;
+                cur = cur->next;
+            }
+
+            if (cur != nullptr) {
+                // If not at the end of the list, remove the node
+                prev->next = cur->next;
+
+                // Update the tail if needed
+                if (prev->next == nullptr) {
+                    tail = prev;
+                }
+
+                // Memory management
+                delete cur;
+
+                // Update the size
+                size--;
+            }
         }
     }
     printList();
