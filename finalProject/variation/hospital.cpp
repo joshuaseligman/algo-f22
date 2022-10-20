@@ -46,10 +46,15 @@ void Hospital::addResident(Resident* resident, int level) {
 int Hospital::compare(Hospital* hospitalComp) {
     // Initialize the comparison to be equal to each other
     int out = 0;
-    if (this->getNumAssigned() < hospitalComp->getNumAssigned()) {
+    
+    // Compute the difference between the number of provisionally assigned residents and the capacity
+    int thisDiff = this->getNumAssigned() - this->getCapacity();
+    int otherDiff = hospitalComp->getNumAssigned() - hospitalComp->getCapacity();
+
+    if (thisDiff < otherDiff) {
         // This hospital is less than hospitalComp, so set out to -1
         out = -1;
-    } else if (this->getNumAssigned() > hospitalComp->getNumAssigned()) {
+    } else if (thisDiff > otherDiff) {
         // This hospital is greater than hospitalComp, so set out to 1
         out = 1;
     } else { // They both have the same number of provisionally assigned residents
