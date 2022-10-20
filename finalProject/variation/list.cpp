@@ -82,7 +82,8 @@ void List<T>::remove(T removeData) {
 
         // Update the size
         size--;
-    } else if (cur == head) {
+    } else if (removeData == head->data) {
+        // Set the new head
         head = head->next;
         delete cur;
 

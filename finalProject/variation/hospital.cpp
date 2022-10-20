@@ -38,17 +38,11 @@ void Hospital::addResident(Resident* resident, int level) {
     // Create a node and add it to the level
     Node<Resident*>* residentNode = new Node<Resident*>(resident);
     leveledAssignments[level].enqueue(residentNode);
-
-    // Increment numAssigned
-    numAssigned++;
 }
 
 void Hospital::removeResident(Resident* resident, int level) {
     // Create a node and add it to the level
     leveledAssignments[level].remove(resident);
-
-    // Decrement numAssigned
-    numAssigned--;
 }
 
 int Hospital::compare(Hospital* hospitalComp) {
@@ -96,7 +90,11 @@ int Hospital::getCapacity() {
 }
 
 int Hospital::getNumAssigned() {
-    return numAssigned;
+    int sum = 0;
+    for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
+        sum += leveledAssignments[i].getSize();
+    }
+    return sum;
 }
 
 List<Resident*>* Hospital::getAssignments() {
