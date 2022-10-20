@@ -33,4 +33,7 @@ public:
 
     // Getter for the size of the list
     int getSize();
+
+    // Getter for the head
+    Node<T>* getHead();
 };

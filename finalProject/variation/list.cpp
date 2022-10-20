@@ -95,6 +95,11 @@ int List<T>::getSize() {
     return size;
 }
 
+template <typename T>
+Node<T>* List<T>::getHead() {
+    return head;
+}
+
 // Define acceptable data types that the List can accept for the template
 template class List<Hospital*>;
 template class List<Resident*>;

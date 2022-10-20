@@ -97,64 +97,39 @@ HospitalArr* createHospitals(int numHospitals) {
 }
 
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
-    List<Resident*> residentList;
-
-    // Add the residents to a list for determining the next resident to propose
-    for (int i = 0; i < residents->length; i++) {
-        Node<Resident*>* n = new Node(&residents->arr[i]);
-        residentList.enqueue(n);
-    }
-
     std::cout << std::endl;
 
-    while (!residentList.isEmpty()) {
-        residentList.printList();
+   for (int i = 0; i < residents->length; i++) {
+        Node<Hospital*>* cur = residents->arr[i].getHospitalPreferences()->getHead();
 
-        Node<Resident*>* resident = residentList.dequeue();
+        int level = 0;
 
-        // Continue until there are no more residents
-        if (!resident->data->getHospitalPreferences()->isEmpty()) {
-
-            // Get the top preferred hospital
-            Node<Hospital*>* topHospital = resident->data->getHospitalPreferences()->dequeue();
-
-            // If there is still room in the hospital
-            if (!topHospital->data->isFull()) {
-                // Determine the preference level of the hospital
-                int level = topHospital->data->NUM_LEVELS - resident->data->getHospitalPreferences()->getSize() - 1;
-
-                // Assign the resident to the hospital
-                topHospital->data->addResident(resident->data, level);
-
-                std::cout << "Assigned " << resident->data->getName() << " to " << topHospital->data->getName() << std::endl;
-
-                // Print out all of the leveled lists
-                for (int j = 0; j < topHospital->data->NUM_LEVELS; j++) {
-                    topHospital->data->getAssignments()[j].printList();
-                }
-            } else {
-                // Put the resident back on the queue
-                residentList.enqueue(resident);
-                continue;
-            }
-
-            // Memory management
-            delete topHospital;
+        while (cur != nullptr) {
+            // Provisionally assign the resident to all of its preferences
+            cur->data->addResident(&residents->arr[i], level);
+            level++;
+            cur = cur->next;
         }
-
-        // Delete the resident because they are no longer needed
-        delete resident;
     }
 
-    std::cout << "Finished algo" << std::endl << std::endl;
+    // Print out the number of residents in each level for each hospital
+    for (int i = 0; i < hospitals->length; i++) {
+        std::cout << hospitals->arr[i].getCapacity() << ": ";
+        for (int j = 0; j < hospitals->arr[i].NUM_LEVELS; j++) {
+            std::cout << hospitals->arr[i].getAssignments()[j].getSize() << " ";
+        }
+        std::cout << "= " << hospitals->arr[i].getNumAssigned() << std::endl;
+    }
+
+    // std::cout << "Finished algo" << std::endl << std::endl;
 
     // Print the final results
-    std::cout << "Final results:" << std::endl;
-    for (int i = 0; i < residents->length; i++) {
-        if (residents->arr[i].getAssignment() != nullptr) {
-            std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
-        } else {
-            std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
-        }
-    }
+    // std::cout << "Final results:" << std::endl;
+    // for (int i = 0; i < residents->length; i++) {
+    //     if (residents->arr[i].getAssignment() != nullptr) {
+    //         std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+    //     } else {
+    //         std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
+    //     }
+    // }
 }

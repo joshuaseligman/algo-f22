@@ -37,7 +37,7 @@ void Hospital::addResident(Resident* resident, int level) {
     leveledAssignments[level].enqueue(residentNode);
 
     // Assign the resident to this hospital
-    resident->setAssignment(this);
+    // resident->setAssignment(this);
 }
 
 bool Hospital::isFull() {
