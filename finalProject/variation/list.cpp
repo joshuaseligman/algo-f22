@@ -77,6 +77,9 @@ void List<T>::remove(T removeData) {
         tail = nullptr;
 
         delete cur;
+
+        // Update the size
+        size--;
     } else {
         // Go through the list until the end or until the element is found
         while (cur != nullptr && cur->data != removeData) {
@@ -95,6 +98,9 @@ void List<T>::remove(T removeData) {
 
             // Memory management
             delete cur;
+
+            // Update the size
+            size--;
         }
     }
 }
