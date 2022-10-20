@@ -68,10 +68,12 @@ Node<T>* List<T>::dequeue() {
 
 template <typename T>
 void List<T>::remove(T removeData) {
+    printList();
+
     Node<T>* cur = head;
     Node<T>* prev = nullptr;
 
-    // Remove the head element from the list
+    // Remove the element from the list of size 1
     if (cur->next == nullptr) {
         head = nullptr;
         tail = nullptr;
@@ -79,6 +81,11 @@ void List<T>::remove(T removeData) {
         delete cur;
 
         // Update the size
+        size--;
+    } else if (cur == head) {
+        head = head->next;
+        delete cur;
+
         size--;
     } else {
         // Go through the list until the end or until the element is found
@@ -103,6 +110,7 @@ void List<T>::remove(T removeData) {
             size--;
         }
     }
+    printList();
 }
 
 // Checks to see if the list is empty or not
