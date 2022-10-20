@@ -66,6 +66,39 @@ Node<T>* List<T>::dequeue() {
     }
 }
 
+template <typename T>
+void List<T>::remove(T removeData) {
+    Node<T>* cur = head;
+    Node<T>* prev = nullptr;
+
+    // Remove the head element from the list
+    if (cur->next == nullptr) {
+        head = nullptr;
+        tail = nullptr;
+
+        delete cur;
+    } else {
+        // Go through the list until the end or until the element is found
+        while (cur != nullptr && cur->data != removeData) {
+            prev = cur;
+            cur = cur->next;
+        }
+
+        if (cur != nullptr) {
+            // If not at the end of the list, remove the node
+            prev->next = cur->next;
+
+            // Update the tail if needed
+            if (prev->next == nullptr) {
+                tail = prev;
+            }
+
+            // Memory management
+            delete cur;
+        }
+    }
+}
+
 // Checks to see if the list is empty or not
 template <typename T>
 bool List<T>::isEmpty() {

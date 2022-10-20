@@ -25,6 +25,9 @@ public:
     // Removes the front element from the list
     Node<T>* dequeue();
 
+    // Removes a node from the list
+    void remove(T removeData);
+
     // isEmpty checks to see if the list is empty
     bool isEmpty();
 

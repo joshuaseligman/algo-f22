@@ -42,6 +42,9 @@ class Hospital {
         // Adds a resident to the given level
         void addResident(Resident* resident, int level);
 
+        // Removes a resident from the given level
+        void removeResident(Resident* resident, int level);
+
         // Compares 2 hospitals based on the number of residents provisionally assigned to them and their respective capacities
         int compare(Hospital* hospitalComp);
 
@@ -56,6 +59,9 @@ class Hospital {
 
         // The capacity of the hospital
         int capacity;
+
+        // Number of residents assigned to the hospital
+        int numAssigned;
 
         // Array for each level of assigned residents
         List<Resident*>* leveledAssignments;
