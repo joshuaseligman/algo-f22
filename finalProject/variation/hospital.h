@@ -37,10 +37,16 @@ class Hospital {
         List<Resident*>* getAssignments();
 
         // Constant for 3 levels (each resident gets 3 preferences as well)
-        const int NUM_LEVELS = 3;
+        inline static const int NUM_LEVELS = 3;
 
         // Adds a resident to the given level
         void addResident(Resident* resident, int level);
+
+        // Compares 2 hospitals based on the number of residents provisionally assigned to them and their respective capacities
+        int compare(Hospital* hospitalComp);
+
+        // Clears memory to make sure that the destructor doesn't tamper with the data when not wanted
+        void clearMemory();
     private:
         // The name for printing the output
         std::string name;

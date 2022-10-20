@@ -12,6 +12,9 @@ Hospital::Hospital() {
 }
 
 Hospital::~Hospital() {
+}
+
+void Hospital::clearMemory() {
     delete [] leveledAssignments;
 }
 
@@ -38,6 +41,29 @@ void Hospital::addResident(Resident* resident, int level) {
 
     // Assign the resident to this hospital
     // resident->setAssignment(this);
+}
+
+int Hospital::compare(Hospital* hospitalComp) {
+    // Initialize the comparison to be equal to each other
+    int out = 0;
+    if (this->getNumAssigned() < hospitalComp->getNumAssigned()) {
+        // This hospital is less than hospitalComp, so set out to -1
+        out = -1;
+    } else if (this->getNumAssigned() > hospitalComp->getNumAssigned()) {
+        // This hospital is greater than hospitalComp, so set out to 1
+        out = 1;
+    } else { // They both have the same number of provisionally assigned residents
+        if (this->getCapacity() < hospitalComp->getCapacity()) {
+            // This hospital is less than hospitalComp, so set out to -1
+            out = -1;
+        } else if (this->getCapacity() > hospitalComp->getCapacity()) {
+            // This hospital is greater than hospitalComp, so set out to 1
+            out = 1;
+        }
+    }
+
+    // Return the result of the comparison
+    return out;
 }
 
 bool Hospital::isFull() {

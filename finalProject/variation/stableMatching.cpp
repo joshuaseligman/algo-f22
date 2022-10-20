@@ -2,6 +2,7 @@
 #include "resident.h"
 #include "hospital.h"
 #include "util.h"
+#include "sort.h"
 
 #include <iostream>
 #include <sstream>
@@ -68,6 +69,9 @@ void stableMatchAlgo(StringArr* data) {
     delete [] residents->arr;
     delete residents;
 
+    for (int i = 0; i < hospitals->length; i++) {
+        hospitals->arr[i].clearMemory();
+    }
     delete [] hospitals->arr;
     delete hospitals;
 }
@@ -120,6 +124,13 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         }
         std::cout << "= " << hospitals->arr[i].getNumAssigned() << std::endl;
     }
+
+    quickSort(hospitals);
+
+    for (int i = 0; i < hospitals->length; i++) {
+        std::cout << hospitals->arr[i].getName() << " ";
+    }
+    std::cout << std::endl;
 
     // std::cout << "Finished algo" << std::endl << std::endl;
 
