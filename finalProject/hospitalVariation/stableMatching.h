@@ -15,3 +15,9 @@ HospitalArr* createHospitals(int numHospitals);
 
 // The stable match algorithm
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals);
+
+// Compute the happiness index for the residents
+double computeResidentHappiness(ResidentArr* residents);
+
+// Compute the happiness indexf for the hospitals
+double computeHospitalHappiness(HospitalArr* hospitals);

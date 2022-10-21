@@ -26,7 +26,7 @@ void Resident::loadData(std::string data, int resIndex, HospitalArr* hospitals) 
     index = resIndex;
 
     // Initialize the array for the preferences
-    preferenceArr = new bool[hospitals->length];
+    preferenceArr = new int[hospitals->length];
 
     // Load the preference data
     addPreferences(data.substr(colonIndex + 2, std::string::npos), hospitals);
@@ -36,6 +36,8 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
     char* ptr;
     // Get the first token
     ptr = strtok(preferences.data(), " ");
+
+    int ranking = Hospital::NUM_LEVELS;
 
     // Continue until the end of the string  
     while (ptr != NULL) {
@@ -55,7 +57,8 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
         hospitalPreferences->enqueue(hospitalNode);
 
         // Add the preference to the status array
-        preferenceArr[hospitalIndex] = true;
+        preferenceArr[hospitalIndex] = ranking;
+        ranking--;
 
         ptr = strtok(NULL, " ");  
     }
@@ -74,7 +77,7 @@ List<Hospital*>* Resident::getHospitalPreferences() {
     return hospitalPreferences;
 }
 
-bool* Resident::getPreferencesArr() {
+int* Resident::getPreferencesArr() {
     return preferenceArr;
 }
 
