@@ -76,12 +76,39 @@ int main() {
     
     std::cout << std::endl;
 
+    // Create a hash table of size 250
     HashTable h(250);
 
+    // Put the magic items in the hash table
     for (int i = 0; i < magicItems->length; i++) {
         h.put(magicItems->arr[i]);
     }
-    h.printHashTable();
+    
+    // Initialize total comparisons to 0
+    int totalComparisons = 0;
+
+    // Try to get all of the 42 selected items
+    for (auto it = randomItems.begin(); it != randomItems.end(); it++) {
+        int comparisons = 0;
+
+        // Try to get the item
+        bool found = h.get(*it, &comparisons);
+
+        std::cout << *it << " - found: " << found << "; comparisons: " << comparisons << std::endl;
+
+        // Add to the total
+        totalComparisons += comparisons;
+    }
+
+    // Print a summary
+    double average = (double) totalComparisons / randomItems.size();
+    printf("Average comparisons: %.2f\n", average);
+
+    std::cout << std::endl;
+    
+    // Try to get something that isn't in the table
+    comparisons = 0;
+    std::cout << "test - found: " << h.get("test", &comparisons) << "; comparisons: " << comparisons << std::endl;
 
     // Memory management
     delete [] magicItems->arr;

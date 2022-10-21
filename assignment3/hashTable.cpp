@@ -34,6 +34,38 @@ HashTable::~HashTable() {
     delete [] table;
 }
 
+bool HashTable::get(std::string value, int* comparisons) {
+    // Increment the number of comparisons off the bat
+    if (comparisons != nullptr) {
+        (*comparisons)++;
+    }
+
+    // Compute the hash function
+    int index = hash(value);
+
+    // Assume the value isn't in the table
+    bool found = false;
+
+    // Start at the head of the list
+    Node<std::string>* cur = table[index];
+
+    while (!found && cur != nullptr) {
+        // Determine if the value was found
+        if (cur->data.compare(value) == 0) {
+            found = true;
+        } else {
+            // Move to the next element
+            cur = cur->next;
+        }
+
+        // A comparison was made
+        if (comparisons != nullptr) {
+            (*comparisons)++;
+        }
+    }
+    return found;
+}
+
 void HashTable::put(std::string value) {
     // Generate the hash
     int index = hash(value);

@@ -17,7 +17,7 @@ class HashTable {
         ~HashTable();
 
         // Returns if the value is in the hash table
-        bool get(std::string value);
+        bool get(std::string value, int* comparisons = nullptr);
 
         // Puts the value in the hash table
         void put(std::string value);
