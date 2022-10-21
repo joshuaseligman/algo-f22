@@ -28,7 +28,7 @@ class Resident {
         List<Hospital*>* getHospitalPreferences();
 
         // Getter for the preferences array
-        bool* getPreferencesArr();
+        int* getPreferencesArr();
 
         // Getter for the assignment
         Hospital* getAssignment();
@@ -45,8 +45,8 @@ class Resident {
         // List of initial preferences
         List<Hospital*>* hospitalPreferences;
 
-        // Boolean array to determine which hospitals are still in the running for the resident
-        bool* preferenceArr;
+        // Integer array to put the hospital rankings easily
+        int* preferenceArr;
 
         // The hospital the resident is assigned to
         Hospital* assignment;

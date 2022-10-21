@@ -189,6 +189,38 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
             std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
         }
     }
+    std::cout << std::endl;
+
+    // Compute the happiness indices for both residents and hospitals
+    std::cout << "Resident Happiness: " << computeResidentHappiness(residents) << std::endl;
+    std::cout << "Hospital Happiness: " << computeHospitalHappiness(hospitals) << std::endl;
 
     delete [] mutableHospitals.arr;
+}
+
+double computeResidentHappiness(ResidentArr* residents) {
+    int sum = 0;
+
+    // Go through each resident
+    for (int i = 0; i < residents->length; i++) {
+        if (residents->arr[i].getAssignment() != nullptr) {
+            // Add the preference ranking to the sum
+            sum += residents->arr[i].getPreferencesArr()[residents->arr[i].getAssignment()->getIndex()];
+        }
+    }
+
+    // Take the average of ranking / number of levels
+    return (double) sum / (residents->length * Hospital::NUM_LEVELS);
+}
+
+double computeHospitalHappiness(HospitalArr* hospitals) {
+    double sum = 0;
+
+    for (int i = 0; i < hospitals->length; i++) {
+        // The happiness ranking is the percentage of seats that are filled
+        sum += (double) hospitals->arr[i].getNumAssigned() / hospitals->arr[i].getCapacity();
+    }
+
+    // Return the average happiness ranking
+    return sum / hospitals->length;
 }
