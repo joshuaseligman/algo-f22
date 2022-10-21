@@ -73,14 +73,13 @@ void HashTable::put(std::string value) {
     // Create a new node for the table
     Node<std::string>* newNode = new Node<std::string>(value);
 
-    // If the table entry is empty, then just insert the node
-    if (table[index] == nullptr) {
-        table[index] = newNode;
-    } else {
-        // Place the new node at the head of the list
+    // If the table entry is not empty, set the next pointer of the new node
+    if (table[index] != nullptr) {
         newNode->next = table[index];
-        table[index] = newNode;
     }
+    
+    // Place the new node at the head of the list
+    table[index] = newNode;
 }
 
 int HashTable::hash(std::string value) {
