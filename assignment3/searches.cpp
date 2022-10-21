@@ -57,7 +57,7 @@ int binarySearchHelper(StringArr* data, std::string target, int start, int stop,
             // Run the binary search on the first half of the array
             out = binarySearchHelper(data, target, start, mid - 1, comparisons);
         } else { // The target is in the second half of the array
-                        // Run the binary search on the second half of the array
+            // Run the binary search on the second half of the array
             out = binarySearchHelper(data, target, mid + 1, stop, comparisons);
         }
     }

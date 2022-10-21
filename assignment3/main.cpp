@@ -9,6 +9,7 @@
 #include "fileUtil.h"
 #include "sortsAndShuffles.h"
 #include "searches.h"
+#include "hashTable.h"
 
 void runSearch(int (*search)(StringArr*, std::string, int*), StringArr* input, std::set<std::string> targets, std::string searchName) {
     std::cout << searchName << std::endl;
@@ -72,6 +73,15 @@ int main() {
     // Test case for an element that doesn't exist
     comparisons = 0;
     std::cout << "test - position: " << binarySearch(magicItems, "test", &comparisons) << "; comparisons: " << comparisons << std::endl;
+    
+    std::cout << std::endl;
+
+    HashTable h(250);
+
+    for (int i = 0; i < magicItems->length; i++) {
+        h.put(magicItems->arr[i]);
+    }
+    h.printHashTable();
 
     // Memory management
     delete [] magicItems->arr;
