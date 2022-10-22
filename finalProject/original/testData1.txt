@@ -1,5 +1,5 @@
 -- This is a hospital-residents test file.
-
+-- It matches the example data in the slide deck we discussed in class.
 Config: 11 5
 r1: h3 h1 h5 h4
 r2: h1 h3 h4 h2 h5
