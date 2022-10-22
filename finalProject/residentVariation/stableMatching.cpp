@@ -99,14 +99,19 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         std::cout << hospitals->arr[i].getPriority() << std::endl;
     }
 
+    // Go through each level of the hospitals
     for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
         for (int j = 0; j < hospitals->length; j++) {
             hospitals->arr[j].getAssignments()[i].printList();
+            // Make sure the hospital is not over capacity
             while (hospitals->arr[j].getNumAssigned() > hospitals->arr[j].getCapacity()) {
+                // If the level is empty, it's ok to quit because the lower levels are causing it to go over, which will be handled in a later iteration
                 if (!hospitals->arr[j].getAssignments()[i].isEmpty()) {
+                    // Get the resident and remove the hospital from its list
                     Node<Resident*>* res = hospitals->arr[j].getAssignments()[i].dequeue();
                     res->data->getHospitalPreferences()->dequeue();
 
+                    // Add the resident to its next preferred hospital if possible
                     if (i < Hospital::NUM_LEVELS - 1) {
                         res->data->getHospitalPreferences()->getHead()->data->getAssignments()[i + 1].priorityAdd(res, i + 1);
                     } else {
@@ -119,6 +124,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         }
     }
 
+    // Formally assign each resident to the hospitals
     for(int i = 0; i < hospitals->length; i++) {
         for (int j = 0; j < Hospital::NUM_LEVELS; j++) {
             Node<Resident*>* cur = hospitals->arr[i].getAssignments()[j].getHead();
@@ -145,8 +151,6 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     // Compute the happiness indices for both residents and hospitals
     std::cout << "Resident Happiness: " << computeResidentHappiness(residents) << std::endl;
     std::cout << "Hospital Happiness: " << computeHospitalHappiness(hospitals) << std::endl;
-
-    // delete [] mutableHospitals.arr;
 }
 
 double computeResidentHappiness(ResidentArr* residents) {
