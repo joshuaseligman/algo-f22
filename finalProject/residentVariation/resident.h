@@ -35,6 +35,9 @@ class Resident {
 
         // Setter for the assignment
         void setAssignment(Hospital* newAssignment);
+
+        // Compare 2 residents with each other
+        int compare(Resident* compResident, int level);
     private:
         // The name for printing the output
         std::string name;

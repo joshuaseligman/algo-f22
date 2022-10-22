@@ -67,6 +67,34 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
     }
 }
 
+int Resident::compare(Resident* compResident, int level) {
+    Node<Hospital*>* thisCur = getHospitalPreferences()->getHead();
+    Node<Hospital*>* otherCur = compResident->getHospitalPreferences()->getHead();
+
+    for (int i = 0; i < level; i++) {
+        thisCur = thisCur->next;
+        otherCur = otherCur->next;
+    }
+
+    // Assume they are the same
+    int out = 0;
+
+    while (thisCur != nullptr && otherCur != nullptr) {
+        if (thisCur->data->getPriority() < otherCur->data->getPriority()) {
+            out = 1;
+            break;
+        } else if (thisCur->data->getPriority() > otherCur->data->getPriority()) {
+            out = -1;
+            break;
+        } else {
+            thisCur = thisCur->next;
+            otherCur = otherCur->next;
+        }
+    }
+    
+    return out;
+}
+
 int Resident::getIndex() {
     return index;
 }

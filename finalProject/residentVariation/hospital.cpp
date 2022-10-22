@@ -40,7 +40,7 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
 void Hospital::addResident(Resident* resident, int level) {
     // Create a node and add it to the level
     Node<Resident*>* residentNode = new Node<Resident*>(resident);
-    leveledAssignments[level].enqueue(residentNode);
+    leveledAssignments[level].priorityAdd(residentNode, level);
 }
 
 void Hospital::removeResident(Resident* resident, int level) {

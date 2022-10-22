@@ -50,7 +50,7 @@ Node<T>* List<T>::dequeue() {
         // We need to collect the data in the node before removing it from the list
         Node<T>* frontNode = head;
         head = head->next;
-        if (head == nullptr) {
+        if (isEmpty()) {
             // Tail has to become nullptr because the list is now empty
             tail = nullptr;
         }
@@ -68,8 +68,6 @@ Node<T>* List<T>::dequeue() {
 
 template <typename T>
 void List<T>::remove(T removeData) {
-    printList();
-
     // Make sure the list isn't already empty
     if (!isEmpty()) {
         Node<T>* cur = head;
@@ -114,7 +112,60 @@ void List<T>::remove(T removeData) {
             }
         }
     }
-    printList();
+}
+
+template <typename T>
+void List<T>::priorityAdd(Node<T>* data, int level) {
+    // Add the resident immediately if the list is empty
+    if (isEmpty()) {
+        head = data;
+        tail = data;
+
+        size++;
+    } else {
+        Node<T>* cur = head;
+        Node<T>* prev = nullptr;
+
+        // Make sure we are dealing with residents
+        if (strcmp(typeid(cur->data).name(), "P8Resident") == 0) {
+            // Convert the data to a Resident
+            Resident* dataRes = (Resident*) data->data;
+
+            // Boolean to see if the new node has been placed in the list yet
+            bool placed = false;
+
+            // Continue until the end of the list is hit
+            while (cur != nullptr && !placed) {
+                // Get the current node resident
+                Resident* curRes = (Resident*) cur->data;
+
+                // See if the resident is in the right place
+                if (dataRes->compare(curRes, level) <= 0) {
+                    // Place the new node in the list
+                    data->next = cur;
+                    if (prev == nullptr) {
+                        // Update the head if needed
+                        head = data;
+                    } else {
+                        // Insert the node into the list
+                        prev->next = data;
+                    }
+                    placed = true;
+                }
+                prev = cur;
+                cur = cur->next;
+            }
+
+            if (!placed) {
+                // Place the node at the end of the list
+                prev->next = data;
+            }
+
+            size++;
+        } else {
+            throw std::invalid_argument("Tried to use priority add for a Hospital list. Must use residents.");
+        }
+    }
 }
 
 // Checks to see if the list is empty or not

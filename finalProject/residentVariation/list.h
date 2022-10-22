@@ -39,4 +39,7 @@ public:
 
     // Getter for the head
     Node<T>* getHead();
+
+    // Add a node to the list with some priority
+    void priorityAdd(Node<T>* data, int level);
 };
