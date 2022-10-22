@@ -9,6 +9,9 @@
 Hospital::Hospital() {
     // Initialize leveledAssignments to be NUM_LEVELS of empty lists
     leveledAssignments = new List<Resident*>[NUM_LEVELS];
+
+    // Priority starts at 0
+    priority = 0;
 }
 
 Hospital::~Hospital() {
@@ -99,4 +102,12 @@ int Hospital::getNumAssigned() {
 
 List<Resident*>* Hospital::getAssignments() {
     return leveledAssignments;
+}
+
+int Hospital::getPriority() {
+    return priority;
+}
+
+void Hospital::setPriority(int newPriority) {
+    priority = newPriority;
 }

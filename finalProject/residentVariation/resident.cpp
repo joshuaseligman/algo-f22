@@ -58,6 +58,9 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
 
         // Add the preference to the status array
         preferenceArr[hospitalIndex] = ranking;
+
+        // Add the ranking to the hospital level
+        hospitalNode->data->setPriority(hospitalNode->data->getPriority() + ranking);
         ranking--;
 
         ptr = strtok(NULL, " ");  

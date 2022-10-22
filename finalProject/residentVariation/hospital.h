@@ -50,6 +50,12 @@ class Hospital {
 
         // Clears memory to make sure that the destructor doesn't tamper with the data when not wanted
         void clearMemory();
+
+        // Getter for the priority
+        int getPriority();
+
+        // Setter for the priority
+        void setPriority(int newPriority);
     private:
         // The name for printing the output
         std::string name;
@@ -65,6 +71,9 @@ class Hospital {
 
         // Array for each level of assigned residents
         List<Resident*>* leveledAssignments;
+
+        // The priority for the hospital
+        int priority;
 };
 
 // Struct for working with hospitals on the heap
