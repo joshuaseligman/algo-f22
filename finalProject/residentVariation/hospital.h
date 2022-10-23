@@ -33,6 +33,9 @@ class Hospital {
         // Getter for the number of assigned residents
         int getNumAssigned();
 
+        // Gets the number of residents assigned in the first n levels
+        int getNumAssignedRange(int lastLevel);
+
         // Getter for the assignments
         List<Resident*>* getAssignments();
 

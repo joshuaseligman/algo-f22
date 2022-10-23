@@ -77,7 +77,7 @@ int Hospital::compare(Hospital* hospitalComp) {
 }
 
 bool Hospital::isFull() {
-    return capacity == getNumAssigned();
+    return capacity <= getNumAssigned();
 }
 
 std::string Hospital::getName() {
@@ -95,6 +95,18 @@ int Hospital::getCapacity() {
 int Hospital::getNumAssigned() {
     int sum = 0;
     for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
+        sum += leveledAssignments[i].getSize();
+    }
+    return sum;
+}
+
+int Hospital::getNumAssignedRange(int lastLevel) {
+    if (lastLevel >= Hospital::NUM_LEVELS) {
+        throw std::invalid_argument("Invalid level. Must be less than " + std::to_string(Hospital::NUM_LEVELS));
+        return -1;
+    }
+    int sum = 0;
+    for (int i = 0; i <= lastLevel; i++) {
         sum += leveledAssignments[i].getSize();
     }
     return sum;

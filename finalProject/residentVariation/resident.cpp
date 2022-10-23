@@ -71,6 +71,7 @@ int Resident::compare(Resident* compResident, int level) {
     Node<Hospital*>* thisCur = getHospitalPreferences()->getHead();
     Node<Hospital*>* otherCur = compResident->getHospitalPreferences()->getHead();
 
+    // Iterate to the level that we are working with
     for (int i = 0; i < level; i++) {
         thisCur = thisCur->next;
         otherCur = otherCur->next;
@@ -79,16 +80,45 @@ int Resident::compare(Resident* compResident, int level) {
     // Assume they are the same
     int out = 0;
 
+    // Continue to compare the hospitals until no more exist
     while (thisCur != nullptr && otherCur != nullptr) {
-        if (thisCur->data->getPriority() < otherCur->data->getPriority()) {
+        if (thisCur->data->isFull() && !otherCur->data->isFull()) {
+            // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
             out = 1;
             break;
-        } else if (thisCur->data->getPriority() > otherCur->data->getPriority()) {
+        } else if (!thisCur->data->isFull() && otherCur->data->isFull()) {
             out = -1;
             break;
         } else {
-            thisCur = thisCur->next;
-            otherCur = otherCur->next;
+            // Do differenc comparisons based on if the hospitals are full or not
+            if (thisCur->data->isFull()) {
+                if (thisCur->data->getNumAssigned() - thisCur->data->getCapacity() < otherCur->data->getNumAssigned() - otherCur->data->getCapacity()) {
+                    // Cur hospital has a lower difference, so better chance of being placed there
+                    out = -1;
+                    break;
+                } else if (thisCur->data->getNumAssigned() - thisCur->data->getCapacity() > otherCur->data->getNumAssigned() - otherCur->data->getCapacity()) {
+                    out = 1;
+                    break;
+                } else {
+                    // Try the next level if the hospitals are the same
+                    thisCur = thisCur->next;
+                    otherCur = otherCur->next;
+                }
+            } else {
+                // If both have space, compare priorities
+                if (thisCur->data->getPriority() < otherCur->data->getPriority()) {
+                    // Higher priority is better because we will have a better chance to maximize resident happiness
+                    out = 1;
+                    break;
+                } else if (thisCur->data->getPriority() > otherCur->data->getPriority()) {
+                    out = -1;
+                    break;
+                } else {
+                    // Try the next level if the hospitals are the same
+                    thisCur = thisCur->next;
+                    otherCur = otherCur->next;
+                }
+            }
         }
     }
     

@@ -104,21 +104,16 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         for (int j = 0; j < hospitals->length; j++) {
             hospitals->arr[j].getAssignments()[i].printList();
             // Make sure the hospital is not over capacity
-            while (hospitals->arr[j].getNumAssigned() > hospitals->arr[j].getCapacity()) {
-                // If the level is empty, it's ok to quit because the lower levels are causing it to go over, which will be handled in a later iteration
-                if (!hospitals->arr[j].getAssignments()[i].isEmpty()) {
-                    // Get the resident and remove the hospital from its list
-                    Node<Resident*>* res = hospitals->arr[j].getAssignments()[i].dequeue();
-                    res->data->getHospitalPreferences()->dequeue();
+            while (hospitals->arr[j].getNumAssignedRange(i) > hospitals->arr[j].getCapacity()) {
+                // Get the resident and remove the hospital from its list
+                Node<Resident*>* res = hospitals->arr[j].getAssignments()[i].dequeue();
+                res->data->getHospitalPreferences()->dequeue();
 
-                    // Add the resident to its next preferred hospital if possible
-                    if (i < Hospital::NUM_LEVELS - 1) {
-                        res->data->getHospitalPreferences()->getHead()->data->getAssignments()[i + 1].priorityAdd(res, i + 1);
-                    } else {
-                        delete res;
-                    }
+                // Add the resident to its next preferred hospital if possible
+                if (i < Hospital::NUM_LEVELS - 1) {
+                    res->data->getHospitalPreferences()->getHead()->data->getAssignments()[i + 1].priorityAdd(res, i + 1);
                 } else {
-                    break;
+                    delete res;
                 }
             }
         }
