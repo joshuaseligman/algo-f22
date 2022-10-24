@@ -90,7 +90,7 @@ int Resident::compare(Resident* compResident, int level) {
             out = -1;
             break;
         } else {
-            // Do differenc comparisons based on if the hospitals are full or not
+            // Do different comparisons based on if the hospitals are full or not
             if (thisCur->data->isFull()) {
                 if (thisCur->data->getNumAssigned() - thisCur->data->getCapacity() < otherCur->data->getNumAssigned() - otherCur->data->getCapacity()) {
                     // Cur hospital has a lower difference, so better chance of being placed there

@@ -130,9 +130,99 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         }
     }
 
-    std::cout << "Finished algo" << std::endl << std::endl;
+    std::cout << "Finished main algo" << std::endl << std::endl;
 
-    // // Print the final results
+    // Print the final results
+    std::cout << "Final results:" << std::endl;
+    for (int i = 0; i < residents->length; i++) {
+        if (residents->arr[i].getAssignment() != nullptr) {
+            std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+        } else {
+            std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
+        }
+    }
+    std::cout << std::endl;
+
+    // Compute the happiness indices for both residents and hospitals
+    std::cout << "Resident Happiness: " << computeResidentHappiness(residents) << std::endl;
+    std::cout << "Hospital Happiness: " << computeHospitalHappiness(hospitals) << std::endl;
+
+
+    // Make any needed adjustments to increase resident happiness
+    // Create a variable to keep track of the number of swaps made
+    int swaps = -1;
+    while (swaps != 0) {
+        swaps = 0;
+
+        for (int i = 0; i < residents->length; i++) {
+            for (int j = i + 1; j < residents->length; j++) {
+                // Get the current assignments
+                Hospital* iHosp = residents->arr[i].getAssignment();
+                Hospital* jHosp = residents->arr[j].getAssignment();
+
+                // Compute the current average happiness among the 2 residents
+                int iCurHappiness = 0;
+                if (iHosp != nullptr) {
+                    iCurHappiness = residents->arr[i].getPreferencesArr()[iHosp->getIndex()];
+                }
+
+                int jCurHappiness = 0;
+                if (jHosp != nullptr) {
+                    jCurHappiness = residents->arr[j].getPreferencesArr()[jHosp->getIndex()];
+                }
+                double curHappiness = (double) (iCurHappiness + jCurHappiness) / 2;
+
+                // Compute the average happiness if the 2 residents swapped
+                int iSwapHappiness = 0;
+                if (jHosp != nullptr) {
+                    iSwapHappiness = residents->arr[i].getPreferencesArr()[jHosp->getIndex()];
+                }
+
+                int jSwapHappiness = 0;
+                if (iHosp != nullptr) {
+                    jSwapHappiness = residents->arr[j].getPreferencesArr()[iHosp->getIndex()];
+                }
+                double swapHappiness = (double) (iSwapHappiness + jSwapHappiness) / 2;
+
+                std::cout << curHappiness << " " << swapHappiness << std::endl;
+
+                // Conduct a swap if needed
+                if (swapHappiness > curHappiness) {
+                    std::cout << "Swap needed" << std::endl;
+
+                    // Remove the residents from the hospital lists
+                    if (iHosp != nullptr) {
+                        iHosp->removeResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[iHosp->getIndex()]);
+                    }
+
+                    if (jHosp != nullptr) {
+                        jHosp->removeResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[jHosp->getIndex()]);
+                    }
+
+                    // Add the j resident to the i hospital
+                    if (iHosp != nullptr) {
+                        iHosp->addResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[iHosp->getIndex()]);
+                    }
+                    residents->arr[j].setAssignment(iHosp);
+
+                    // Add the i resident to the j hospital
+                    if (jHosp != nullptr) {
+                        jHosp->addResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[jHosp->getIndex()]);
+                    }
+                    residents->arr[i].setAssignment(jHosp);
+
+                    // Increment swaps
+                    swaps++;
+
+                    std::cout << "Swapped " << residents->arr[i].getName() << " and " << residents->arr[j].getName() << std::endl;
+                }
+            }
+        }
+        std::cout << "Swaps made: " << swaps << std::endl;
+    }
+
+    // Print the final results
+    std::cout << std::endl;
     std::cout << "Final results:" << std::endl;
     for (int i = 0; i < residents->length; i++) {
         if (residents->arr[i].getAssignment() != nullptr) {
