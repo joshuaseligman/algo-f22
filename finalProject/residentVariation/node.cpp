@@ -1,6 +1,7 @@
 #include "node.h"
 #include "hospital.h"
 #include "resident.h"
+#include "stableMatching.h"
 
 #include <iostream>
 
@@ -14,3 +15,4 @@ Node<T>::Node(T initialData) {
 // Define acceptable data types that the Node can accept for the template
 template class Node<Resident*>;
 template class Node<Hospital*>;
+template class Node<AlgoOutput*>;

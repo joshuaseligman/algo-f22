@@ -4,6 +4,8 @@
 #include "resident.h"
 #include "hospital.h"
 
+#include <string>
+
 // The algorithm and all of its helpers
 void stableMatchAlgo(StringArr* data);
 
@@ -21,3 +23,15 @@ double computeResidentHappiness(ResidentArr* residents);
 
 // Compute the happiness indexf for the hospitals
 double computeHospitalHappiness(HospitalArr* hospitals);
+
+// A struct to use for saving the best output generated for the n! algorithm
+struct AlgoOutput {
+    // The string to print out
+    std::string assignmentsString;
+
+    // The resident happiness
+    double residentHappiness;
+
+    // The hospital happiness
+    double hospitalHappiness;
+};
