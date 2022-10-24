@@ -44,7 +44,17 @@ void stableMatchAlgo(StringArr* data) {
     }
 
     // Call the actual algorithm
-    generateStableMatches(residents, hospitals);
+    // generateStableMatches(residents, hospitals);
+
+    AlgoOutput* x = new AlgoOutput;
+    Node<AlgoOutput*>* best = new Node<AlgoOutput*>(x);
+
+    stableMatchRecursive(residents, hospitals, 0, best);
+
+    std::cout << x->assignmentsString << std::endl << x->residentHappiness << std::endl;
+
+    delete best;
+    delete x;
 
     // Memory management and clean up
     delete [] residents->arr;
@@ -133,7 +143,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     std::cout << "Finished main algo" << std::endl << std::endl;
 
     // Print the final results
-    std::cout << "Final results:" << std::endl;
+    std::cout << "Initial results:" << std::endl;
     for (int i = 0; i < residents->length; i++) {
         if (residents->arr[i].getAssignment() != nullptr) {
             std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
@@ -146,6 +156,8 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     // Compute the happiness indices for both residents and hospitals
     std::cout << "Resident Happiness: " << computeResidentHappiness(residents) << std::endl;
     std::cout << "Hospital Happiness: " << computeHospitalHappiness(hospitals) << std::endl;
+
+    std::cout << std::endl;
 
 
     // Make any needed adjustments to increase resident happiness
@@ -184,12 +196,8 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                 }
                 double swapHappiness = (double) (iSwapHappiness + jSwapHappiness) / 2;
 
-                std::cout << curHappiness << " " << swapHappiness << std::endl;
-
                 // Conduct a swap if needed
                 if (swapHappiness > curHappiness) {
-                    std::cout << "Swap needed" << std::endl;
-
                     // Remove the residents from the hospital lists
                     if (iHosp != nullptr) {
                         iHosp->removeResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[iHosp->getIndex()]);
@@ -263,4 +271,77 @@ double computeHospitalHappiness(HospitalArr* hospitals) {
 
     // Return the average happiness ranking
     return sum / hospitals->length;
+}
+
+void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int curResident, Node<AlgoOutput*>* best) {
+    // Each hospital assignment should be considered for each resident
+    for (int i = 0; i <= hospitals->length; i++) {
+        // Residents can also be unassigned
+        if (i == hospitals->length) {
+            residents->arr[curResident].setAssignment(nullptr);
+        } else {
+            // Assign the resident to the hospital
+            residents->arr[curResident].setAssignment(&hospitals->arr[i]);
+        }
+
+        if (curResident < residents->length - 1) {
+            // Get all permutations of the remaining residents
+            stableMatchRecursive(residents, hospitals, curResident + 1, best);
+        } else {
+            // Assume stable at first
+            bool stable = true;
+
+            // Array to keep track of number of residents assigned to each hospital
+            int assignmentCount[hospitals->length];
+            for (int j = 0; j < hospitals->length; j++) {
+                assignmentCount[j] = 0;
+            }
+
+            for (int j = 0; j < residents->length; j++) {
+                if (residents->arr[j].getAssignment() != nullptr) {
+                    // Check the assignment to the preferenc list
+                    if (residents->arr[j].getPreferencesArr()[residents->arr[j].getAssignment()->getIndex()] > 0) {
+                        // The hospital is a valid assignment
+                        assignmentCount[residents->arr[j].getAssignment()->getIndex()]++;
+                    } else {
+                        // Invalid permutation
+                        stable = false;
+                        break;
+                    }
+                }
+            }
+
+            if (stable) {
+                for (int k = 0; k < hospitals->length; k++) {
+                    // Make sure all hospitals are at or under capacity
+                    if (hospitals->arr[k].getCapacity() < assignmentCount[k]) {
+                        stable = false;
+                        break;
+                    }
+                }
+            }
+
+            if (stable) {
+                // Compute the resident happiness score
+                double residentHappiness = computeResidentHappiness(residents);
+                if (residentHappiness >= best->data->residentHappiness) {
+                    // Update the best to be the new best score
+                    best->data->residentHappiness = residentHappiness;
+                    std::stringstream ss;
+
+                    // Generate the string for the output
+                    for (int i = 0; i < residents->length; i++) {
+                        if (residents->arr[i].getAssignment() != nullptr) {
+                            ss << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")\n";
+                        } else {
+                            ss << "(" << residents->arr[i].getName() << ", nullptr)\n";
+                        }
+                    }
+
+                    // Assign the best node to have the new string
+                    best->data->assignmentsString = ss.str();
+                }
+            }
+        }
+    }
 }
