@@ -1,0 +1,151 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% CMPT 435
+% Fall 2022
+% Final Project
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Short Sectioned Assignment
+% LaTeX Template
+% Version 1.0 (5/5/12)
+%
+% This template has been downloaded from: http://www.LaTeXTemplates.com
+% Original author: % Frits Wenneker (http://www.howtotex.com)
+% License: CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% Modified by Alan G. Labouseur  - alan@labouseur.com
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[letterpaper, 10pt,DIV=13]{scrartcl} 
+
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\usepackage[english]{babel} % English language/hyphenation
+\usepackage{amsmath,amsfonts,amsthm,xfrac} % Math packages
+\usepackage{sectsty} % Allows customizing section commands
+\usepackage{graphicx}
+\usepackage{algorithm, algpseudocode}
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage{lastpage}
+\usepackage{color}
+\usepackage{qtree}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\allsectionsfont{\normalfont\scshape} % Make all section titles in default font and small caps.
+
+\usepackage{fancyhdr} % Custom headers and footers
+\pagestyle{fancyplain} % Makes all pages in the document conform to the custom headers and footers
+
+\fancyhead{} % No page header - if you want one, create it in the same way as the footers below
+\fancyfoot[L]{} % Empty left footer
+\fancyfoot[C]{} % Empty center footer
+\fancyfoot[R]{page \thepage\ of \pageref{LastPage}} % Page numbering for right footer
+
+\renewcommand{\headrulewidth}{0pt} % Remove header underlines
+\renewcommand{\footrulewidth}{0pt} % Remove footer underlines
+\setlength{\headheight}{13.6pt} % Customize the height of the header
+
+\numberwithin{equation}{section} % Number equations within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{figure}{section} % Number figures within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+\numberwithin{table}{section} % Number tables within sections (i.e. 1.1, 1.2, 2.1, 2.2 instead of 1, 2, 3, 4)
+
+\setlength\parindent{0pt} % Removes all indentation from paragraphs.
+
+\binoppenalty=3000
+\relpenalty=3000
+
+\algrenewcommand{\algorithmiccomment}[1]{\hskip1em\textit{$//$ #1}}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} % Create horizontal rule command with 1 argument of height
+
+\title{	
+   \normalfont \normalsize 
+   \textsc{CMPT 435 - Fall 2022 - Dr. Labouseur} \\[10pt] % Header stuff.
+   \horrule{0.5pt} \\[0.25cm] 	% Top horizontal rule
+   \huge Final Project  \\     	    % Assignment title
+   \horrule{0.5pt} \\[0.25cm] 	% Bottom horizontal rule
+}
+
+\author{Josh Seligman \\ \normalsize joshua.seligman1@marist.edu}
+
+\date{\normalsize\today} 	% Today's date.
+
+\begin{document}
+\maketitle % Print the title
+
+\section{Hospitals and Residents Stable Matching}
+\subsection{The Algorithm}
+In the hospitals and residents stable matching problem, the goal is to assign residents to hospitals given the preferences of both sides so that all assignments are stable. In this context, the term "stability" means that for each resident, there is no hospital that is available that is higher on a resident's list compared to that resident's current assignment. The reason stability is in the terms of the residents is because the residents propose to the hospitals on their preference lists and the hospitals have the ability to either provisionally accept or reject the residents based on their resident preferences and current capacity.
+
+\begin{algorithm}
+  \caption{Hospitals and Residents Stable Matching Algorithm}
+  \label{algorithm:original}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+      \Procedure{StableMatchOriginal}{$residents$, $hospitals$}
+        \For{$r~of~residents$}
+            \State $r.assignment \gets null$ \Comment{Residents start off unassigned}
+        \EndFor
+        \For{$h~of~hospitals$}
+            \State $h.assignments \gets [~]$ \Comment{Hospitals initially have no assignments}
+        \EndFor
+        \While{$!residents.isEmpty()$}
+            \State $r \gets residents.dequeue()$ \Comment{Get the next resident in line to be assigned}
+            \While{$r.assignment == null~\&\&~!r.preferences.isEmpty()$}
+                \State $h \gets r.preferences.dequeue()$ \Comment{Try the resident's next top preference}
+                \If{$h.isFull()$}
+                    \State $r^\prime \gets h.getLeastPreferredAssignedResident()$
+                    \State $r^\prime.assignment \gets null$ \Comment{Set the least preferred assigned resident to be free}
+                    \State $residents.enqueue(r)$ \Comment{Add the resident back to the list to be reassigned}
+                \EndIf
+                \State $r.assignment \gets h$ \Comment{Provisionally assign r to h}
+                \If{$h.isFull()$}
+                    \State $s \gets h.getLeastPreferredAssignedResident()$
+                    \For {$i \gets h.preferences.indexOf(s) + 1,~len(h.preferences) - 1$}
+                        \State $s^\prime \gets h.preferences[i]$
+                        \State $s^\prime.preferences.remove(h)$ \Comment{Remove h from preferences of $s^\prime$}
+                        \State $h.preferences.remove(s^\prime)$ \Comment{Remove $s^\prime$ from preferences of h}
+                    \EndFor
+                \EndIf
+            \EndWhile
+        \EndWhile
+      \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Asymptotic Analysis and Comparisons}
+
+
+\section{Appendix}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
+
+% Colors and lstset for syntax highlighting from https://www.overleaf.com/latex/examples/syntax-highlighting-in-latex-with-the-listings-package/jxnppmxxvsvk
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{
+  backgroundcolor=\color{white},   % choose the background color
+  basicstyle=\footnotesize,        % size of fonts used for the code
+  breaklines=true,                 % automatic line breaking only at whitespace
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  escapeinside={\%*}{*},          % if you want to add LaTeX within your code
+  keywordstyle=\color{blue},       % keyword style
+  stringstyle=\color{mymauve},     % string literal style
+}
+
+\subsection{Linear Search}
+
+
+\end{document}
