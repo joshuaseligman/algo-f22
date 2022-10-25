@@ -3,6 +3,7 @@
 #include "hospital.h"
 #include "util.h"
 #include "sort.h"
+#include "list.h"
 
 #include <iostream>
 #include <sstream>
@@ -46,15 +47,13 @@ void stableMatchAlgo(StringArr* data) {
     // Call the actual algorithm
     // generateStableMatches(residents, hospitals);
 
-    AlgoOutput* x = new AlgoOutput;
-    Node<AlgoOutput*>* best = new Node<AlgoOutput*>(x);
+    List<AlgoOutput*>* best = new List<AlgoOutput*>;
 
     stableMatchRecursive(residents, hospitals, 0, best);
 
-    std::cout << x->assignmentsString << std::endl << x->residentHappiness << std::endl;
+    std::cout << best->getHead()->data->assignmentsString << std::endl << best->getHead()->data->residentHappiness << std::endl;
 
     delete best;
-    delete x;
 
     // Memory management and clean up
     delete [] residents->arr;
@@ -273,7 +272,7 @@ double computeHospitalHappiness(HospitalArr* hospitals) {
     return sum / hospitals->length;
 }
 
-void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int curResident, Node<AlgoOutput*>* best) {
+void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int curResident, List<AlgoOutput*>* best) {
     // Each hospital assignment should be considered for each resident
     for (int i = 0; i <= hospitals->length; i++) {
         // Residents can also be unassigned
@@ -324,9 +323,11 @@ void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int cu
             if (stable) {
                 // Compute the resident happiness score
                 double residentHappiness = computeResidentHappiness(residents);
-                if (residentHappiness >= best->data->residentHappiness) {
+                if (best->isEmpty() || residentHappiness >= best->getHead()->data->residentHappiness) {
+                    AlgoOutput* newOut = new AlgoOutput;
+                    newOut->residentHappiness = residentHappiness;
+
                     // Update the best to be the new best score
-                    best->data->residentHappiness = residentHappiness;
                     std::stringstream ss;
 
                     // Generate the string for the output
@@ -339,7 +340,14 @@ void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int cu
                     }
 
                     // Assign the best node to have the new string
-                    best->data->assignmentsString = ss.str();
+                    newOut->assignmentsString = ss.str();
+
+                    Node<AlgoOutput*>* newNode = new Node<AlgoOutput*>(newOut);
+
+                    if (!best->isEmpty() && residentHappiness > best->getHead()->data->residentHappiness) {
+                        best->clear();
+                    }
+                    best->enqueue(newNode);
                 }
             }
         }

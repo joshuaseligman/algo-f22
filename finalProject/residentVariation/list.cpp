@@ -6,6 +6,7 @@
 #include "node.h"
 #include "resident.h"
 #include "hospital.h"
+#include "stableMatching.h"
 
 // Instantiate the list with the head pointing to nothing
 template <typename T>
@@ -210,3 +211,4 @@ Node<T>* List<T>::getHead() {
 // Define acceptable data types that the List can accept for the template
 template class List<Hospital*>;
 template class List<Resident*>;
+template class List<AlgoOutput*>;

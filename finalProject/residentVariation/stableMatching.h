@@ -3,6 +3,7 @@
 #include "util.h"
 #include "resident.h"
 #include "hospital.h"
+#include "list.h"
 
 #include <string>
 
@@ -34,4 +35,4 @@ double computeResidentHappiness(ResidentArr* residents);
 double computeHospitalHappiness(HospitalArr* hospitals);
 
 // Recursive call to generate the best possible outcome in O(n!) time
-void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int curResident, Node<AlgoOutput*>* best);
+void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int curResident, List<AlgoOutput*>* best);
