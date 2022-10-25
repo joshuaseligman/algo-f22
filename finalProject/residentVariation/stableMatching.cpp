@@ -345,7 +345,7 @@ void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int cu
                     Node<AlgoOutput*>* newNode = new Node<AlgoOutput*>(newOut);
 
                     if (!best->isEmpty() && residentHappiness > best->getHead()->data->residentHappiness) {
-                        best->clear();
+                        best->clear(true);
                     }
                     best->enqueue(newNode);
                 }

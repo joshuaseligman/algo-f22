@@ -29,7 +29,7 @@ public:
     void remove(T removeData);
 
     // Removes all nodes from the list
-    void clear();
+    void clear(bool clearData);
 
     // isEmpty checks to see if the list is empty
     bool isEmpty();

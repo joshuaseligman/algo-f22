@@ -19,7 +19,7 @@ List<T>::List() {
 
 template <typename T>
 List<T>::~List() {
-    clear();
+    clear(false);
 }
 
 // Creates a new node and adds it to the list
@@ -167,9 +167,12 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
 }
 
 template <typename T>
-void List<T>::clear() {
+void List<T>::clear(bool cleardata) {
     while (!isEmpty()) {
         Node<T>* n = dequeue();
+        if (cleardata) {
+            delete n->data;
+        }
         delete n;
     }
 }
