@@ -18,10 +18,7 @@ List<T>::List() {
 
 template <typename T>
 List<T>::~List() {
-    while (!isEmpty()) {
-        Node<T>* n = dequeue();
-        delete n;
-    }
+    clear();
 }
 
 // Creates a new node and adds it to the list
@@ -165,6 +162,14 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
         } else {
             throw std::invalid_argument("Tried to use priority add for a Hospital list. Must use residents.");
         }
+    }
+}
+
+template <typename T>
+void List<T>::clear() {
+    while (!isEmpty()) {
+        Node<T>* n = dequeue();
+        delete n;
     }
 }
 

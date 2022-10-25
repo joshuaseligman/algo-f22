@@ -28,6 +28,9 @@ public:
     // Removes a node from the list
     void remove(T removeData);
 
+    // Removes all nodes from the list
+    void clear();
+
     // isEmpty checks to see if the list is empty
     bool isEmpty();
 
