@@ -51,8 +51,15 @@ void stableMatchAlgo(StringArr* data) {
 
     stableMatchRecursive(residents, hospitals, 0, best);
 
-    std::cout << best->getHead()->data->assignmentsString << std::endl << best->getHead()->data->residentHappiness << std::endl;
+    Node<AlgoOutput*>* cur = best->getHead();
+    while (cur != nullptr) {
+        std::cout << cur->data->assignmentsString;
+        std::cout << "Resident happiness: " << cur->data->residentHappiness << std::endl << std::endl;
 
+        cur = cur->next;
+    }
+
+    best->clear(true);
     delete best;
 
     // Memory management and clean up
