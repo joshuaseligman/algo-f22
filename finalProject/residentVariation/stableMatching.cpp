@@ -54,7 +54,8 @@ void stableMatchAlgo(StringArr* data) {
     Node<AlgoOutput*>* cur = best->getHead();
     while (cur != nullptr) {
         std::cout << cur->data->assignmentsString;
-        std::cout << "Resident happiness: " << cur->data->residentHappiness << std::endl << std::endl;
+        std::cout << "Resident happiness: " << cur->data->residentHappiness << std::endl;
+        std::cout << "Hospital happiness: " << cur->data->hospitalHappiness << std::endl << std::endl;
 
         cur = cur->next;
     }
@@ -348,6 +349,14 @@ void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int cu
 
                     // Assign the best node to have the new string
                     newOut->assignmentsString = ss.str();
+
+                    // Compute the hospital happiness as an additional metric
+                    double sum = 0;
+                    for (int i = 0; i < hospitals->length; i++) {
+                        sum += (double) assignmentCount[i] / hospitals->arr[i].getCapacity();
+                    }
+                    double hospitalHappiness = sum / hospitals->length;
+                    newOut->hospitalHappiness = hospitalHappiness;
 
                     Node<AlgoOutput*>* newNode = new Node<AlgoOutput*>(newOut);
 

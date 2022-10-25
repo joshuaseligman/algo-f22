@@ -14,6 +14,9 @@ struct AlgoOutput {
 
     // The resident happiness
     double residentHappiness;
+
+    // The hopsital happiness
+    double hospitalHappiness;
 };
 
 // The algorithm and all of its helpers
