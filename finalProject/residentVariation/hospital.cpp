@@ -77,6 +77,10 @@ bool Hospital::isFull() {
     return capacity <= getNumAssigned();
 }
 
+bool Hospital::isFullRange(int lastLevel) {
+    return capacity <= getNumAssignedRange(lastLevel);
+}
+
 std::string Hospital::getName() {
     return name;
 }
@@ -111,4 +115,12 @@ int Hospital::getNumAssignedRange(int lastLevel) {
 
 List<Resident*>* Hospital::getAssignments() {
     return leveledAssignments;
+}
+
+int Hospital::getFirstChoiceCount() {
+    return firstChoice;
+}
+
+void Hospital::incrementFirstChoice() {
+    firstChoice++;
 }

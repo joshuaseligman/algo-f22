@@ -157,6 +157,7 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
             if (!placed) {
                 // Place the node at the end of the list
                 prev->next = data;
+                tail = data;
             }
 
             size++;

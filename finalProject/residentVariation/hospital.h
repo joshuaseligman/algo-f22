@@ -20,6 +20,9 @@ class Hospital {
 
         // Returns if the hospital is full or not
         bool isFull();
+
+        // Determines if a hospital is full up to a certain level
+        bool isFullRange(int lastLevel);
         
         // Getter for the name
         std::string getName();
@@ -53,6 +56,12 @@ class Hospital {
 
         // Clears memory to make sure that the destructor doesn't tamper with the data when not wanted
         void clearMemory();
+
+        // Getter for the number of residents that have this hosiptal as their first choice
+        int getFirstChoiceCount();
+
+        // Adds 1 to the first choice variable
+        void incrementFirstChoice();
     private:
         // The name for printing the output
         std::string name;
@@ -68,6 +77,9 @@ class Hospital {
 
         // Array for each level of assigned residents
         List<Resident*>* leveledAssignments;
+
+        // The number of residents that want the hospital as its first choice
+        int firstChoice;
 };
 
 // Struct for working with hospitals on the heap

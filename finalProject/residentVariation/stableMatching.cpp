@@ -126,12 +126,12 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     // Go through each level of the hospitals
     for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
         for (int j = 0; j < hospitals->length; j++) {
-            hospitals->arr[j].getAssignments()[i].printList();
             // Make sure the hospital is not over capacity
             while (hospitals->arr[j].getNumAssignedRange(i) > hospitals->arr[j].getCapacity()) {
                 // Get the resident and remove the hospital from its list
                 Node<Resident*>* res = hospitals->arr[j].getAssignments()[i].dequeue();
-                res->data->getHospitalPreferences()->dequeue();
+                Node<Hospital*>* h = res->data->getHospitalPreferences()->dequeue();
+                delete h;
 
                 // Add the resident to its next preferred hospital if possible
                 if (i < Hospital::NUM_LEVELS - 1) {

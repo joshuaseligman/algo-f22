@@ -60,6 +60,9 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
         preferenceArr[hospitalIndex] = ranking;
 
         // Moving on to the next ranking
+        if (ranking == Hospital::NUM_LEVELS) {
+            hospitalNode->data->incrementFirstChoice();
+        }
         ranking--;
 
         ptr = strtok(NULL, " ");  
@@ -67,13 +70,18 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
 }
 
 int Resident::compare(Resident* compResident, int level) {
+    // Get the current hospitals being compared
     Node<Hospital*>* thisCur = getHospitalPreferences()->getHead();
     Node<Hospital*>* otherCur = compResident->getHospitalPreferences()->getHead();
 
-    // Iterate to the level that we are working with
-    for (int i = 0; i < level; i++) {
+    // Assume we are working with a later level
+    bool firstLevel = false;
+
+    if (level == 0) {
         thisCur = thisCur->next;
         otherCur = otherCur->next;
+
+        firstLevel = true;
     }
 
     // Assume they are the same
@@ -81,32 +89,71 @@ int Resident::compare(Resident* compResident, int level) {
 
     // Continue to compare the hospitals until no more exist
     while (thisCur != nullptr && otherCur != nullptr) {
-        if (thisCur->data->isFull() && !otherCur->data->isFull()) {
-            // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
-            out = 1;
-            break;
-        } else if (!thisCur->data->isFull() && otherCur->data->isFull()) {
-            out = -1;
-            break;
-        } else {
-            // Do different comparisons based on if the hospitals are full or not
-            if (thisCur->data->isFull()) {
-                if (thisCur->data->getNumAssigned() - thisCur->data->getCapacity() < otherCur->data->getNumAssigned() - otherCur->data->getCapacity()) {
-                    // Cur hospital has a lower difference, so better chance of being placed there
-                    out = -1;
-                    break;
-                } else if (thisCur->data->getNumAssigned() - thisCur->data->getCapacity() > otherCur->data->getNumAssigned() - otherCur->data->getCapacity()) {
-                    out = 1;
-                    break;
-                } else {
-                    // Try the next level if the hospitals are the same
-                    thisCur = thisCur->next;
-                    otherCur = otherCur->next;
-                }
+        if (name.compare("r9") == 0 || compResident->name.compare("r9") == 0) {
+            std::cout << thisCur->data->getName() << ": " << thisCur->data->getNumAssignedRange(level - 1) << "; " << otherCur->data->getName() << ": " << otherCur->data->getNumAssignedRange(level - 1) << std::endl;
+        }
+
+        if (firstLevel) {
+            if (thisCur->data->getFirstChoiceCount() >= thisCur->data->getCapacity() && otherCur->data->getFirstChoiceCount() < otherCur->data->getCapacity()) {
+                // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
+                out = 1;
+                break;
+            } else if (thisCur->data->getFirstChoiceCount() < thisCur->data->getCapacity() && otherCur->data->getFirstChoiceCount() >= otherCur->data->getCapacity()) {
+                out = -1;
+                break;
             } else {
-                // Try the next level if the hospitals are the same
                 thisCur = thisCur->next;
                 otherCur = otherCur->next;
+            }
+        } else {
+            if (thisCur->data->isFullRange(level - 1) && !otherCur->data->isFullRange(level - 1)) {
+                // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
+                out = 1;
+                break;
+            } else if (!thisCur->data->isFullRange(level - 1) && otherCur->data->isFullRange(level - 1)) {
+                out = -1;
+                break;
+            } else {
+                // Do different comparisons based on if the hospitals are full or not
+                // if (thisCur->data->isFullRange(level - 1)) {
+                //     // if (thisCur->data->getNumAssignedRange(level) - thisCur->data->getCapacity() < otherCur->data->getNumAssignedRange(level) - otherCur->data->getCapacity()) {
+                //     //     // Cur hospital has a lower difference, so better chance of being placed there
+                //     //     out = -1;
+                //     //     break;
+                //     // } else if (thisCur->data->getNumAssignedRange(level) - thisCur->data->getCapacity() > otherCur->data->getNumAssignedRange(level) - otherCur->data->getCapacity()) {
+                //     //     out = 1;
+                //     //     break;
+                //     // } else {
+                //     //     // Try the next level if the hospitals are the same
+                //     //     thisCur = thisCur->next;
+                //     //     otherCur = otherCur->next;
+                //     // }
+                //     int thisAvailability = 0;
+                //     int otherAvailability = 0;
+
+                //     thisCur = thisCur->next;
+                //     otherCur = otherCur->next;
+
+                //     while (thisCur != nullptr && otherCur != nullptr) {
+                //         thisAvailability += thisCur->data->isFullRange(level - 1);
+                //         otherAvailability += otherCur->data->isFullRange(level - 1);
+
+                //         thisCur = thisCur->next;
+                //         otherCur = otherCur->next;
+                //     }
+
+                //     if (thisAvailability < otherAvailability) {
+                //         out =  -1;
+                //     } else {
+                //         out = 1;
+                //     }
+
+                //     break;
+                // } else {
+                //     // Try the next level if the hospitals are the same
+                    thisCur = thisCur->next;
+                    otherCur = otherCur->next;
+                // }
             }
         }
     }
