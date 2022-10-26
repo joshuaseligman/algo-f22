@@ -89,10 +89,6 @@ int Resident::compare(Resident* compResident, int level) {
 
     // Continue to compare the hospitals until no more exist
     while (thisCur != nullptr && otherCur != nullptr) {
-        if (name.compare("r9") == 0 || compResident->name.compare("r9") == 0) {
-            std::cout << thisCur->data->getName() << ": " << thisCur->data->getNumAssignedRange(level - 1) << "; " << otherCur->data->getName() << ": " << otherCur->data->getNumAssignedRange(level - 1) << std::endl;
-        }
-
         if (firstLevel) {
             if (thisCur->data->getFirstChoiceCount() >= thisCur->data->getCapacity() && otherCur->data->getFirstChoiceCount() < otherCur->data->getCapacity()) {
                 // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
@@ -102,6 +98,7 @@ int Resident::compare(Resident* compResident, int level) {
                 out = -1;
                 break;
             } else {
+                // Try the next level if the hospitals are the same
                 thisCur = thisCur->next;
                 otherCur = otherCur->next;
             }
@@ -114,46 +111,9 @@ int Resident::compare(Resident* compResident, int level) {
                 out = -1;
                 break;
             } else {
-                // Do different comparisons based on if the hospitals are full or not
-                // if (thisCur->data->isFullRange(level - 1)) {
-                //     // if (thisCur->data->getNumAssignedRange(level) - thisCur->data->getCapacity() < otherCur->data->getNumAssignedRange(level) - otherCur->data->getCapacity()) {
-                //     //     // Cur hospital has a lower difference, so better chance of being placed there
-                //     //     out = -1;
-                //     //     break;
-                //     // } else if (thisCur->data->getNumAssignedRange(level) - thisCur->data->getCapacity() > otherCur->data->getNumAssignedRange(level) - otherCur->data->getCapacity()) {
-                //     //     out = 1;
-                //     //     break;
-                //     // } else {
-                //     //     // Try the next level if the hospitals are the same
-                //     //     thisCur = thisCur->next;
-                //     //     otherCur = otherCur->next;
-                //     // }
-                //     int thisAvailability = 0;
-                //     int otherAvailability = 0;
-
-                //     thisCur = thisCur->next;
-                //     otherCur = otherCur->next;
-
-                //     while (thisCur != nullptr && otherCur != nullptr) {
-                //         thisAvailability += thisCur->data->isFullRange(level - 1);
-                //         otherAvailability += otherCur->data->isFullRange(level - 1);
-
-                //         thisCur = thisCur->next;
-                //         otherCur = otherCur->next;
-                //     }
-
-                //     if (thisAvailability < otherAvailability) {
-                //         out =  -1;
-                //     } else {
-                //         out = 1;
-                //     }
-
-                //     break;
-                // } else {
-                //     // Try the next level if the hospitals are the same
-                    thisCur = thisCur->next;
-                    otherCur = otherCur->next;
-                // }
+                // Try the next level if the hospitals are the same
+                thisCur = thisCur->next;
+                otherCur = otherCur->next;
             }
         }
     }
