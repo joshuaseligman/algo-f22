@@ -32,7 +32,7 @@ void stableMatchAlgo(StringArr* data) {
         ptr = strtok(NULL, " ");  
     }
 
-    // Create default residents and hospitals with no preferencs and no capacity
+    // Create default residents and hospitals with no preferences and no capacity
     ResidentArr* residents = createResidents(numResidents);
     HospitalArr* hospitals = createHospitals(numHospitals);
 
@@ -186,57 +186,69 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                 Hospital* iHosp = residents->arr[i].getAssignment();
                 Hospital* jHosp = residents->arr[j].getAssignment();
 
-                // Compute the current average happiness among the 2 residents
-                int iCurHappiness = 0;
-                if (iHosp != nullptr) {
-                    iCurHappiness = residents->arr[i].getPreferencesArr()[iHosp->getIndex()];
+                bool canSwap = true;
+                // Make sure jHosp is a preference for resident i
+                if (jHosp != nullptr && residents->arr[i].getPreferencesArr()[jHosp->getIndex()] == 0) {
+                    // Cannot swap if resident i does not want to go to jHosp
+                    canSwap = false;
+                } else if (iHosp != nullptr && residents->arr[j].getPreferencesArr()[iHosp->getIndex()] == 0) {
+                    // Same but for resident j and iHosp
+                    canSwap = false;
                 }
 
-                int jCurHappiness = 0;
-                if (jHosp != nullptr) {
-                    jCurHappiness = residents->arr[j].getPreferencesArr()[jHosp->getIndex()];
-                }
-                double curHappiness = (double) (iCurHappiness + jCurHappiness) / 2;
-
-                // Compute the average happiness if the 2 residents swapped
-                int iSwapHappiness = 0;
-                if (jHosp != nullptr) {
-                    iSwapHappiness = residents->arr[i].getPreferencesArr()[jHosp->getIndex()];
-                }
-
-                int jSwapHappiness = 0;
-                if (iHosp != nullptr) {
-                    jSwapHappiness = residents->arr[j].getPreferencesArr()[iHosp->getIndex()];
-                }
-                double swapHappiness = (double) (iSwapHappiness + jSwapHappiness) / 2;
-
-                // Conduct a swap if needed
-                if (swapHappiness > curHappiness) {
-                    // Remove the residents from the hospital lists
+                if (canSwap) {
+                    // Compute the current average happiness among the 2 residents
+                    int iCurHappiness = 0;
                     if (iHosp != nullptr) {
-                        iHosp->removeResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[iHosp->getIndex()]);
+                        iCurHappiness = residents->arr[i].getPreferencesArr()[iHosp->getIndex()];
                     }
 
+                    int jCurHappiness = 0;
                     if (jHosp != nullptr) {
-                        jHosp->removeResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[jHosp->getIndex()]);
+                        jCurHappiness = residents->arr[j].getPreferencesArr()[jHosp->getIndex()];
+                    }
+                    double curHappiness = (double) (iCurHappiness + jCurHappiness) / 2;
+
+                    // Compute the average happiness if the 2 residents swapped
+                    int iSwapHappiness = 0;
+                    if (jHosp != nullptr) {
+                        iSwapHappiness = residents->arr[i].getPreferencesArr()[jHosp->getIndex()];
                     }
 
-                    // Add the j resident to the i hospital
+                    int jSwapHappiness = 0;
                     if (iHosp != nullptr) {
-                        iHosp->addResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[iHosp->getIndex()]);
+                        jSwapHappiness = residents->arr[j].getPreferencesArr()[iHosp->getIndex()];
                     }
-                    residents->arr[j].setAssignment(iHosp);
+                    double swapHappiness = (double) (iSwapHappiness + jSwapHappiness) / 2;
 
-                    // Add the i resident to the j hospital
-                    if (jHosp != nullptr) {
-                        jHosp->addResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[jHosp->getIndex()]);
+                    // Conduct a swap if needed
+                    if (swapHappiness > curHappiness) {
+                        // Remove the residents from the hospital lists
+                        if (iHosp != nullptr) {
+                            iHosp->removeResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[iHosp->getIndex()]);
+                        }
+
+                        if (jHosp != nullptr) {
+                            jHosp->removeResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[jHosp->getIndex()]);
+                        }
+
+                        // Add the j resident to the i hospital
+                        if (iHosp != nullptr) {
+                            iHosp->addResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[iHosp->getIndex()]);
+                        }
+                        residents->arr[j].setAssignment(iHosp);
+
+                        // Add the i resident to the j hospital
+                        if (jHosp != nullptr) {
+                            jHosp->addResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[jHosp->getIndex()]);
+                        }
+                        residents->arr[i].setAssignment(jHosp);
+
+                        // Increment swaps
+                        swaps++;
+
+                        std::cout << "Swapped " << residents->arr[i].getName() << " and " << residents->arr[j].getName() << std::endl;
                     }
-                    residents->arr[i].setAssignment(jHosp);
-
-                    // Increment swaps
-                    swaps++;
-
-                    std::cout << "Swapped " << residents->arr[i].getName() << " and " << residents->arr[j].getName() << std::endl;
                 }
             }
         }
@@ -313,7 +325,7 @@ void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int cu
 
             for (int j = 0; j < residents->length; j++) {
                 if (residents->arr[j].getAssignment() != nullptr) {
-                    // Check the assignment to the preferenc list
+                    // Check the assignment to the preference list
                     if (residents->arr[j].getPreferencesArr()[residents->arr[j].getAssignment()->getIndex()] > 0) {
                         // The hospital is a valid assignment
                         assignmentCount[residents->arr[j].getAssignment()->getIndex()]++;
