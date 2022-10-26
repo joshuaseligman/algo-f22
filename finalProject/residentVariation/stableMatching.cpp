@@ -43,14 +43,14 @@ void stableMatchAlgo(StringArr* data) {
     for (int i = 0; i < hospitals->length; i++) {
         hospitals->arr[i].loadData(data->arr[residents->length + 1 + i], i, residents);
     }
-
-    // Call the actual algorithm
-    // generateStableMatches(residents, hospitals);
-
+    
+    // Linked list for the best possible output
     List<AlgoOutput*>* best = new List<AlgoOutput*>;
 
+    // Get the best possible output in O(n!) time
     stableMatchRecursive(residents, hospitals, 0, best);
 
+    // Print out the best possibilities
     Node<AlgoOutput*>* cur = best->getHead();
     while (cur != nullptr) {
         std::cout << cur->data->assignmentsString;
@@ -60,8 +60,19 @@ void stableMatchAlgo(StringArr* data) {
         cur = cur->next;
     }
 
+    // Memory cleanup
     best->clear(true);
     delete best;
+
+    // Reset all assignments to null
+    for (int i = 0; i < residents->length; i++) {
+        residents->arr[i].setAssignment(nullptr);
+    }
+
+    std::cout << "----- Actual algorithm -----" << std::endl;
+
+    // Call the actual algorithm
+    generateStableMatches(residents, hospitals);
 
     // Memory management and clean up
     delete [] residents->arr;
