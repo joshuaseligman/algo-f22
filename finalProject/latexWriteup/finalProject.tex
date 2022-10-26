@@ -131,6 +131,72 @@ The pseudocode for the hospitals and residents stable matching algorithm is prov
 \subsection{The Algorithm}
 One variation of the hospitals and residents stable matching problem is when only the residents rank the hospitals and the hospitals do not rank the residents. When making the assignments, stability is defined by not having a resident who is assigned to one hospital that would rather be in another hospital that is still available. Similar to the original algorithm, hospital capacity would be nice to have, but is not a necessity if not enough residents prefer the hospital to meet its capacity. In other words, overall resident happiness is the most important variable to consider when making the assignments.
 
+\begin{algorithm}
+    \caption{Hospitals and Residents Stable Matching Algorithm}
+    \label{algorithm:variation}
+    %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+    \begin{algorithmic}[1]
+        \Procedure{StableMatchVariation}{$residents$, $hospitals$}
+          \For{$r~of~residents$}
+            \State $topHosp \gets r.preferences.head$
+            \State $r.assignment \gets topHosp$ \Comment{Residents start with their top choice regardless of capacity}
+          \EndFor
+          \For{$i \gets 0, NUM\_LEVELS - 1$} \Comment{Have to check at all levels}
+            \For{$j \gets 0, len(hospitals) - 1$} \Comment{Have to iterate through each hospital}
+                \While{$hospitals[j].numAssigned(0, i) > hospitals[j].capacity$} \Comment{Continue until the hospital is no longer over capacity at the given level}
+                    \State $res \gets hospitals[j].assignments[i].dequeue()$ \Comment{Get the resident being removed}
+                    \State $res.preferences.dequeue()$ \Comment{Remove the hospital from the resident's preferences}
+                    \If{$i < NUM\_LEVELS - 1$}
+                        \State $newTopHospital \gets res.preferences.head$
+                        \State $newTopHospital.assignments[i + 1].add{res}$ \Comment{Add the resident to their next top choice}
+                    \EndIf
+                \EndWhile
+            \EndFor
+          \EndFor
+          \For{$i \gets 0, len(hospitals) - 1$}
+            \For{$j \gets 0, NUM\_LEVELS - 1$} \Comment {Iterate through all the residents assigned to the hospital}
+                \State $cur \gets hospitals[i].assignments[j].head$
+                \While{$cur~!=~null$}
+                    \State $cur.assignment \gets hospitals[i]$ \Comment{Formally assign the resident to the hospital}
+                    \State $cur \gets cur.next$
+                \EndWhile
+            \EndFor
+          \EndFor
+          \State $swaps \gets -1$ \Comment{Initialize to -1 to enter the loop}
+          \While{$swaps~!= 0$}
+            \State $swaps \gets 0$ \Comment{Start off the iteration with 0 swaps}
+            \For{$i \gets 0, len(residents) - 1$}
+                \For{$j \gets i + 1, len(residents) - 1$} \Comment{Compare all residents to all residents}
+                    \State $iHosp \gets residents[i].assignment$ \Comment{Get the current assignments}
+                    \State $jHosp \gets residents[j].assignment$
+                    \State $canSwap \gets true$ \Comment{Assume we can swap and end up with a stable pairing}
+                    \If{$residents[i].rankings[jHosp.index]~!= 0$}
+                        \State $canSwap \gets false$ \Comment{Cannot swap because resident i didn't rank jHosp}
+                    \ElsIf{$residents[j].rankings[iHosp.index]~!= 0$}
+                        \State $canSwap \gets false$ \Comment{Same but for resident j}
+                    \EndIf
+                    \If{$canSwap$}
+                        \State $curHappiness \gets avg(residents[i].rankings[iHosp.index], residents[j].rankings[jHosp.index])$
+                        \State $swapHappiness \gets avg(residents[i].rankings[jHosp.index], residents[j].rankings[iHosp.index])$
+                        \If{swapHappiness > curHappiness} \Comment{Swapping would result in a better net happiness}
+                            \State $iHosp.remove(residents[i])$ \Comment{Remove the residents from the hopsitals}
+                            \State $jHosp.remove(residents[j])$
+
+                            \State $iHosp.add(residents[j])$ \Comment{Swap the residents and the hospitals they are assigned to}
+                            \State $residents[j].assignment \gets iHosp$
+                            \State $jHosp.add(residents[i])$
+                            \State $residents[i].assignment \gets jHosp$
+
+                            \State $swaps \gets swaps + 1$ \Comment{Increment the number of swaps made}
+                        \EndIf
+                    \EndIf
+                \EndFor
+            \EndFor
+          \EndWhile
+        \EndProcedure
+    \end{algorithmic}
+  \end{algorithm}
+
 \subsection{Asymptotic Analysis}
 
 \section{Appendix}
@@ -155,6 +221,6 @@ One variation of the hospitals and residents stable matching problem is when onl
 \lstinputlisting[caption = Original Stable Matching Algorithm (C++), label = lst:original, language = C++, firstline = 98, lastline = 184, firstnumber = 1]{./../original/stableMatching.cpp}
 
 \subsection{Variation Algorithm}
-\lstinputlisting[caption = Variation Stable Matching Algorithm (C++), label = lst:variation, language = C++, firstline = 112, lastline = 261, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
+\lstinputlisting[caption = Variation Stable Matching Algorithm (C++), label = lst:variation, language = C++, firstline = 112, lastline = 273, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
 
 \end{document}
