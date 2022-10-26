@@ -1,0 +1,12 @@
+-- This is a hospital-residents test file.
+
+Config: 5 4
+r1: h1 h2 h3
+r2: h1 h2 h3
+r3: h1 h2 h3
+r4: h1 h4 h3
+r5: h1 h3 h2
+h1: 1
+h2: 1
+h3: 1
+h4: 1

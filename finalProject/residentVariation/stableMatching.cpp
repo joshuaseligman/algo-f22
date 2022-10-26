@@ -123,10 +123,6 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         hospitals->arr[i].getAssignments()[0].printList();
     }
 
-    for (int i = 0; i < hospitals->length; i++) {
-        std::cout << hospitals->arr[i].getPriority() << std::endl;
-    }
-
     // Go through each level of the hospitals
     for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
         for (int j = 0; j < hospitals->length; j++) {

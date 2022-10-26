@@ -105,19 +105,9 @@ int Resident::compare(Resident* compResident, int level) {
                     otherCur = otherCur->next;
                 }
             } else {
-                // If both have space, compare priorities
-                if (thisCur->data->getPriority() < otherCur->data->getPriority()) {
-                    // Higher priority is better because we will have a better chance to maximize resident happiness
-                    out = 1;
-                    break;
-                } else if (thisCur->data->getPriority() > otherCur->data->getPriority()) {
-                    out = -1;
-                    break;
-                } else {
-                    // Try the next level if the hospitals are the same
-                    thisCur = thisCur->next;
-                    otherCur = otherCur->next;
-                }
+                // Try the next level if the hospitals are the same
+                thisCur = thisCur->next;
+                otherCur = otherCur->next;
             }
         }
     }

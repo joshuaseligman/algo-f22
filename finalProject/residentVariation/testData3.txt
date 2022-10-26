@@ -1,0 +1,12 @@
+-- This is a hospital-residents test file.
+-- Expected (r1, h4) (r2, h2) (r3, h3) (r4, h4)
+
+Config: 4 4
+r1: h1 h4 h3
+r2: h2 h3 h4
+r3: h3 h4 h1
+r4: h1 h2 h3
+h1: 1
+h2: 1
+h3: 1
+h4: 1
