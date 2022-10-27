@@ -24,9 +24,14 @@ void stableMatchAlgo(StringArr* data) {
         std::stringstream ss(ptr);
         if (ss.str().compare("Config:") != 0) {
             if (numResidents == -1) {
+                // The first number should be the number of residents
                 ss >> numResidents;
-            } else {
+            } else if (numHospitals == -1) {
+                // The second number should be the number of hospitals
                 ss >> numHospitals;
+            } else {
+                // The third number is the number of preferences each resident gets
+                ss >> Hospital::NUM_LEVELS;
             }
         }
         ptr = strtok(NULL, " ");  

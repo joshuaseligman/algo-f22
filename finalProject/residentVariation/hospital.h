@@ -42,8 +42,8 @@ class Hospital {
         // Getter for the assignments
         List<Resident*>* getAssignments();
 
-        // Constant for 3 levels (each resident gets 3 preferences as well)
-        inline static const int NUM_LEVELS = 3;
+        // Constant for the number of preferences each resident gets. Determined at file read time
+        inline static int NUM_LEVELS = 0;
 
         // Adds a resident to the given level
         void addResident(Resident* resident, int level);

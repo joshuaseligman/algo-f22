@@ -1,6 +1,6 @@
 -- This is a hospital-residents test file.
 
-Config: 5 4
+Config: 5 4 3
 r1: h1 h2 h3
 r2: h1 h2 h3
 r3: h1 h2 h3
