@@ -34,8 +34,11 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals);
 // Compute the happiness index for the residents
 double computeResidentHappiness(ResidentArr* residents);
 
-// Compute the happiness indexf for the hospitals
+// Compute the happiness index for the hospitals
 double computeHospitalHappiness(HospitalArr* hospitals);
 
 // Recursive call to generate the best possible outcome in O(n!) time
 void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int curResident, List<AlgoOutput*>* best);
+
+// Performs swaps to boost the overall resident happiness
+void performSwaps(ResidentArr* residents);
