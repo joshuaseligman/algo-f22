@@ -14,6 +14,12 @@ class BinarySearchTree {
         // Inserts the node in the binary search tree
         void insert(BinaryTreeNode<std::string>* newNode);
 
+        // Searches for a value in the binary search tree
+        bool search(std::string target, int* comparisons = nullptr);
+
+        // Helper function for searching for an element in the binary search tree
+        bool searchHelper(std::string target, BinaryTreeNode<std::string>* cur, int* comparisons);
+
         // Getter for the root
         BinaryTreeNode<std::string>* getRoot();
 

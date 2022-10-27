@@ -13,6 +13,8 @@ BinarySearchTree::BinarySearchTree() {
 BinarySearchTree::~BinarySearchTree() {
     // Create a queue for things to delete
     Queue<BinaryTreeNode<std::string>*> removalQueue;
+
+    // Add all nodes to the queue, starting with the root
     depthFirstAddToQueue(root, &removalQueue);
 
     // Continue for all nodes
@@ -67,6 +69,41 @@ void BinarySearchTree::insert(BinaryTreeNode<std::string>* newNode) {
             trailing->right = newNode;
         }
     }
+}
+
+bool BinarySearchTree::search(std::string target, int* comparisons) {
+    // Run the search starting with the root of the tree
+    return searchHelper(target, root, comparisons);
+}
+
+bool BinarySearchTree::searchHelper(std::string target, BinaryTreeNode<std::string>* cur, int* comparisons) {
+    // Assume the element is not found (cur is nullptr)
+    bool out = false;
+
+    if (cur != nullptr) {
+        // Compare the strings
+        int strComp = target.compare(cur->data);
+
+        // A comparison was made, so increment the counter
+        if (comparisons != nullptr) {
+            (*comparisons)++;
+        }
+
+        if (strComp ==  0) {
+            // The element was found, so return true
+            out = true;
+        } else if (strComp < 0) {
+            // Check the left side because the target is less than the current value
+            std::cout << "L";
+            out = searchHelper(target, cur->left, comparisons);
+        } else {
+            // Check the right side because the target is greater than the current value
+            std::cout << "R";
+            out = searchHelper(target, cur->right, comparisons);
+        }
+    }
+
+    return out;
 }
 
 void BinarySearchTree::depthFirstAddToQueue(BinaryTreeNode<std::string>* cur, Queue<BinaryTreeNode<std::string>*>* queue) {
