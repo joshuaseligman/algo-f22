@@ -5,7 +5,7 @@
 #include <iostream>
 
 int main() {
-    StringArr* data = readFile("testData5.txt");
+    StringArr* data = readFile("testData6.txt");
     
     stableMatchAlgo(data);
 

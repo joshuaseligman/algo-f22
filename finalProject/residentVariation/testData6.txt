@@ -1,0 +1,17 @@
+-- This is a hospital-residents test file.
+-- Trying to force a swap
+
+Config: 7 6 5
+r1: h1 h4 h3 h2 h5
+r2: h2 h3 h6 h5 h1
+r3: h3 h4 h5 h1 h2
+r4: h4 h5 h1 h2 h3
+r5: h5 h4 h1 h2 h3
+r6: h2 h1 h3 h5 h4
+r7: h6 h1 h2 h3 h4
+h1: 1
+h2: 1
+h3: 1
+h4: 2
+h5: 1
+h6: 1
