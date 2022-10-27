@@ -3,10 +3,13 @@
 #include "binaryTreeNode.h"
 
 template <typename T>
-class BinaryTree {
+class BinarySearchTree {
     public:
         // Constructor
-        BinaryTree();
+        BinarySearchTree();
+
+        // Inserts the node in the binary search tree
+        void insert(BinaryTreeNode<T>* newNode);
 
         // Getter for the root
         BinaryTreeNode<T>* getRoot();

@@ -22,4 +22,3 @@ BinaryTreeNode<T>::BinaryTreeNode() {
 
 // Define acceptable data types that the Node can accept for the template
 template class BinaryTreeNode<std::string>;
-template class BinaryTreeNode<char>;
