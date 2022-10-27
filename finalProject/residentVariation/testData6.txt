@@ -1,5 +1,5 @@
 -- This is a hospital-residents test file.
--- Trying to force a swap
+-- (r1, h1) (r2, h3) (r3, h4) (r4, h4) (r5, h5) (r6, h2) (r7, h6)
 
 Config: 7 6 5
 r1: h1 h3 h4 h2 h5
