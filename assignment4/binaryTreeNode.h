@@ -2,19 +2,25 @@
 
 // Node represents an item within a singly linked list and can store data of a given type
 template <typename T>
-class Node {
+class BinaryTreeNode {
     public:
         // A node has the data it is storing (of a type defined by the user) and a pointer to the next node
         T data;
 
-        // The pointer uses the template to make sure all elements of the linked list store the same data type
-        Node<T>* next;
+        // The left branch node
+        BinaryTreeNode<T>* left;
+
+        // The right branch node
+        BinaryTreeNode<T>* right;
+
+        // The parent node (null means root)
+        BinaryTreeNode<T>* parent;
 
         // Nodes will be instantiated with some data and not have a next node
-        Node(T initialData);
+        BinaryTreeNode(T initialData);
 
         // Implicit constructor
-        Node();
+        BinaryTreeNode();
 };
 
 // Super helpful resource on templates for c++
