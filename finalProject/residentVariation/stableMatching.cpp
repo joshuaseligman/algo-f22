@@ -367,14 +367,19 @@ void performSwaps(ResidentArr* residents) {
                     }
                     double swapHappiness = (double) (iSwapHappiness + jSwapHappiness) / 2;
 
-                    // Conduct a swap if needed
+                    // Make sure the new happiness is better than it was before
                     if (swapHappiness > curHappiness) {
+                        // Get the gained happiness
                         double diff = swapHappiness - curHappiness;
+
+                        // Check to see if it is better than the current best
                         if (diff > bestDiff) {
+                            // Update the variables
                             bestDiff = diff;
                             res1 = &residents->arr[i];
                             res2 = &residents->arr[j];
                         } else if (diff == bestDiff && rand() % 2 == 0) {
+                            // If equal, randomly pick one or the other to use as the best difference
                             bestDiff = diff;
                             res1 = &residents->arr[i];
                             res2 = &residents->arr[j];
@@ -384,10 +389,13 @@ void performSwaps(ResidentArr* residents) {
             }
         }
 
+        // Make the swap if a possible swap was found
         if (res1 != nullptr && res2 != nullptr) {
+            // Get the hospitals being used
             Hospital* h1 = res1->getAssignment();
             Hospital* h2 = res2->getAssignment();
 
+            // Remove the residents from the hospitals
             if (h1 != nullptr) {
                 h1->removeResident(res1, Hospital::NUM_LEVELS - res1->getPreferencesArr()[h1->getIndex()]);
             }
@@ -410,6 +418,7 @@ void performSwaps(ResidentArr* residents) {
 
             std::cout << "Swapped " << res1->getName() << " and " << res2->getName() << std::endl;
         } else {
+            // No swaps were made, so can set the flag to false and end the loop
             std::cout << "No swaps made" << std::endl;
             swapped = false;
         }
