@@ -5,6 +5,8 @@
 #include "sort.h"
 #include "list.h"
 
+#include "stdlib.h"
+
 #include <iostream>
 #include <sstream>
 
@@ -317,10 +319,12 @@ void stableMatchRecursive(ResidentArr* residents, HospitalArr* hospitals, int cu
 
 void performSwaps(ResidentArr* residents) {
     // Make any needed adjustments to increase resident happiness
-    // Create a variable to keep track of the number of swaps made
-    int swaps = -1;
-    while (swaps != 0) {
-        swaps = 0;
+    bool swapped = true;
+    while (swapped) {
+        // Initialize the residents to swap to be nothing
+        Resident* res1 = nullptr;
+        Resident* res2 = nullptr;
+        double bestDiff = 0;
 
         for (int i = 0; i < residents->length; i++) {
             for (int j = i + 1; j < residents->length; j++) {
@@ -365,35 +369,49 @@ void performSwaps(ResidentArr* residents) {
 
                     // Conduct a swap if needed
                     if (swapHappiness > curHappiness) {
-                        // Remove the residents from the hospital lists
-                        if (iHosp != nullptr) {
-                            iHosp->removeResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[iHosp->getIndex()]);
+                        double diff = swapHappiness - curHappiness;
+                        if (diff > bestDiff) {
+                            bestDiff = diff;
+                            res1 = &residents->arr[i];
+                            res2 = &residents->arr[j];
+                        } else if (diff == bestDiff && rand() % 2 == 0) {
+                            bestDiff = diff;
+                            res1 = &residents->arr[i];
+                            res2 = &residents->arr[j];
                         }
-
-                        if (jHosp != nullptr) {
-                            jHosp->removeResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[jHosp->getIndex()]);
-                        }
-
-                        // Add the j resident to the i hospital
-                        if (iHosp != nullptr) {
-                            iHosp->addResident(&residents->arr[j], Hospital::NUM_LEVELS - residents->arr[j].getPreferencesArr()[iHosp->getIndex()]);
-                        }
-                        residents->arr[j].setAssignment(iHosp);
-
-                        // Add the i resident to the j hospital
-                        if (jHosp != nullptr) {
-                            jHosp->addResident(&residents->arr[i], Hospital::NUM_LEVELS - residents->arr[i].getPreferencesArr()[jHosp->getIndex()]);
-                        }
-                        residents->arr[i].setAssignment(jHosp);
-
-                        // Increment swaps
-                        swaps++;
-
-                        std::cout << "Swapped " << residents->arr[i].getName() << " and " << residents->arr[j].getName() << std::endl;
                     }
                 }
             }
         }
-        std::cout << "Swaps made: " << swaps << std::endl;
+
+        if (res1 != nullptr && res2 != nullptr) {
+            Hospital* h1 = res1->getAssignment();
+            Hospital* h2 = res2->getAssignment();
+
+            if (h1 != nullptr) {
+                h1->removeResident(res1, Hospital::NUM_LEVELS - res1->getPreferencesArr()[h1->getIndex()]);
+            }
+
+            if (h2 != nullptr) {
+                h2->removeResident(res2, Hospital::NUM_LEVELS - res2->getPreferencesArr()[h2->getIndex()]);
+            }
+
+            // Add the j resident to the i hospital
+            if (h1 != nullptr) {
+                h1->addResident(res2, Hospital::NUM_LEVELS - res2->getPreferencesArr()[h1->getIndex()]);
+            }
+            res2->setAssignment(h1);
+
+            // Add the i resident to the j hospital
+            if (h2 != nullptr) {
+                h2->addResident(res1, Hospital::NUM_LEVELS - res1->getPreferencesArr()[h2->getIndex()]);
+            }
+            res1->setAssignment(h2);
+
+            std::cout << "Swapped " << res1->getName() << " and " << res2->getName() << std::endl;
+        } else {
+            std::cout << "No swaps made" << std::endl;
+            swapped = false;
+        }
     }
 }
