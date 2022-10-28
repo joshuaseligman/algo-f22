@@ -118,6 +118,11 @@ void BinarySearchTree::depthFirstAddToQueue(BinaryTreeNode<std::string>* cur, Qu
     }
 }
 
+void BinarySearchTree::inOrderTraversal() {
+    // Perform the in order traversal starting with the root
+    BinaryTreeNode<std::string>::inOrderTraversal(root);
+}
+
 BinaryTreeNode<std::string>* BinarySearchTree::getRoot() {
     return root;
 }

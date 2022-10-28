@@ -18,6 +18,8 @@ int main() {
         bst.insert(newNode);
     }
 
+    bst.inOrderTraversal();
+
     StringArr* searchItems = readFile("magicitems-find-in-bst.txt");
 
     // Total comparisons starts at 0

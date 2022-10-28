@@ -21,6 +21,9 @@ class BinaryTreeNode {
 
         // Implicit constructor
         BinaryTreeNode();
+
+        // Traverse through a binary tree starting with the node
+        static void inOrderTraversal(BinaryTreeNode<T>* node);
 };
 
 // Super helpful resource on templates for c++

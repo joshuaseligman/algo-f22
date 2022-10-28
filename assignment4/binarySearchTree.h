@@ -20,6 +20,9 @@ class BinarySearchTree {
         // Helper function for searching for an element in the binary search tree
         bool searchHelper(std::string target, BinaryTreeNode<std::string>* cur, int* comparisons);
 
+        // Traverse the tree from the root of the node
+        void inOrderTraversal();
+
         // Getter for the root
         BinaryTreeNode<std::string>* getRoot();
 
