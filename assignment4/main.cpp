@@ -6,8 +6,11 @@
 #include "binarySearchTree.h"
 #include "binaryTreeNode.h"
 
+#include "sortsAndShuffles.h"
+
 int main() {
     StringArr* magicItems = readFile("magicitems.txt");
+    // mergeSort(magicItems);
 
     // Create the binary search tree
     BinarySearchTree bst;
