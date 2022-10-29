@@ -45,6 +45,15 @@ void Hospital::addResident(Resident* resident) {
     numAssigned++;
 }
 
+void Hospital::replace(Resident* oldResident, Resident* newResident) {
+    for (int i = 0; i < numAssigned; i++) {
+        // Find the target and replace it
+        if (assignments[i] == oldResident) {
+            assignments[i] = newResident;
+        }
+    }
+}
+
 void Hospital::addResident(Resident* resident, int level) {
     // Create a node and add it to the level
     Node<Resident*>* residentNode = new Node<Resident*>(resident);

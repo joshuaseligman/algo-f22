@@ -54,6 +54,9 @@ class Hospital {
         // Adds a resident to the hospital assignments
         void addResident(Resident* resident);
 
+        // Replaces residents from the list
+        void replace(Resident* oldResident, Resident* newResident);
+
         // Removes a resident from the given level
         void removeResident(Resident* resident, int level);
 
