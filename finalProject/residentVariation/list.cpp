@@ -138,7 +138,7 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
                 Resident* curRes = (Resident*) cur->data;
 
                 // See if the resident is in the right place
-                if (dataRes->compare(curRes, level) <= 0) {
+                if (dataRes->compare(curRes) <= 0) {
                     // Place the new node in the list
                     data->next = cur;
                     if (prev == nullptr) {

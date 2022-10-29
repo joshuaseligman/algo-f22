@@ -69,54 +69,86 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
     }
 }
 
-int Resident::compare(Resident* compResident, int level) {
+int Resident::compare(Resident* compResident) {
     // Get the current hospitals being compared
-    int thisCur = curPreferenceIndex;
-    int otherCur = compResident->getCurPreferenceIndex();
+    int thisCur = curPreferenceIndex + 1;
+    int otherCur = compResident->getCurPreferenceIndex() + 1;
 
-    // Assume we are working with a later level
-    bool firstLevel = false;
-
-    if (level == 0) {
-        thisCur = thisCur + 1;
-        otherCur = otherCur + 1;
-
-        firstLevel = true;
+    while (thisCur < Hospital::NUM_LEVELS) {
+        if (hospitalPreferences[thisCur]->isFull()) {
+            thisCur++;
+        } else {
+            break;
+        }
     }
+
+    while (otherCur < Hospital::NUM_LEVELS) {
+        if (compResident->getHospitalPreferences()[otherCur]->isFull()) {
+            otherCur++;
+        } else {
+            break;
+        }
+    }
+
+    int thisDiff = thisCur - curPreferenceIndex;
+    int otherDiff = otherCur - compResident->getCurPreferenceIndex();
 
     // Assume they are the same
     int out = 0;
 
-    // Continue to compare the hospitals until no more exist
-    while (thisCur < Hospital::NUM_LEVELS && otherCur < Hospital::NUM_LEVELS) {
-        if (firstLevel) {
-            if (hospitalPreferences[thisCur]->getFirstChoiceCount() >= hospitalPreferences[thisCur]->getCapacity() && compResident->getHospitalPreferences()[otherCur]->getFirstChoiceCount() < compResident->getHospitalPreferences()[otherCur]->getCapacity()) {
-                // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
-                out = 1;
-                break;
-            } else if (hospitalPreferences[thisCur]->getFirstChoiceCount() < hospitalPreferences[thisCur]->getCapacity() && compResident->getHospitalPreferences()[otherCur]->getFirstChoiceCount() >= compResident->getHospitalPreferences()[otherCur]->getCapacity()) {
-                out = -1;
-                break;
-            } else {
-                // Try the next level if the hospitals are the same
-                thisCur++;
-                otherCur++;
-            }
-        } else {
-            if (hospitalPreferences[thisCur]->isFullRange(level - 1) && !compResident->getHospitalPreferences()[otherCur]->isFullRange(level - 1)) {
-                // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
-                out = 1;
-                break;
-            } else if (!hospitalPreferences[thisCur]->isFullRange(level - 1) && compResident->getHospitalPreferences()[otherCur]->isFullRange(level - 1)) {
-                out = -1;
-                break;
-            } else {
-                // Try the next level if the hospitals are the same
-                thisCur++;
-                otherCur++;
-            }
+    if (thisDiff < otherDiff) {
+        out = 1;
+    } else if (thisDiff > otherDiff) {
+        out = -1;
+    } else {
+        if (curPreferenceIndex < compResident->getCurPreferenceIndex()) {
+            out = -1;
+        } else if (curPreferenceIndex > compResident->getCurPreferenceIndex()) {
+            out = 1;
         }
     }
+
+    // Assume we are working with a later level
+    // bool firstLevel = false;
+
+    // if (thisCur == 0) {
+    //     thisCur = thisCur + 1;
+    //     otherCur = otherCur + 1;
+
+    //     firstLevel = true;
+    // }
+
+
+    // // Continue to compare the hospitals until no more exist
+    // while (thisCur < Hospital::NUM_LEVELS && otherCur < Hospital::NUM_LEVELS) {
+    //     if (firstLevel) {
+    //         if (hospitalPreferences[thisCur]->getFirstChoiceCount() >= hospitalPreferences[thisCur]->getCapacity() && compResident->getHospitalPreferences()[otherCur]->getFirstChoiceCount() < compResident->getHospitalPreferences()[otherCur]->getCapacity()) {
+    //             // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
+    //             out = 1;
+    //             break;
+    //         } else if (hospitalPreferences[thisCur]->getFirstChoiceCount() < hospitalPreferences[thisCur]->getCapacity() && compResident->getHospitalPreferences()[otherCur]->getFirstChoiceCount() >= compResident->getHospitalPreferences()[otherCur]->getCapacity()) {
+    //             out = -1;
+    //             break;
+    //         } else {
+    //             // Try the next level if the hospitals are the same
+    //             thisCur++;
+    //             otherCur++;
+    //         }
+    //     } else {
+    //         if (hospitalPreferences[thisCur]->isFullRange(level - 1) && !compResident->getHospitalPreferences()[otherCur]->isFullRange(level - 1)) {
+    //             // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
+    //             out = 1;
+    //             break;
+    //         } else if (!hospitalPreferences[thisCur]->isFullRange(level - 1) && compResident->getHospitalPreferences()[otherCur]->isFullRange(level - 1)) {
+    //             out = -1;
+    //             break;
+    //         } else {
+    //             // Try the next level if the hospitals are the same
+    //             thisCur++;
+    //             otherCur++;
+    //         }
+    //     }
+    // }
     
     return out;
 }

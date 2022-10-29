@@ -40,7 +40,7 @@ class Hospital {
         int getNumAssignedRange(int lastLevel);
 
         // Getter for the assignments
-        List<Resident*>* getAssignments();
+        Resident** getAssignments();
 
         // Constant for the number of preferences each resident gets. Determined at file read time
         inline static int NUM_LEVELS = 0;
@@ -67,6 +67,8 @@ class Hospital {
         void incrementFirstChoice();
 
         void printAssignments();
+
+        void sortResidentAssignments();
     private:
         // The name for printing the output
         std::string name;
@@ -88,6 +90,10 @@ class Hospital {
 
         // The number of residents that want the hospital as its first choice
         int firstChoice;
+
+        void quickSortWithIndices(Resident** data, int start, int end);
+
+        int partition(Resident** data, int start, int end, int pivotIndex);
 };
 
 // Struct for working with hospitals on the heap
