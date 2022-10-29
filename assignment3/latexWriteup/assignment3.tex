@@ -107,7 +107,7 @@ Linear search is a searching algorithm that walks through an array and continues
 \end{algorithm}
 
 \subsection{Asymptotic Analysis and Comparisons}
-As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. The performance of linear search varies drastically on the position of the target element relative to the front of the array. For instance, linear search will be really fast when the target is near the front as the algorithm terminates upon finding the element. However, if the target is near the end of the array, the algorithm will have to iterate through nearly the entire array. Thus, for a randomly sorted list, the average expected case will be $\frac{n}{2}$ iterations. Also, at the worst case, the number of iterations will be equal to the number of elements in the array. Therefore, as its name implies, linear search runs in linear time $O(n)$. Table \ref{comparisonsTable} shows the average number of comparisons made for 42 of the 666 magic items, which for the case of linear search, was 341.67. This lines up with the expected case for the searching algorithm of $\frac{n}{2}$ as, for a list of 666 items, about 333 will have to be searched and compared with before the target value is found.
+As mentioned in Section \ref{linearSearch}, performing a linear search requires going through each element until the target is found or until the end of the array is reached. The performance of linear search varies drastically on the position of the target element relative to the front of the array. For instance, linear search will be really fast when the target is near the front as the algorithm terminates upon finding the element. However, if the target is near the end of the array, the algorithm will have to iterate through nearly the entire array. Thus, for a randomly arranged list, the average expected case will be $\frac{n}{2}$ iterations. Also, at the worst case, the number of iterations will be equal to the number of elements in the array. Therefore, as its name implies, linear search runs in linear time $O(n)$. Table \ref{comparisonsTable} shows the average number of comparisons made for 42 of the 666 magic items, which for the case of linear search, was 341.67. This lines up with the expected case for the searching algorithm of $\frac{n}{2}$ as, for a list of 666 items, about 333 will have to be searched and compared with before the target value is found.
 
 \section{Binary Search}
 \subsection{The Algorithm}\label{binarySearch}
@@ -155,7 +155,7 @@ Binary search is a searching algorithm that takes an already sorted list and pro
 \subsection{Asymptotic Analysis and Comparisons}
 Binary search, similar to merge sort and quicksort, divides the array in half at each step of the recursion tree. This makes the recurrence relation of binary search to be $T(n) = T(\frac{n}{2}) + C$, where $T(\frac{n}{2})$ is the time to perform binary search on the half of the array and $C$ is the constant time to perform the comparisons. Thus, since the array is being divided in half until the size of the array being considered is 1, the number of times binary search will be recursively called at worst case will be $log_2n$ times, which makes it run in $O(log_2n)$ time.
 
-$O(log_2n)$ is a huge improvement over $O(n)$ for linear search. However, the one tradeoff is that binary search needs to have an already sorted array. Thus, if the array is not sorted, an additional $n * log_2n$ time will need to be added to put the array in a state to use binary search. Therefore, linear search may be the better option for one and done search operations, but binary search with a sort will catch up as the number of search operations increases. The mathematical equation to determine this point is $x * n > x * log_2n + n * log_2n$, where $x$ is the number of searching operations that have to be done on the unsorted array. For an array of 666 sorted items, binary search required an avereage of 8.57 comparisons to retrieve 42 random items, which is around $n * log_2n = 9.37$, or the number of levels in the recursion tree.
+$O(log_2n)$ is a huge improvement over $O(n)$ for linear search. However, the one tradeoff is that binary search needs to have an already sorted array. Thus, if the array is not sorted, an additional $n * log_2n$ time will need to be added to put the array in a state to use binary search. Therefore, linear search may be the better option for one and done search operations, but binary search with a sort will catch up as the number of search operations increases. The mathematical equation to determine this point is $x * n > x * log_2n + n * log_2n$, where $x$ is the number of searching operations that have to be done on the unsorted array. For an array of 666 sorted items, binary search required an avereage of 8.57 comparisons to retrieve 42 random items, which is around $log_2n = 9.37$, or the number of levels in the recursion tree.
 
 \subsection{Hashing with Chaining}
 A hash table is a data structure that stores data in an array and uses a hash function to determine the position in the array to store the data. Hash tables have 2 main functions: get and put, and both of these are provided in Algorithms \ref{algorithm:hashGet} and \ref{algorithm:hashPut}, respectively. Since an array has a fixed size, there are 2 initial problems with hash tables. The first is that the output of a hash function may not be directly translatable to an array index. As displayed on line 19 of Listing \ref{lst:hashFunc}, once the sum of the ordinal codes is calculated, modulus division is performed to get the hash code to be on the range $[0, size - 1]$, which are all valid indices within the array. The other issue is caused when 2 different elements return the same hash code, which is called a collision. A hash table may implement a method called probing by searching for an empty space within the array to put the value, but is restricted by the size of the created array. Chaining is the other way to resolve this problem of duplicate hash codes. Rather than searching for an empty spot in the array, chaining stares a linked list at each element in the array, and the value that is being put into the hash table can be added to the linked list at the index generated by the hash function. Additionally, unlike probing, chaining is not limited to the size of the array being used as a linked list is only limited by the size of memory. See Figure \ref{figure:hashing} for a visual understanding of hashing with chaining.
@@ -188,7 +188,7 @@ A hash table is a data structure that stores data in an array and uses a hash fu
       \Procedure{Put}{$value$}
         \State $hashCode \gets hash(value)$ \Comment{Generate the hash code for the value}
         \State $curHead \gets table[hashCode]$ \Comment{Going to work with the head of the list}
-        \State $newHead = new Node(value)$ \Comment{Create the new node}
+        \State $newHead = new~Node(value)$ \Comment{Create the new node}
         \If {$curHead~!= null$}
           \State $newHead.next = curHead$ \Comment{Place the new node ahead of the current head}
         \EndIf
@@ -223,7 +223,7 @@ The C++ implementation for the put function for hash tables is shown in Listing 
     Hashing & 3.19 \\
     \hline
   \end{tabular}
-\captionof{table}{A table of the number of comparisons made and time to get an item from an array or hash table.}
+\captionof{table}{A table of the number of comparisons made to get an item from an array or hash table.}
 \end{center}
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
@@ -250,7 +250,7 @@ The C++ implementation for the put function for hash tables is shown in Listing 
 \lstinputlisting[caption = Binary Search (C++), label = lst:binarySerach, language = C++, firstline = 32, lastline = 67, firstnumber = 1]{./../searches.cpp}
 
 \subsection{Hashing with Chaining}
-\lstinputlisting[caption = Simple Hash Function, label = lst:hashFunc, language = C++, firstline = 86, lastline = 106]{./../hashTable.cpp}
+\lstinputlisting[caption = Simple Hash Function, label = lst:hashFunc, language = C++, firstline = 85, lastline = 106]{./../hashTable.cpp}
 \lstinputlisting[caption = Hash Table Get with Chaining, label = lst:hashGet, language = C++, firstline = 37, lastline = 67]{./../hashTable.cpp}
 \lstinputlisting[caption = Hash Table Put with Chaining, label = lst:hashPut, language = C++, firstline = 69, lastline = 84]{./../hashTable.cpp}
 
