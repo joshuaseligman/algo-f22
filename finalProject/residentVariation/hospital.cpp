@@ -108,6 +108,10 @@ int Hospital::getNumAssigned() {
     return numAssigned;
 }
 
+void Hospital::setNumAssigned(int newNumAssigned) {
+    numAssigned = newNumAssigned;
+}
+
 int Hospital::getNumAssignedRange(int lastLevel) {
     if (lastLevel >= Hospital::NUM_LEVELS) {
         throw std::invalid_argument("Invalid level. Must be less than " + std::to_string(Hospital::NUM_LEVELS));

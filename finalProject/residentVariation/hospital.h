@@ -36,6 +36,9 @@ class Hospital {
         // Getter for the number of assigned residents
         int getNumAssigned();
 
+        // Setter for the number of assigned residents
+        void setNumAssigned(int newNumAssigned);
+
         // Gets the number of residents assigned in the first n levels
         int getNumAssignedRange(int lastLevel);
 

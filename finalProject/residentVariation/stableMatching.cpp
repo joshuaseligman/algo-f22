@@ -126,8 +126,36 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         cur->addResident(&residents->arr[i]);
     }
 
-    for (int i = 0; i < hospitals->length; i++) {
-        hospitals->arr[i].printAssignments();
+    bool hasToCheck = true;
+
+    while (hasToCheck) {
+        List<Resident*> residentsToReassign;
+
+        for (int i = 0; i < hospitals->length; i++) {
+            while (hospitals->arr[i].getNumAssigned() - hospitals->arr[i].getCapacity() > 0) {
+                hospitals->arr[i].sortResidentAssignments();
+                hospitals->arr[i].printAssignments();
+
+                Resident* residentToRemove = hospitals->arr[i].getAssignments()[hospitals->arr[i].getNumAssigned() - 1];
+                residentToRemove->setCurPreferenceIndex(residentToRemove->getCurPreferenceIndex() + 1);
+
+                hospitals->arr[i].setNumAssigned(hospitals->arr[i].getNumAssigned() - 1);
+
+                Node<Resident*>* resNode = new Node<Resident*>(residentToRemove);
+                residentsToReassign.enqueue(resNode);             
+            }
+        }
+        if (residentsToReassign.getSize() > 0) {
+            Node<Resident*>* res = residentsToReassign.dequeue();
+
+            if (res->data->getCurPreferenceIndex() < Hospital::NUM_LEVELS) {
+                res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->addResident(res->data);
+            }
+
+            delete res;
+        } else {
+            hasToCheck = false;
+        }
     }
 
     // Go through each level of the hospitals
@@ -151,35 +179,31 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     //     }
     // }
 
-    // // Formally assign each resident to the hospitals
-    // for(int i = 0; i < hospitals->length; i++) {
-    //     for (int j = 0; j < Hospital::NUM_LEVELS; j++) {
-    //         Node<Resident*>* cur = hospitals->arr[i].getAssignments()[j].getHead();
-    //         while (cur != nullptr) {
-    //             cur->data->setAssignment(&hospitals->arr[i]);
-    //             cur = cur->next;
-    //         }
-    //     }
-    // }
+    // Formally assign each resident to the hospitals
+    for (int i = 0; i < hospitals->length; i++) {
+        for (int j = 0; j < hospitals->arr[i].getNumAssigned(); j++) {
+            hospitals->arr[i].getAssignments()[j]->setAssignment(&hospitals->arr[i]);
+        }
+    }
 
-    // std::cout << "Finished main algo" << std::endl << std::endl;
+    std::cout << "Finished main algo" << std::endl << std::endl;
 
-    // // Print the final results
-    // std::cout << "Initial results:" << std::endl;
-    // for (int i = 0; i < residents->length; i++) {
-    //     if (residents->arr[i].getAssignment() != nullptr) {
-    //         std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
-    //     } else {
-    //         std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
-    //     }
-    // }
-    // std::cout << std::endl;
+    // Print the final results
+    std::cout << "Initial results:" << std::endl;
+    for (int i = 0; i < residents->length; i++) {
+        if (residents->arr[i].getAssignment() != nullptr) {
+            std::cout << "(" << residents->arr[i].getName() << ", " << residents->arr[i].getAssignment()->getName() << ")" << std::endl;
+        } else {
+            std::cout << "(" << residents->arr[i].getName() << ", nullptr)" << std::endl;
+        }
+    }
+    std::cout << std::endl;
 
-    // // Compute the happiness indices for both residents and hospitals
-    // std::cout << "Resident Happiness: " << computeResidentHappiness(residents) << std::endl;
-    // std::cout << "Hospital Happiness: " << computeHospitalHappiness(hospitals) << std::endl;
+    // Compute the happiness indices for both residents and hospitals
+    std::cout << "Resident Happiness: " << computeResidentHappiness(residents) << std::endl;
+    std::cout << "Hospital Happiness: " << computeHospitalHappiness(hospitals) << std::endl;
 
-    // std::cout << std::endl;
+    std::cout << std::endl;
 
     // // Try to do swaps to boost the performance of the algorithm
     // performSwaps(residents);
