@@ -8,13 +8,14 @@
 #include <string>
 
 Resident::Resident() {
-    hospitalPreferences = new List<Hospital*>();
+    hospitalPreferences = new Hospital*[Hospital::NUM_LEVELS];
     assignment = nullptr;
+    curPreferenceIndex = 0;
 }
 
 Resident::~Resident() {
     delete [] preferenceArr;
-    delete hospitalPreferences;
+    delete [] hospitalPreferences;
 }
 
 void Resident::loadData(std::string data, int resIndex, HospitalArr* hospitals) {
@@ -52,16 +53,15 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
         // Decrement because the first hospital is labeled as h1, but stored in index 0
         hospitalIndex--;
 
-        // Create a node and add it to the end of the preferences list because the preferences are in order
-        Node<Hospital*>* hospitalNode = new Node<Hospital*>(&hospitals->arr[hospitalIndex]);
-        hospitalPreferences->enqueue(hospitalNode);
+        // Save the hospital in the preferences
+        hospitalPreferences[Hospital::NUM_LEVELS - ranking] = &hospitals->arr[hospitalIndex];
 
         // Add the preference to the status array
         preferenceArr[hospitalIndex] = ranking;
 
         // Moving on to the next ranking
         if (ranking == Hospital::NUM_LEVELS) {
-            hospitalNode->data->incrementFirstChoice();
+            hospitals->arr[hospitalIndex].incrementFirstChoice();
         }
         ranking--;
 
@@ -71,15 +71,15 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
 
 int Resident::compare(Resident* compResident, int level) {
     // Get the current hospitals being compared
-    Node<Hospital*>* thisCur = getHospitalPreferences()->getHead();
-    Node<Hospital*>* otherCur = compResident->getHospitalPreferences()->getHead();
+    int thisCur = curPreferenceIndex;
+    int otherCur = compResident->getCurPreferenceIndex();
 
     // Assume we are working with a later level
     bool firstLevel = false;
 
     if (level == 0) {
-        thisCur = thisCur->next;
-        otherCur = otherCur->next;
+        thisCur = thisCur + 1;
+        otherCur = otherCur + 1;
 
         firstLevel = true;
     }
@@ -88,32 +88,32 @@ int Resident::compare(Resident* compResident, int level) {
     int out = 0;
 
     // Continue to compare the hospitals until no more exist
-    while (thisCur != nullptr && otherCur != nullptr) {
+    while (thisCur < Hospital::NUM_LEVELS && otherCur < Hospital::NUM_LEVELS) {
         if (firstLevel) {
-            if (thisCur->data->getFirstChoiceCount() >= thisCur->data->getCapacity() && otherCur->data->getFirstChoiceCount() < otherCur->data->getCapacity()) {
+            if (hospitalPreferences[thisCur]->getFirstChoiceCount() >= hospitalPreferences[thisCur]->getCapacity() && compResident->getHospitalPreferences()[otherCur]->getFirstChoiceCount() < compResident->getHospitalPreferences()[otherCur]->getCapacity()) {
                 // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
                 out = 1;
                 break;
-            } else if (thisCur->data->getFirstChoiceCount() < thisCur->data->getCapacity() && otherCur->data->getFirstChoiceCount() >= otherCur->data->getCapacity()) {
+            } else if (hospitalPreferences[thisCur]->getFirstChoiceCount() < hospitalPreferences[thisCur]->getCapacity() && compResident->getHospitalPreferences()[otherCur]->getFirstChoiceCount() >= compResident->getHospitalPreferences()[otherCur]->getCapacity()) {
                 out = -1;
                 break;
             } else {
                 // Try the next level if the hospitals are the same
-                thisCur = thisCur->next;
-                otherCur = otherCur->next;
+                thisCur++;
+                otherCur++;
             }
         } else {
-            if (thisCur->data->isFullRange(level - 1) && !otherCur->data->isFullRange(level - 1)) {
+            if (hospitalPreferences[thisCur]->isFullRange(level - 1) && !compResident->getHospitalPreferences()[otherCur]->isFullRange(level - 1)) {
                 // Check if one of the hospitals is full and the other is not to prioritize taking advantage of open spaces
                 out = 1;
                 break;
-            } else if (!thisCur->data->isFullRange(level - 1) && otherCur->data->isFullRange(level - 1)) {
+            } else if (!hospitalPreferences[thisCur]->isFullRange(level - 1) && compResident->getHospitalPreferences()[otherCur]->isFullRange(level - 1)) {
                 out = -1;
                 break;
             } else {
                 // Try the next level if the hospitals are the same
-                thisCur = thisCur->next;
-                otherCur = otherCur->next;
+                thisCur++;
+                otherCur++;
             }
         }
     }
@@ -130,8 +130,16 @@ std::string Resident::getName() {
     return name;
 }
 
-List<Hospital*>* Resident::getHospitalPreferences() {
+Hospital** Resident::getHospitalPreferences() {
     return hospitalPreferences;
+}
+
+int Resident::getCurPreferenceIndex() {
+    return curPreferenceIndex;
+}
+
+void Resident::setCurPreferenceIndex(int newIndex) {
+    curPreferenceIndex = newIndex;
 }
 
 int* Resident::getPreferencesArr() {

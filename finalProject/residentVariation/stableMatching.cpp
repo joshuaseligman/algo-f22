@@ -120,10 +120,10 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     std::cout << std::endl;
 
     for (int i = 0; i < residents->length; i++) {
-        Node<Hospital*>* cur = residents->arr[i].getHospitalPreferences()->getHead();
+        Hospital* cur = residents->arr[i].getHospitalPreferences()[residents->arr[i].getCurPreferenceIndex()];
 
         // Add each resident to their top choice hospital
-        cur->data->addResident(&residents->arr[i], 0);
+        cur->addResident(&residents->arr[i], 0);
     }
 
     for (int i = 0; i < hospitals->length; i++) {
@@ -137,12 +137,16 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
             while (hospitals->arr[j].getNumAssignedRange(i) > hospitals->arr[j].getCapacity()) {
                 // Get the resident and remove the hospital from its list
                 Node<Resident*>* res = hospitals->arr[j].getAssignments()[i].dequeue();
-                Node<Hospital*>* h = res->data->getHospitalPreferences()->dequeue();
-                delete h;
+                // TODO Make sure this is the best resident by checking the other residents assigned to this residents higher preferences
+
+                // Node<Hospital*>* h = res->data->getHospitalPreferences()->dequeue();
+                // delete h;
+
+                res->data->setCurPreferenceIndex(res->data->getCurPreferenceIndex() + 1);
 
                 // Add the resident to its next preferred hospital if possible
                 if (i < Hospital::NUM_LEVELS - 1) {
-                    res->data->getHospitalPreferences()->getHead()->data->getAssignments()[i + 1].priorityAdd(res, i + 1);
+                    res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->getAssignments()[i + 1].priorityAdd(res, i + 1);
                 } else {
                     delete res;
                 }

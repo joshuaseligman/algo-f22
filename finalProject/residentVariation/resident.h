@@ -24,8 +24,14 @@ class Resident {
         // Getter for the name
         std::string getName();
 
-        // Getter for the preferences
-        List<Hospital*>* getHospitalPreferences();
+        // Getter for the current preferences
+        Hospital** getHospitalPreferences();
+
+        // Getter for the current preference index
+        int getCurPreferenceIndex();
+
+        // Setter for the current preference index
+        void setCurPreferenceIndex(int newIndex);
 
         // Getter for the preferences array
         int* getPreferencesArr();
@@ -45,8 +51,11 @@ class Resident {
         // Index for referencing the resident from an array
         int index;
 
-        // List of initial preferences
-        List<Hospital*>* hospitalPreferences;
+        // Array of the current preferences
+        Hospital** hospitalPreferences;
+
+        // The current preference index
+        int curPreferenceIndex;
 
         // Integer array to put the hospital rankings easily
         int* preferenceArr;
