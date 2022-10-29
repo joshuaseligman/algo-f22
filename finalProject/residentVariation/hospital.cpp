@@ -9,9 +9,12 @@
 Hospital::Hospital() {
     // Initialize leveledAssignments to be NUM_LEVELS of empty lists
     leveledAssignments = new List<Resident*>[NUM_LEVELS];
+
+    numAssigned = 0;
 }
 
 Hospital::~Hospital() {
+    delete [] assignments;
 }
 
 void Hospital::clearMemory() {
@@ -19,6 +22,8 @@ void Hospital::clearMemory() {
 }
 
 void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents) {
+    assignments = new Resident*[residents->length];
+
     // The part of the line before the colon is the name
     int colonIndex = data.find(":");
     name = data.substr(0, colonIndex);
@@ -32,6 +37,11 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
     // Ignore the space before the hyphen and save the capacity
     std::stringstream ss(remainder);
     ss >> capacity;
+}
+
+void Hospital::addResident(Resident* resident) {
+    assignments[numAssigned] = resident;
+    numAssigned++;
 }
 
 void Hospital::addResident(Resident* resident, int level) {
@@ -123,4 +133,11 @@ int Hospital::getFirstChoiceCount() {
 
 void Hospital::incrementFirstChoice() {
     firstChoice++;
+}
+
+void Hospital::printAssignments() {
+    for (int i = 0; i < numAssigned; i++) {
+        std::cout << assignments[i]->getName() << " ";
+    }
+    std::cout << std::endl;
 }
