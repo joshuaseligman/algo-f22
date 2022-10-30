@@ -4,7 +4,7 @@
 Config: 8 7 6
 r1: h1 h3 h2 h4 h5 h7
 r2: h2 h3 h6 h5 h1 h7
-r3: h3 h5 h1 h2 h4 h7
+r3: h3 h4 h1 h2 h5 h7
 r4: h4 h5 h1 h2 h3 h7
 r5: h5 h4 h1 h2 h3 h7
 r6: h2 h1 h3 h5 h7 h4

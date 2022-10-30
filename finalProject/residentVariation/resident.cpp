@@ -101,9 +101,51 @@ int Resident::compare(Resident* compResident) {
     if (thisDiff < otherDiff) {
         // Lower difference should be put at the end of the list
         out = 1;
+
+        Hospital* target = hospitalPreferences[thisCur];
+        bool found = false;
+        // Iterate back through all possible moves to go down for the other resident
+        for (int i = compResident->getCurPreferenceIndex() + 1; i < Hospital::NUM_LEVELS && !found; i++) {
+            // Iterate through all the residents assigned to the hospital
+            for (int j = 0; j < compResident->getHospitalPreferences()[i]->getNumAssigned() && !found; j++) {
+                Resident* middleMan = compResident->getHospitalPreferences()[i]->getAssignments()[j];
+                for (int k = middleMan->getCurPreferenceIndex() + 1; k < Hospital::NUM_LEVELS && !found; k++) {
+                    if (middleMan->getHospitalPreferences()[k] == target) {
+                        int middleDiff = k - middleMan->getCurPreferenceIndex();
+                        int newOtherDiff = i - compResident->getCurPreferenceIndex();
+                        double avg = (double) (middleDiff + newOtherDiff) / 2;
+                        if (avg < thisDiff) {
+                            out = -1;
+                            found = true;
+                        }
+                    }
+                }
+            }
+        }
     } else if (thisDiff > otherDiff) {
         // Higher difference should be kept near the front
         out = -1;
+
+        Hospital* target = compResident->getHospitalPreferences()[otherCur];
+        bool found = false;
+        // Iterate back through all possible moves to go down for the other resident
+        for (int i = curPreferenceIndex + 1; i < Hospital::NUM_LEVELS && !found; i++) {
+            // Iterate through all the residents assigned to the hospital
+            for (int j = 0; j < hospitalPreferences[i]->getNumAssigned() && !found; j++) {
+                Resident* middleMan = hospitalPreferences[i]->getAssignments()[j];
+                for (int k = middleMan->getCurPreferenceIndex() + 1; k < Hospital::NUM_LEVELS && !found; k++) {
+                    if (middleMan->getHospitalPreferences()[k] == target) {
+                        int middleDiff = k - middleMan->getCurPreferenceIndex();
+                        int newThisDiff = i - curPreferenceIndex;
+                        double avg = (double) (middleDiff + newThisDiff) / 2;
+                        if (avg < thisDiff) {
+                            out = -1;
+                            found = true;
+                        }
+                    }
+                }
+            }
+        }
     } else {
         // If the differences are the same, prioritize keeping the one that is happier as it is
         if (curPreferenceIndex < compResident->getCurPreferenceIndex()) {
