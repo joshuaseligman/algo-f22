@@ -132,39 +132,39 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         List<Resident*> residentsToReassign;
 
         for (int i = 0; i < hospitals->length; i++) {
+            hospitals->arr[i].sortResidentAssignments();
             while (hospitals->arr[i].getNumAssigned() - hospitals->arr[i].getCapacity() > 0) {
-                hospitals->arr[i].sortResidentAssignments();
                 hospitals->arr[i].printAssignments();
 
                 Resident* residentToRemove = hospitals->arr[i].getAssignments()[hospitals->arr[i].getNumAssigned() - 1];
 
-                // Resident* swapRes = nullptr;
-                // int hospIndex = -1;
+                Resident* swapRes = nullptr;
+                int hospIndex = -1;
 
-                // for (int j = 0; j < residentToRemove->getCurPreferenceIndex(); j++) {
-                //     Hospital* checkHosp = residentToRemove->getHospitalPreferences()[j];
-                //     for (int k = 0; k < checkHosp->getNumAssigned(); k++) {
-                //         if (residentToRemove->compare(checkHosp->getAssignments()[k]) < 0) {
-                //             if (swapRes != nullptr) {
-                //                 if (swapRes->compare(checkHosp->getAssignments()[k]) < 0) {
-                //                     std::cout << "Found better option" << std::endl;
-                //                     swapRes = checkHosp->getAssignments()[k];
-                //                     hospIndex = j;
-                //                 }
-                //             } else {
-                //                 swapRes = checkHosp->getAssignments()[k];
-                //                 hospIndex = j;
-                //             }
-                //         }
-                //     }
-                // }
+                for (int j = 0; j < residentToRemove->getCurPreferenceIndex(); j++) {
+                    Hospital* checkHosp = residentToRemove->getHospitalPreferences()[j];
+                    for (int k = 0; k < checkHosp->getNumAssigned(); k++) {
+                        if (residentToRemove->compare(checkHosp->getAssignments()[k]) < 0) {
+                            if (swapRes != nullptr) {
+                                if (swapRes->compare(checkHosp->getAssignments()[k]) < 0) {
+                                    std::cout << "Found better option" << std::endl;
+                                    swapRes = checkHosp->getAssignments()[k];
+                                    hospIndex = j;
+                                }
+                            } else {
+                                swapRes = checkHosp->getAssignments()[k];
+                                hospIndex = j;
+                            }
+                        }
+                    }
+                }
 
-                // if (swapRes != nullptr) {
-                //     std::cout << "Mid algo swap" << std::endl;
-                //     residentToRemove->getHospitalPreferences()[hospIndex]->replace(swapRes, residentToRemove);
-                //     residentToRemove->setCurPreferenceIndex(hospIndex);
-                //     residentToRemove = swapRes;
-                // }
+                if (swapRes != nullptr) {
+                    std::cout << "Mid algo swap" << std::endl;
+                    residentToRemove->getHospitalPreferences()[hospIndex]->replace(swapRes, residentToRemove);
+                    residentToRemove->setCurPreferenceIndex(hospIndex);
+                    residentToRemove = swapRes;
+                }
 
                 hospitals->arr[i].setNumAssigned(hospitals->arr[i].getNumAssigned() - 1);
                 residentToRemove->setCurPreferenceIndex(residentToRemove->getCurPreferenceIndex() + 1);
@@ -173,13 +173,15 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
             }
         }
         if (residentsToReassign.getSize() > 0) {
-            Node<Resident*>* res = residentsToReassign.dequeue();
+            while (!residentsToReassign.isEmpty()) {
+                Node<Resident*>* res = residentsToReassign.dequeue();
 
-            if (res->data->getCurPreferenceIndex() < Hospital::NUM_LEVELS) {
-                res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->addResident(res->data);
+                if (res->data->getCurPreferenceIndex() < Hospital::NUM_LEVELS) {
+                    res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->addResident(res->data);
+                }
+
+                delete res;
             }
-
-            delete res;
         } else {
             hasToCheck = false;
         }

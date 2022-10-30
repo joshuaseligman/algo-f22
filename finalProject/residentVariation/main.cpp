@@ -11,7 +11,7 @@ int main() {
     // Set the seed for the random numbers
     srand(time(NULL));
 
-    StringArr* data = readFile("testData6.txt");
+    StringArr* data = readFile("testData5.txt");
     
     stableMatchAlgo(data);
 
