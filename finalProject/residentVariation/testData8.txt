@@ -1,0 +1,21 @@
+-- This is a hospital-residents test file.
+-- (r1, h1) (r2, h2) (r3, h4) (r4, h4) (r5, h5) (r6, h3) (r7, h6) (r8, h7) (r9, h8)
+
+Config: 9 8 7
+r1: h1 h5 h2 h3 h7 h8 h4
+r2: h2 h1 h6 h3 h5 h7 h8
+r3: h3 h4 h1 h2 h5 h7 h8
+r4: h4 h5 h1 h2 h3 h7 h8
+r5: h5 h4 h2 h1 h3 h7 h8
+r6: h2 h3 h8 h1 h7 h8 h4
+r7: h6 h1 h2 h3 h4 h7 h8
+r8: h7 h1 h2 h3 h4 h5 h8
+r9: h8 h4 h2 h3 h4 h5 h6
+h1: 1
+h2: 1
+h3: 1
+h4: 2
+h5: 1
+h6: 1
+h7: 1
+h8: 1
