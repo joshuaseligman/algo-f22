@@ -28,6 +28,9 @@ void Resident::loadData(std::string data, int resIndex, HospitalArr* hospitals) 
 
     // Initialize the array for the preferences
     preferenceArr = new int[hospitals->length];
+    for (int i = 0; i < hospitals->length; i++) {
+        preferenceArr[i] = 0;
+    }
 
     // Load the preference data
     addPreferences(data.substr(colonIndex + 2, std::string::npos), hospitals);
