@@ -51,6 +51,9 @@ int main() {
 
     createGraphs(graphFile);
 
+    delete [] graphFile->arr;
+    delete graphFile;
+
     delete [] searchItems->arr;
     delete searchItems;
 
