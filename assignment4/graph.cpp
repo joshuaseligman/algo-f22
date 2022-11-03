@@ -12,7 +12,12 @@ Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
         std::string prefix = data->arr[i].substr(0, 5);
 
         if (prefix.compare("add v") == 0) {
+            // Create a vertex
+
+            // Increment the number of vertices
             numVertices++;
+        } else if (prefix.compare("add e") == 0) {
+            // Add the edge
         }
     }
 
