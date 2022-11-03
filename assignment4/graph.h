@@ -16,6 +16,12 @@ class Graph {
         void printMatrix();
 
     private:
+        // Creates a vertex for the linked objects
+        void createVertex(std::string vertexInfo);
+
+        // Creates an edge for the linked objects
+        void createEdge(std::string edgeInfo);
+
         // The number of vertices in the graph
         int numVertices;
 

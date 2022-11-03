@@ -11,11 +11,13 @@ void createGraphs(StringArr* contents) {
             if (curBegin != -1) {
                 Graph g(contents, curBegin, i - 1);
                 g.printMatrix();
+                std::cout << std::endl;
             }
             curBegin = i;
         } else if (i == contents->length - 1) {
             Graph g(contents, curBegin, i);
             g.printMatrix();
+            std::cout << std::endl;
         }
     }
 }
