@@ -10,10 +10,12 @@ void createGraphs(StringArr* contents) {
         if (contents->arr[i].compare("new graph") == 0) {
             if (curBegin != -1) {
                 Graph g(contents, curBegin, i - 1);
+                g.printMatrix();
             }
             curBegin = i;
         } else if (i == contents->length - 1) {
             Graph g(contents, curBegin, i);
+            g.printMatrix();
         }
     }
 }

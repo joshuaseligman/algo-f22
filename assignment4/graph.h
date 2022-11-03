@@ -10,6 +10,9 @@ class Graph {
         // Destructor for a graph
         ~Graph();
 
+        // Function to print out the matrix
+        void printMatrix();
+
     private:
         // The number of vertices in the graph
         int numVertices;
