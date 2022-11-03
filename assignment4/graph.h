@@ -1,5 +1,7 @@
 #pragma once
 
+#include "node.h"
+#include "graphNode.h"
 #include "util.h"
 
 class Graph {
@@ -16,6 +18,9 @@ class Graph {
     private:
         // The number of vertices in the graph
         int numVertices;
+
+        // Stores a pointer to the head of a linked list containing all the vertices
+        Node<GraphNode*>* vertexList;
 
         // The matrix representation of the graph
         bool* matrix;
