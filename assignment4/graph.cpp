@@ -88,9 +88,6 @@ void Graph::createVertex(std::string vertexInfo) {
 }
 
 void Graph::createEdge(std::string edgeInfo) {
-    GraphNode* v1 = nullptr;
-    GraphNode* v2 = nullptr;
-
     // Variable to store the match results
     std::smatch m;
     // Regular expression looks for a number followed by a space, hyphen, space, and another number
@@ -101,8 +98,8 @@ void Graph::createEdge(std::string edgeInfo) {
 
     bool firstId = true;
 
-    int id1 = -1;
-    int id2 = -1;
+    int id1 = INT_MIN;
+    int id2 = INT_MIN;
 
     char* ptr;
     // Only work with the substring that is the vertices
@@ -120,7 +117,27 @@ void Graph::createEdge(std::string edgeInfo) {
         ptr = strtok(NULL, " - ");
     }
 
-    std::cout << id1 << " " << id2 << std::endl;
+    GraphNode* v1 = getGraphNode(id1);
+    if (v1 == nullptr) {
+        // Create an error message if the vertex was not found
+        std::stringstream ss;
+        ss << "Vertex " << id1 << " does not exist";
+        throw std::invalid_argument(ss.str());
+    }
+
+    GraphNode* v2 = getGraphNode(id2);
+    if (v2 == nullptr) {
+        // Create an error message if the vertex was not found
+        std::stringstream ss;
+        ss << "Vertex " << id2 << " does not exist";
+        throw std::invalid_argument(ss.str());
+    }
+
+    // Add each vertex to the neighbors list
+    v1->addNeighbor(v2);
+    v2->addNeighbor(v1);
+
+    std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << std::endl;
 }
 
 void Graph::printMatrix() {
@@ -133,4 +150,25 @@ void Graph::printMatrix() {
         }
         std::cout << std::endl;
     }
+}
+
+GraphNode* Graph::getGraphNode(int nodeId) {
+    // Start at the head of the list
+    Node<GraphNode*>* cur = vertexList;
+
+    // Assume not found
+    bool found = false;
+
+    while (cur != nullptr && !found) {
+        // Set found to true if the id matches
+        if (cur->data->getId() == nodeId) {
+            found = true;
+        } else {
+            // Otherwise move on to the next node
+            cur = cur->next;
+        }
+    }
+
+    // Return the graph node
+    return cur->data;
 }

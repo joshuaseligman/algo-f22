@@ -15,6 +15,9 @@ class Graph {
         // Function to print out the matrix
         void printMatrix();
 
+        // Gets the graph node of the given id, nullptr if not found
+        GraphNode* getGraphNode(int nodeId);
+
     private:
         // Creates a vertex for the linked objects
         void createVertex(std::string vertexInfo);
