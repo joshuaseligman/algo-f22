@@ -27,13 +27,7 @@ Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
 
     std::cout << numVertices << std::endl;
 
-    // Create a matrix of size numVertices x numVertices
-    matrix = new bool[numVertices * numVertices];
-
-    // Initialize the matrix to be all false
-    for (int i = 0; i < numVertices * numVertices; i++) {
-        matrix[i] = false;
-    }
+    createMatrix();
 }
 
 Graph::~Graph() {
@@ -138,6 +132,28 @@ void Graph::createEdge(std::string edgeInfo) {
     v2->addNeighbor(v1);
 
     std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << std::endl;
+}
+
+void Graph::createMatrix() {
+    // Create a matrix of size numVertices x numVertices
+    matrix = new bool[numVertices * numVertices];
+
+    // Initialize the matrix to be all false
+    for (int i = 0; i < numVertices * numVertices; i++) {
+        matrix[i] = false;
+    }
+
+    // Go through all vertices
+    Node<GraphNode*>* cur = vertexList;
+    while (cur != nullptr) {
+        // Go through all of the neighbors
+        Node<GraphNode*>* neighbor = cur->data->getNeighbors();
+        while (neighbor != nullptr) {
+            matrix[cur->data->getIndex() * numVertices + neighbor->data->getIndex()] = true;
+            neighbor = neighbor->next;
+        }
+        cur = cur->next;
+    }
 }
 
 void Graph::printMatrix() {

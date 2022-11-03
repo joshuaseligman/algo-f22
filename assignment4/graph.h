@@ -25,6 +25,9 @@ class Graph {
         // Creates an edge for the linked objects
         void createEdge(std::string edgeInfo);
 
+        // Creates the matrix representation of the graph based on the nodes already created
+        void createMatrix();
+
         // The number of vertices in the graph
         int numVertices;
 
