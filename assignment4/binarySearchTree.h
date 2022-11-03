@@ -34,5 +34,5 @@ class BinarySearchTree {
         BinaryTreeNode<std::string>* root;
 
         // Adds every node in the tree to the queue
-        void depthFirstAddToQueue(BinaryTreeNode<std::string>* cur, Queue<BinaryTreeNode<std::string>*>* queue);
+        void preOrderAddToQueue(BinaryTreeNode<std::string>* cur, Queue<BinaryTreeNode<std::string>*>* queue);
 };

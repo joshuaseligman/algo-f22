@@ -15,7 +15,7 @@ BinarySearchTree::~BinarySearchTree() {
     Queue<BinaryTreeNode<std::string>*> removalQueue;
 
     // Add all nodes to the queue, starting with the root
-    depthFirstAddToQueue(root, &removalQueue);
+    preOrderAddToQueue(root, &removalQueue);
 
     // Continue for all nodes
     while (!removalQueue.isEmpty()) {
@@ -106,15 +106,15 @@ bool BinarySearchTree::searchHelper(std::string target, BinaryTreeNode<std::stri
     return out;
 }
 
-void BinarySearchTree::depthFirstAddToQueue(BinaryTreeNode<std::string>* cur, Queue<BinaryTreeNode<std::string>*>* queue) {
+void BinarySearchTree::preOrderAddToQueue(BinaryTreeNode<std::string>* cur, Queue<BinaryTreeNode<std::string>*>* queue) {
     if (cur != nullptr) {
         // Add the current node to the queue
         Node<BinaryTreeNode<std::string>*>* curNode = new Node<BinaryTreeNode<std::string>*>(cur);
         queue->enqueue(curNode);
 
         // Check to add the left and right child nodes to the queue
-        depthFirstAddToQueue(cur->left, queue);
-        depthFirstAddToQueue(cur->right, queue);
+        preOrderAddToQueue(cur->left, queue);
+        preOrderAddToQueue(cur->right, queue);
     }
 }
 
