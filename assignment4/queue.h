@@ -18,6 +18,9 @@ public:
     // We need a constructor and destructor
     Queue();
 
+    // Destructor for the queue
+    ~Queue();
+
     // Enqueue adds a new element to the queue
     void enqueue(Node<T>* newNode);
 
@@ -32,4 +35,7 @@ public:
 
     // Getter for the size
     int getSize();
+
+    // Getter for the head
+    Node<T>* getHead();
 };

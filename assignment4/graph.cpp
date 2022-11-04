@@ -3,6 +3,7 @@
 #include "util.h"
 #include "node.h"
 #include "graphNode.h"
+#include "queue.h"
 
 #include <regex>
 #include <iostream>
@@ -10,7 +11,7 @@
 
 Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
     numVertices = 0;
-    vertexList = nullptr;
+    vertices = new Queue<GraphNode*>;
 
     for (int i = beginIndex; i <= endIndex; i++) {
         // Get the first 5 characters. Should be "add v" or "add e"
@@ -32,17 +33,7 @@ Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
 
 Graph::~Graph() {
     delete [] matrix;
-
-    // Go through all created vertices
-    Node<GraphNode*>* cur = vertexList;
-    while (cur != nullptr) {
-        Node<GraphNode*>* toBeDeleted = cur;
-        cur = cur->next;
-
-        // Delete the graph node and the linked list node
-        delete toBeDeleted->data;
-        delete toBeDeleted;
-    }
+    delete vertices;
 }
 
 void Graph::createVertex(std::string vertexInfo) {
@@ -74,8 +65,7 @@ void Graph::createVertex(std::string vertexInfo) {
 
     // Create the regular node and store it in the list at the front to keep O(1) time
     Node<GraphNode*>* newNode = new Node<GraphNode*>(newGraphNode);
-    newNode->next = vertexList;
-    vertexList = newNode;
+    vertices->enqueue(newNode);
 
     // Increment the number of vertices
     numVertices++;
@@ -144,10 +134,10 @@ void Graph::createMatrix() {
     }
 
     // Go through all vertices
-    Node<GraphNode*>* cur = vertexList;
+    Node<GraphNode*>* cur = vertices->getHead();
     while (cur != nullptr) {
         // Go through all of the neighbors
-        Node<GraphNode*>* neighbor = cur->data->getNeighbors();
+        Node<GraphNode*>* neighbor = cur->data->getNeighbors()->getHead();
         while (neighbor != nullptr) {
             matrix[cur->data->getIndex() * numVertices + neighbor->data->getIndex()] = true;
             neighbor = neighbor->next;
@@ -170,7 +160,7 @@ void Graph::printMatrix() {
 
 GraphNode* Graph::getGraphNode(int nodeId) {
     // Start at the head of the list
-    Node<GraphNode*>* cur = vertexList;
+    Node<GraphNode*>* cur = vertices->getHead();
 
     // Assume not found
     bool found = false;

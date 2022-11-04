@@ -3,6 +3,7 @@
 #include "node.h"
 #include "graphNode.h"
 #include "util.h"
+#include "queue.h"
 
 class Graph {
     public:
@@ -32,7 +33,7 @@ class Graph {
         int numVertices;
 
         // Stores a pointer to the head of a linked list containing all the vertices
-        Node<GraphNode*>* vertexList;
+        Queue<GraphNode*>* vertices;
 
         // The matrix representation of the graph
         bool* matrix;

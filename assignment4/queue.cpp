@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "node.h"
 #include "binaryTreeNode.h"
+#include "graphNode.h"
 
 // Instantiate the queue with the head pointing to nothing
 template <typename T>
@@ -12,6 +13,14 @@ Queue<T>::Queue() {
     tail = nullptr;
 
     size = 0;
+}
+
+template <typename T>
+Queue<T>::~Queue() {
+    while (!isEmpty()) {
+        Node<T>* n = dequeue();
+        delete n;
+    }
 }
 
 // Creates a new node and adds it to the queue
@@ -79,6 +88,12 @@ int Queue<T>::getSize() {
     return size;
 }
 
+template <typename T>
+Node<T>* Queue<T>::getHead() {
+    return head;
+}
+
 // Define acceptable data types that the Queue can accept for the template
 template class Queue<std::string>;
 template class Queue<BinaryTreeNode<std::string>*>;
+template class Queue<GraphNode*>;

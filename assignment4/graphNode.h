@@ -1,6 +1,6 @@
 #pragma once
 
-#include "node.h"
+#include "queue.h"
 
 class GraphNode {
     public:
@@ -19,8 +19,8 @@ class GraphNode {
         // Getter for the index the vertex is stored in
         int getIndex();
 
-        // Getter for the neighbors linked list
-        Node<GraphNode*>* getNeighbors();
+        // Getter for the neighbors queue
+        Queue<GraphNode*>* getNeighbors();
     private:
         // Id of the vertex
         int id;
@@ -28,6 +28,6 @@ class GraphNode {
         // Index of the vertex in the array in case the first id given is different from 0
         int index;
 
-        // A linked list containing the neighboring vertices
-        Node<GraphNode*>* neighbors;
+        // A queue containing the neighboring vertices
+        Queue<GraphNode*>* neighbors;
 };
