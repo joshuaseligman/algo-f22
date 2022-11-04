@@ -11,7 +11,7 @@ GraphNode::GraphNode(int nodeId, int nodeIndex) {
     neighbors = new Queue<GraphNode*>;
 
     // Initialize to false because it wasn't worked with yet
-    processed = false;
+    isProcessed = false;
 
     std::cout << "Created vertex. Id: " << id << "; Index: " << index << std::endl;
 }

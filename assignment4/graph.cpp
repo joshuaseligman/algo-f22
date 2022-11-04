@@ -218,7 +218,7 @@ void Graph::depthFirstSearch() {
 
     while (start != nullptr) {
         // If the vertex has not been processed, it is disconnected from the rest of the graph
-        if (!start->data->processed) {
+        if (!start->data->isProcessed) {
             // Start the DFS from the current node to explore that region of the graph
             std::cout << "DFS: ";
             depthFirstSearch(start->data);
@@ -229,15 +229,15 @@ void Graph::depthFirstSearch() {
 }
 
 void Graph::depthFirstSearch(GraphNode* start) {
-    if (!start->processed) {
+    if (!start->isProcessed) {
         // Print out the vertex id only if it hasn't been processed yet
         std::cout << start->getId() << " ";
-        start->processed = true;
+        start->isProcessed = true;
     }
     // Iterate through all neighbors
     Node<GraphNode*>* cur = start->getNeighbors()->getHead();
     while (cur != nullptr) {
-        if (!cur->data->processed) {
+        if (!cur->data->isProcessed) {
             // Run a DFS starting from the neighbor if it hasn't been processed already
             depthFirstSearch(cur->data);
         }
@@ -253,7 +253,7 @@ void Graph::breadthFirstSearch() {
 
     while (start != nullptr) {
         // If the vertex has not been processed, it is disconnected from the rest of the graph
-        if (!start->data->processed) {
+        if (!start->data->isProcessed) {
             // Start the BFS from the current node to explore that region of the graph
             std::cout << "BFS: ";
             // Do a breadth first search from the first vertex
@@ -271,7 +271,7 @@ void Graph::breadthFirstSearch(GraphNode* start) {
     // Add the start to the queue
     Node<GraphNode*>* startNode = new Node<GraphNode*>(start);
     verticesToCheck.enqueue(startNode);
-    startNode->data->processed = true;
+    startNode->data->isProcessed = true;
 
     // Continue until no more vertices are left to check
     while (!verticesToCheck.isEmpty()) {
@@ -281,11 +281,11 @@ void Graph::breadthFirstSearch(GraphNode* start) {
 
         Node<GraphNode*>* cur = check->data->getNeighbors()->getHead();
         while (cur != nullptr) {
-            if (!cur->data->processed) {
+            if (!cur->data->isProcessed) {
                 // Create a new node and add it to the queue
                 Node<GraphNode*>* newNode = new Node<GraphNode*>(cur->data);
                 verticesToCheck.enqueue(newNode);
-                newNode->data->processed = true;
+                newNode->data->isProcessed = true;
             }
             cur = cur->next;
         }
@@ -298,7 +298,7 @@ void Graph::clearProcessedStates() {
     // Initialize all nodes to not be processed yet
     Node<GraphNode*>* cur = vertices->getHead();
     while (cur != nullptr) {
-        cur->data->processed = false;
+        cur->data->isProcessed = false;
         cur = cur->next;
     }
 }
