@@ -89,8 +89,6 @@ A binary search tree is a data structure that, for each node in the tree, all ch
 
 \hspace*{\fill}
 \begin{figure}
-  \caption{Sample binary search tree for the numbers 5, 3, 1, 2, 7, 6, 8.}
-  \label{figure:bstNormal}
   % Documentation: https://www.ling.upenn.edu/advice/latex/qtree/qtreenotes.pdf
   \Tree [.5
           [.3
@@ -105,13 +103,13 @@ A binary search tree is a data structure that, for each node in the tree, all ch
             [.8 ]
           ]
         ]
+  \caption{Sample binary search tree for the numbers 5, 3, 1, 2, 7, 6, 8.}
+  \label{figure:bstNormal}
 \end{figure}
 \hspace*{\fill}
 
 \hspace*{\fill}
 \begin{figure}
-  \caption{Sample binary search tree for the numbers 1, 2, 3, 5, 6, 7, 8.}
-  \label{figure:bstBad}
   % Documentation: https://www.ling.upenn.edu/advice/latex/qtree/qtreenotes.pdf
   \Tree [.1
           [.{null} ]
@@ -132,6 +130,8 @@ A binary search tree is a data structure that, for each node in the tree, all ch
             ]
           ]
         ]
+  \caption{Sample binary search tree for the numbers 1, 2, 3, 5, 6, 7, 8.}
+  \label{figure:bstBad}
 \end{figure}
 \hspace*{\fill}
 
@@ -158,7 +158,7 @@ A binary search tree is a data structure that, for each node in the tree, all ch
 Algorithm \ref{algorithm:bstLookup} provides the pseudocode for performing a lookup on a binary search tree. As shown on lines 6 and 8, the area of the tree gets cut in half for each level of the recursion tree. This causes the expected runtime for a binary search tree lookup to be the same as binary search at $O(log_2n)$. However, as displayed in Figures \ref{figure:bstNormal} and \ref{figure:bstBad}, the order in which the data arrive makes a huge difference in the number of checks needed to find an element. For instance, when looking for the number 8 in the tree in Figure \ref{figure:bstNormal}, it will start with the 5 and go to the right because 8 > 5, then compare 8 with the 7 and also go to the right because 8 > 7, and then end when it finds the 8. Since there are 7 elements in the tree, it should take around $log_{2}7$ comparisons to find an element, and 3 comparisons is very close to the expected outcome. However, when trying to find 8 in the tree in Figure \ref{figure:bstBad}, one will have to compare 8 with every single element in the tree, which degrades the binary search tree lookup to be $O(n)$ as it is just doing a linear search. Therefore, when working with a binary search tree, it is important to make sure the data are shuffled in a random order to ensure the tree is as close to being balanced as possible. Since shuffling is an $O(n)$ operation, taking the time to shuffle a sorted array before putting the data in a binary search tree will save a lot of time in the long run especially when doing a lot of lookups within the tree.
 
 \section{Graphs}
-\subsection{The Data Structure}
+\subsection{The Data Structure}\label{graph}
 A graph is a data structure that is composed of vertices that are connected via edges. Graphs can be useful for modeling networks of objects, such as LinkedIn connections or the many locations within a city map. The edges that connect the vertices together may have direction and weights, but this paper will focus on undirected and unweighted graphs. As illustrated in Figure \ref{figure:graph}, some of the vertices are connected to each other with various levels of cardinality. Additionally, some vertices may be disconnected from some areas of the graph. This is the case with vertices 6 and 7, which are on their own island separate from the rest of the graph.
 
 Traversing a graph is commonly done by using either a depth-first search or breadth-first search. As per the name, depth-first search works to traverse through the graph with the goal of going as deep into the graph as quickly as possible. Algorithm \ref{algorithm:graphDfs} provides the pseudocode for depth-first search. Lines 6-10 emphasize the nature of the algorithm as a depth-first search is recursively performed on the first neighbor, which will not return until it has exhaustively searched through every node that can be reached through the neighbor before moving on to the next neighbor. Alternatively, one can use a breadth-first search to traverse a graph, by going through all of the direct connections to the starting vertex, then going through those vertices' connections, and so on until all levels are searched. As shown in Algorithm \ref{algorithm:graphBfs}, a queue is used to keep track of the order of the vertices that have to be searched as those closer to the initial vertex are going to be enqueued first and, therefore, will be checked first. The order in which vertices are processed varies between the 2 algorithms. For instance, in Figure \ref{figure:graph}, a depth-first search starting at vertex 1 will go to vertex 2 and then vertex 3. From vertex 3, vertex 4 will be searched, but there are no connections to vertex 4 that have already been searched, which causes the recursion to end and allow for vertex 5 to be searched. Thus, the order is 1, 2, 3, 4, 5. On the other hand, with a breadth-first search, after seeing vertex 1, vertices 2 and 4 will be added to the queue first. When visiting vertex 2, vertex 3 will be added to the queue, and vertex 5 will be added to the queue when visiting vertex 3. Because of the use of the queue, the order of the vertices being checked becomes 1, 2, 4, 3, 5.
@@ -217,7 +217,7 @@ Traversing a graph is commonly done by using either a depth-first search or brea
       \While{$!checkQueue.isEmpty()$}
         \State $checkVertex \gets checkQueue.dequeue()$
         \State \textbf{print} $checkVertex.id$
-        \For{$neighborVertex~\textbf{in}~checkVertex.neighbors$} \Comment{Check all neighbors}
+        \For{$neighbor~\textbf{in}~checkVertex.neighbors$} \Comment{Check all neighbors}
           \If{$!neighbor.isProcessed$} \Comment{Add it to the queue if not visited}
             \State $checkQueue.enqueue(neighbor)$
             \State $neighbor.isProcessed \gets true$
@@ -227,6 +227,18 @@ Traversing a graph is commonly done by using either a depth-first search or brea
     \EndProcedure
   \end{algorithmic}
 \end{algorithm}
+
+\subsection{Asymptotic Analysis}
+In the case of graph traversals through depth-first and breadth-first searches, the worst possible case is when the graph is complete and all vertices are connected to every other vertex as this is the situation with the most number of edges and connections between nodes. Redundant connections cause the same impact on the outcome of the algorithm runtime but will be ignored in this instance to keep the math simple.
+
+Depth-first search is described in Algorithm \ref{algorithm:graphDfs}, and its C++ implementation can be found in Listing \ref{lst:graphDfs}. In Algorithm \ref{algorithm:graphDfs}, lines 2-5 define an if-statement that contains a check to see if a variable is true or false, a print statement, and an assignment. All of these operations are constant time operations and run in $O(1)$ time. Next, lines 6-10 define a for-loop that iterates over all of the vertex's neighbors. In the worst case described above, this loop will run for each of the neighbors, which is every other vertex, or $v - 1$ times. Inside the loop, there is an if-statement that runs in constant just like the one on line 2 as well as a recursive call to the function. Since the function is only called if the neighbor has not been visited yet, it will run once for each vertex. Therefore, the loop will run a total of $v$ times, which causes the algorithm to be $O(v^2)$ because each function call requires a loop over all of the other vertices.
+
+Breadth-first search is described in Algorithm \ref{algorithm:graphBfs}, and its C++ implementation can be found in Listing \ref{lst:graphBfs}. Lines 2-4 of Algorithm \ref{algorithm:graphBfs} contain 2 assignments and a call to an $enqueue$ function that all run in constant time. Next, the while-loop defined on line 5 has a condition that will vary based on the number of elements added to the queue over time, which, for now, will be unknown. Lines 6 and 7 consist of dequeue assignment and a print statement, which run in $O(1)$ time. Lines 8-13 define a for-loop that iterates over all neighbors of the vertex being checked. Similar to depth-first search, this loop will run $v - 1$ times at the worst case because each vertex is connected to every other vertex, so all vertices have to be checked. However, the neighboring vertices are only added to the end of the queue if they have not been processed yet, which means that each vertex will be added to the queue no more than 1 time. Therefore, the outer loop will run for each vertex in the graph. Also, the body of the for-loop contains all constant time operations that are not dependent on the number of vertices in the graph. Therefore, since the outer loop is running $v$ times and the inner loop runs $v - 1$ times, the runtime of breadth-first search is $O(v^2)$.
+
+The main problem with both depth-first and breadth-first traversals is that they are unaware of any disconnected nodes to the part of the graph they are searching. For instance, as mentioned in the example walkthroughs of these algorithms in Section \ref{graph} for Figure \ref{figure:graph}, only vertices 1-5 were visited and 6 and 7 were left completely out of the loop because they are separate from the rest of the graph. The only solution to this problem is to pick up the searching algorithms with either vertex 6 or 7. The C++ implementation of these algorithms in Listings \ref{lst:graphDfs} and \ref{lst:graphBfs} adds an additional $O(v)$ operation on lines 7-16 that iterates through each vertex and starts up the searching algorithm if the vertex has not been visited yet, which helps ensure complete coverage of the graph.
+
+
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
 
 % Colors and lstset for syntax highlighting from https://www.overleaf.com/latex/examples/syntax-highlighting-in-latex-with-the-listings-package/jxnppmxxvsvk
 \definecolor{mygreen}{rgb}{0,0.6,0}

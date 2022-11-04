@@ -256,7 +256,6 @@ void Graph::breadthFirstSearch() {
         if (!start->data->isProcessed) {
             // Start the BFS from the current node to explore that region of the graph
             std::cout << "BFS: ";
-            // Do a breadth first search from the first vertex
             breadthFirstSearch(start->data);
             std::cout << std::endl;
         }
