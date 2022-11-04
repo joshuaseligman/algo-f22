@@ -161,6 +161,8 @@ Algorithm \ref{algorithm:bstLookup} provides the pseudocode for performing a loo
 \subsection{The Data Structure}
 A graph is a data structure that is composed of vertices that are connected via edges. Graphs can be useful for modeling networks of objects, such as LinkedIn connections or the many locations within a city map. The edges that connect the vertices together may have direction and weights, but this paper will focus on undirected and unweighted graphs. As illustrated in Figure \ref{figure:graph}, some of the vertices are connected to each other with various levels of cardinality. Additionally, some vertices may be disconnected from some areas of the graph. This is the case with vertices 6 and 7, which are on their own island separate from the rest of the graph.
 
+Traversing a graph is commonly done by using either a depth-first search or breadth-first search. As per the name, depth-first search works to traverse through the graph with the goal of going as deep into the graph as quickly as possible. Algorithm \ref{algorithm:graphDfs} provides the pseudocode for depth-first search. Lines 6-10 emphasize the nature of the algorithm as a depth-first search is recursively performed on the first neighbor, which will not return until it has exhaustively searched through every node that can be reached through the neighbor before moving on to the next neighbor. Alternatively, one can use a breadth-first search to traverse a graph, by going through all of the direct connections to the starting vertex, then going through those vertices' connections, and so on until all levels are searched. As shown in Algorithm \ref{algorithm:graphBfs}, a queue is used to keep track of the order of the vertices that have to be searched as those closer to the initial vertex are going to be enqueued first and, therefore, will be checked first. The order in which vertices are processed varies between the 2 algorithms. For instance, in Figure \ref{figure:graph}, a depth-first search starting at vertex 1 will go to vertex 2 and then vertex 3. From vertex 3, vertex 4 will be searched, but there are no connections to vertex 4 that have already been searched, which causes the recursion to end and allow for vertex 5 to be searched. Thus, the order is 1, 2, 3, 4, 5. On the other hand, with a breadth-first search, after seeing vertex 1, vertices 2 and 4 will be added to the queue first. When visiting vertex 2, vertex 3 will be added to the queue, and vertex 5 will be added to the queue when visiting vertex 3. Because of the use of the queue, the order of the vertices being checked becomes 1, 2, 4, 3, 5.
+
 \begin{figure}
   \hspace*{\fill}
   % From https://www.baeldung.com/cs/latex-drawing-graphs
@@ -173,20 +175,19 @@ A graph is a data structure that is composed of vertices that are connected via 
     \node[main] (6) [right of=3] {$6$};
     \node[main] (7) [right of=6] {$7$};
     \draw (1) -- (2);
-    \draw (1) -- (3);
+    \draw (1) -- (4);
     \draw (2) -- (3);
     \draw (3) -- (4);
-    \draw (5) -- (4);
     \draw (3) -- (5);
     \draw (6) -- (7);
   \end{tikzpicture}
   \hspace*{\fill}
-  \caption{Sample undirected, unweighted graph consisting of 7 vertices and 7 edges.}
+  \caption{Sample undirected, unweighted graph consisting of 7 vertices and 6 edges.}
   \label{figure:graph}
 \end{figure}
 
 \begin{algorithm}
-  \caption{Graph Depth First Search. $start$ can begin at any point in the graph.}
+  \caption{Graph Depth-First Search. $start$ can begin at any point in the graph.}
   \label{algorithm:graphDfs}
   %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
   \begin{algorithmic}[1]
@@ -205,7 +206,7 @@ A graph is a data structure that is composed of vertices that are connected via 
 \end{algorithm}
 
 \begin{algorithm}
-  \caption{Graph Breadth First Search. $start$ can begin at any point in the graph.}
+  \caption{Graph Breadth-First Search. $start$ can begin at any point in the graph.}
   \label{algorithm:graphBfs}
   %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
   \begin{algorithmic}[1]
@@ -246,7 +247,7 @@ A graph is a data structure that is composed of vertices that are connected via 
 \lstinputlisting[caption = Binary Search Tree Lookup (C++), label = lst:bstLookup, language = C++, firstline = 74, lastline = 107, firstnumber = 1]{./../binarySearchTree.cpp}
 
 \subsection{Graphs}
-\lstinputlisting[caption = Graph Depth First Search (C++), label = lst:graphDfs, language = C++, firstline = 213, lastline = 246, firstnumber = 1]{./../graph.cpp}
+\lstinputlisting[caption = Graph Depth-First Search (C++), label = lst:graphDfs, language = C++, firstline = 213, lastline = 246, firstnumber = 1]{./../graph.cpp}
 
 \lstinputlisting[caption = Graph Breadth First Search (C++), label = lst:graphBfs, language = C++, firstline = 248, lastline = 295, firstnumber = 1]{./../graph.cpp}
 
