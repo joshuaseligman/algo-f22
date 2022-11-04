@@ -135,7 +135,6 @@ A binary search tree is a data structure that, for each node in the tree, all ch
 \end{figure}
 \hspace*{\fill}
 
-
 \begin{algorithm}
   \caption{Binary Search Tree Lookup. Assume $cur$ starts off as the root of the tree.}
   \label{algorithm:bstLookup}
@@ -185,6 +184,48 @@ A graph is a data structure that is composed of vertices that are connected via 
   \caption{Sample undirected, unweighted graph consisting of 7 vertices and 7 edges.}
   \label{figure:graph}
 \end{figure}
+
+\begin{algorithm}
+  \caption{Graph Depth First Search. $start$ can begin at any point in the graph.}
+  \label{algorithm:graphDfs}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+    \Procedure{GraphDFS}{$start$}
+      \If{$!start.isProcessed$} \Comment{Make sure the vertex has not already been visited}
+        \State \textbf{print} $start.id$
+        \State $start.isProcessed \gets true$
+      \EndIf
+      \For{$neighborVertex~\textbf{in}~start.neighbors$} \Comment{Check all neighbors}
+        \If{$!neighbor.isProcessed$} \Comment{Go down the rabbit hole if the neighbor has not been visited}
+          \State $GraphDFS(neighbor)$
+        \EndIf
+      \EndFor
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption{Graph Breadth First Search. $start$ can begin at any point in the graph.}
+  \label{algorithm:graphBfs}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+    \Procedure{GraphBFS}{$start$}
+      \State $checkQueue \gets new~Queue$
+      \State $checkQueue.enqueue(start)$ \Comment{Add the start to the need to check queue}
+      \State $start.isProcessed \gets true$
+      \While{$!checkQueue.isEmpty()$}
+        \State $checkVertex \gets checkQueue.dequeue()$
+        \State \textbf{print} $checkVertex.id$
+        \For{$neighborVertex~\textbf{in}~checkVertex.neighbors$} \Comment{Check all neighbors}
+          \If{$!neighbor.isProcessed$} \Comment{Add it to the queue if not visited}
+            \State $checkQueue.enqueue(neighbor)$
+            \State $neighbor.isProcessed \gets true$
+          \EndIf
+      \EndFor
+      \EndWhile
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
 
 % Colors and lstset for syntax highlighting from https://www.overleaf.com/latex/examples/syntax-highlighting-in-latex-with-the-listings-package/jxnppmxxvsvk
 \definecolor{mygreen}{rgb}{0,0.6,0}
