@@ -150,18 +150,23 @@ void Graph::createMatrix() {
 }
 
 void Graph::createAdjacencyList() {
+    // Each vertex will have its own adjacency list
     adjacencyList = new Queue<AdjacencyListStruct*>[numVertices];
 
+    // Go through all vertices
     Node<GraphNode*>* cur = vertices->getHead();
     while (cur != nullptr) {
+        // Go through all of its neighbors
         Node<GraphNode*>* neighbor = cur->data->getNeighbors()->getHead();
         while (neighbor != nullptr) {
+            // Create the data and store it
             AdjacencyListStruct* newData = new AdjacencyListStruct;
             newData->vertexId = neighbor->data->getId();
             newData->vertex = neighbor->data;
 
             Node<AdjacencyListStruct*>* newNode = new Node<AdjacencyListStruct*>(newData);
 
+            // Add the struct to the end of the queue
             adjacencyList[cur->data->getIndex()].enqueue(newNode);
 
             neighbor = neighbor->next;
@@ -184,22 +189,59 @@ void Graph::printMatrix() {
 }
 
 void Graph::printAdjacencyList() {
+    // Go through each vertex
     Node<GraphNode*>* cur = vertices->getHead();
-
     while (cur != nullptr) {
+        // Print out the vertex's id
         std::cout << cur->data->getId() << ": ";
 
+        // Go through all of the neighbors
         Node<AdjacencyListStruct*>* neighbor = adjacencyList[cur->data->getIndex()].getHead();
 
         while (neighbor != nullptr) {
-
+            // Print out the neighbor id
             std::cout << neighbor->data->vertexId << " ";
-
             neighbor = neighbor->next;
         }
 
         std::cout << std::endl;
 
+        cur = cur->next;
+    }
+}
+
+void Graph::depthFirstSearch() {
+    // Make sure everything is cleared
+    clearProcessedStates();
+
+    std::cout << "DFS: ";
+    // Start from the first node
+    depthFirstSearchHelper(vertices->getHead()->data);
+    std::cout << std::endl;
+}
+
+void Graph::depthFirstSearchHelper(GraphNode* start) {
+    if (!start->processed) {
+        // Print out the vertex id only if it hasn't been processed yet
+        std::cout << start->getId() << " ";
+        start->processed = true;
+    }
+    // Iterate through all neighbors
+    Node<GraphNode*>* cur = start->getNeighbors()->getHead();
+    while (cur != nullptr) {
+        if (!cur->data->processed) {
+            // Run a DFS starting from the neighbor if it hasn't been processed already
+            depthFirstSearchHelper(cur->data);
+        }
+        cur = cur->next;
+    }
+}
+
+void Graph::clearProcessedStates() {
+    // Initialize all nodes to not be processed yet
+    Node<GraphNode*>* cur = vertices->getHead();
+    while (cur != nullptr) {
+        cur->data->processed = false;
         cur = cur->next;
     }
 }

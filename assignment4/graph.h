@@ -25,6 +25,15 @@ class Graph {
         // Function to print out the adjacency list
         void printAdjacencyList();
 
+        // Performs a depth first search on the entire graph and prints out the vertex ids of the encountered vertices
+        void depthFirstSearch();
+
+        // Helper function that does the dfs from the given node
+        void depthFirstSearchHelper(GraphNode* start);
+
+        // Resets all vertices to be not processed
+        void clearProcessedStates();
+
         // Gets the graph node of the given id, nullptr if not found
         GraphNode* getGraphNode(int nodeId);
 

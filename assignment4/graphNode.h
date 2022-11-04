@@ -21,6 +21,9 @@ class GraphNode {
 
         // Getter for the neighbors queue
         Queue<GraphNode*>* getNeighbors();
+
+        // Boolean to determine if the node was processed during a traversal
+        bool processed;
     private:
         // Id of the vertex
         int id;
