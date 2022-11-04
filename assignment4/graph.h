@@ -28,8 +28,14 @@ class Graph {
         // Performs a depth first search on the entire graph and prints out the vertex ids of the encountered vertices
         void depthFirstSearch();
 
-        // Helper function that does the dfs from the given node
-        void depthFirstSearchHelper(GraphNode* start);
+        // Performs a DFS from the given node
+        void depthFirstSearch(GraphNode* start);
+
+        // Performs a breadth first search on the entire graph and prints out the vertex ids of the encountered vertices
+        void breadthFirstSearch();
+
+        // Performs a breadth first search from the given starting point
+        void breadthFirstSearch(GraphNode* start);
 
         // Resets all vertices to be not processed
         void clearProcessedStates();

@@ -13,6 +13,7 @@ void createGraphs(StringArr* contents) {
                 g.printMatrix();
                 g.printAdjacencyList();
                 g.depthFirstSearch();
+                g.breadthFirstSearch();
                 std::cout << std::endl;
             }
             curBegin = i;
@@ -21,6 +22,7 @@ void createGraphs(StringArr* contents) {
             g.printMatrix();
             g.printAdjacencyList();
             g.depthFirstSearch();
+            g.breadthFirstSearch();
             std::cout << std::endl;
         }
     }

@@ -216,11 +216,11 @@ void Graph::depthFirstSearch() {
 
     std::cout << "DFS: ";
     // Start from the first node
-    depthFirstSearchHelper(vertices->getHead()->data);
+    depthFirstSearch(vertices->getHead()->data);
     std::cout << std::endl;
 }
 
-void Graph::depthFirstSearchHelper(GraphNode* start) {
+void Graph::depthFirstSearch(GraphNode* start) {
     if (!start->processed) {
         // Print out the vertex id only if it hasn't been processed yet
         std::cout << start->getId() << " ";
@@ -231,9 +231,49 @@ void Graph::depthFirstSearchHelper(GraphNode* start) {
     while (cur != nullptr) {
         if (!cur->data->processed) {
             // Run a DFS starting from the neighbor if it hasn't been processed already
-            depthFirstSearchHelper(cur->data);
+            depthFirstSearch(cur->data);
         }
         cur = cur->next;
+    }
+}
+
+void Graph::breadthFirstSearch() {
+    // Do a breadth first search from the first vertex
+    breadthFirstSearch(vertices->getHead()->data);
+}
+
+void Graph::breadthFirstSearch(GraphNode* start) {
+    std::cout << "BFS: ";
+
+    // Reset the processed states
+    clearProcessedStates();
+
+    // Create the queue for the vertices to check
+    Queue<GraphNode*> verticesToCheck;
+
+    // Add the start to the queue
+    Node<GraphNode*>* startNode = new Node<GraphNode*>(start);
+    verticesToCheck.enqueue(startNode);
+    startNode->data->processed = true;
+
+    // Continue until no more vertices are left to check
+    while (!verticesToCheck.isEmpty()) {
+        // Get the next vertex and print it out
+        Node<GraphNode*>* check = verticesToCheck.dequeue();
+        std::cout << check->data->getId() << " ";
+
+        Node<GraphNode*>* cur = check->data->getNeighbors()->getHead();
+        while (cur != nullptr) {
+            if (!cur->data->processed) {
+                // Create a new node and add it to the queue
+                Node<GraphNode*>* newNode = new Node<GraphNode*>(cur->data);
+                verticesToCheck.enqueue(newNode);
+                newNode->data->processed = true;
+            }
+            cur = cur->next;
+        }
+
+        delete check;
     }
 }
 
