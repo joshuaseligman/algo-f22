@@ -214,10 +214,18 @@ void Graph::depthFirstSearch() {
     // Make sure everything is cleared
     clearProcessedStates();
 
-    std::cout << "DFS: ";
-    // Start from the first node
-    depthFirstSearch(vertices->getHead()->data);
-    std::cout << std::endl;
+    Node<GraphNode*>* start = vertices->getHead();
+
+    while (start != nullptr) {
+        // If the vertex has not been processed, it is disconnected from the rest of the graph
+        if (!start->data->processed) {
+            // Start the DFS from the current node to explore that region of the graph
+            std::cout << "DFS: ";
+            depthFirstSearch(start->data);
+            std::cout << std::endl;
+        }
+        start = start->next;
+    }
 }
 
 void Graph::depthFirstSearch(GraphNode* start) {
@@ -238,16 +246,25 @@ void Graph::depthFirstSearch(GraphNode* start) {
 }
 
 void Graph::breadthFirstSearch() {
-    // Do a breadth first search from the first vertex
-    breadthFirstSearch(vertices->getHead()->data);
-}
-
-void Graph::breadthFirstSearch(GraphNode* start) {
-    std::cout << "BFS: ";
-
     // Reset the processed states
     clearProcessedStates();
 
+    Node<GraphNode*>* start = vertices->getHead();
+
+    while (start != nullptr) {
+        // If the vertex has not been processed, it is disconnected from the rest of the graph
+        if (!start->data->processed) {
+            // Start the BFS from the current node to explore that region of the graph
+            std::cout << "BFS: ";
+            // Do a breadth first search from the first vertex
+            breadthFirstSearch(start->data);
+            std::cout << std::endl;
+        }
+        start = start->next;
+    }
+}
+
+void Graph::breadthFirstSearch(GraphNode* start) {
     // Create the queue for the vertices to check
     Queue<GraphNode*> verticesToCheck;
 

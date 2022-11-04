@@ -23,7 +23,6 @@ void createGraphs(StringArr* contents) {
             g.printAdjacencyList();
             g.depthFirstSearch();
             g.breadthFirstSearch();
-            std::cout << std::endl;
         }
     }
 }
