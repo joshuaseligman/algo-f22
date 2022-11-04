@@ -29,11 +29,14 @@ Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
     std::cout << numVertices << std::endl;
 
     createMatrix();
+
+    createAdjacencyList();
 }
 
 Graph::~Graph() {
     delete [] matrix;
     delete vertices;
+    delete [] adjacencyList;
 }
 
 void Graph::createVertex(std::string vertexInfo) {
@@ -146,6 +149,28 @@ void Graph::createMatrix() {
     }
 }
 
+void Graph::createAdjacencyList() {
+    adjacencyList = new Queue<AdjacencyListStruct*>[numVertices];
+
+    Node<GraphNode*>* cur = vertices->getHead();
+    while (cur != nullptr) {
+        Node<GraphNode*>* neighbor = cur->data->getNeighbors()->getHead();
+        while (neighbor != nullptr) {
+            AdjacencyListStruct* newData = new AdjacencyListStruct;
+            newData->vertexId = neighbor->data->getId();
+            newData->vertex = neighbor->data;
+
+            Node<AdjacencyListStruct*>* newNode = new Node<AdjacencyListStruct*>(newData);
+
+            adjacencyList[cur->data->getIndex()].enqueue(newNode);
+
+            neighbor = neighbor->next;
+        }
+
+        cur = cur->next;
+    }
+}
+
 void Graph::printMatrix() {
     // Iterate through each row
     for (int i = 0; i < numVertices; i++) {
@@ -155,6 +180,27 @@ void Graph::printMatrix() {
             std::cout << matrix[i * numVertices + j] << " ";
         }
         std::cout << std::endl;
+    }
+}
+
+void Graph::printAdjacencyList() {
+    Node<GraphNode*>* cur = vertices->getHead();
+
+    while (cur != nullptr) {
+        std::cout << cur->data->getId() << ": ";
+
+        Node<AdjacencyListStruct*>* neighbor = adjacencyList[cur->data->getIndex()].getHead();
+
+        while (neighbor != nullptr) {
+
+            std::cout << neighbor->data->vertexId << " ";
+
+            neighbor = neighbor->next;
+        }
+
+        std::cout << std::endl;
+
+        cur = cur->next;
     }
 }
 

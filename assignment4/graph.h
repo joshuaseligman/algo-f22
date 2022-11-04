@@ -5,6 +5,12 @@
 #include "util.h"
 #include "queue.h"
 
+// Struct for storing data in an adjacency list
+struct AdjacencyListStruct {
+    int vertexId;
+    GraphNode* vertex;
+};
+
 class Graph {
     public:
         // Constructor for a a graph that takes in the range of where to find the graph info in the data (endIndex is inclusive in the range)
@@ -15,6 +21,9 @@ class Graph {
 
         // Function to print out the matrix
         void printMatrix();
+
+        // Function to print out the adjacency list
+        void printAdjacencyList();
 
         // Gets the graph node of the given id, nullptr if not found
         GraphNode* getGraphNode(int nodeId);
@@ -29,6 +38,9 @@ class Graph {
         // Creates the matrix representation of the graph based on the nodes already created
         void createMatrix();
 
+        // Creates the adjacency list representation of the graph based on the nodes already created
+        void createAdjacencyList();
+
         // The number of vertices in the graph
         int numVertices;
 
@@ -37,4 +49,7 @@ class Graph {
 
         // The matrix representation of the graph
         bool* matrix;
+
+        // Adjacency list is an array of queues for the neighboring vertices
+        Queue<AdjacencyListStruct*>* adjacencyList;
 };
