@@ -180,6 +180,81 @@ The final part of the algorithm is on line 85, which calls the swapping function
 
 The runtime for the variation algorithm is $O(hp^2r^2log_2r + r + r^2)$, which is $O(hp^2r^2log_2r)$.
 
+\subsection{Example and Walkthrough}
+Listing \ref{lst:variationTest} contains a sample data set for the variation algorithm that contains 8 residents, 7 hospitals, and 6 preferences per resident. The first step of the algorithm is to assign each resident to their top choice hospital. The initial assignments will be as follows:
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Hospital & Capacity & Residents \\
+    \hline
+    h1 & 1 & r1 \\
+    \hline
+    h2 & 1 & r2, r6 \\
+    \hline
+    h3 & 1 & r3 \\
+    \hline
+    h4 & 2 & r4 \\
+    \hline
+    h5 & 1 & r5 \\
+    \hline
+    h6 & 1 & r7 \\
+    \hline
+    h7 & 1 & r8 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+As shown in the table of initial results, h2 is over capacity as it has 2 residents, r2 and r6, provisionally assigned to the hospital even though h2 has a capacity of only 1. Therefore, when comparing r2 and r6 for the sort, r6 is initially favored to leave h2 because it has a preference of h4, which has availability, and r2 does not. However, through the loop structure on lines 37-53 in Listing \ref{lst:residentComparison}, it is determined that r3 can act as a middle man and would be able to fill the open space in h4 with r2 taking the r3's spot in h3. This would create a better overall resident happiness as 2 residents being in their second choice is better than 1 resident being in their top choice and the other being in their sixth choice. Therefore, r2 will be added to the list of residents to be reassigned and r6 stays put in h2. None of the other hospitals are over capacity, so there are no changes other. r2 will then be assigned to h3, which is its second choice hospital, which will cause the assignments to be as shown in the table below.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Hospital & Capacity & Residents \\
+    \hline
+    h1 & 1 & r1 \\
+    \hline
+    h2 & 1 & r6 \\
+    \hline
+    h3 & 1 & r3, r2 \\
+    \hline
+    h4 & 2 & r4 \\
+    \hline
+    h5 & 1 & r5 \\
+    \hline
+    h6 & 1 & r7 \\
+    \hline
+    h7 & 1 & r8 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+In this next iteration, h3 is now over capacity. When comparing r3 and r2, r3 has a preference for h4, which has an availability, and none of r2's preferences are open, so r3 is prioritized to move out of h3 and will be reassigned to h4. The assignment table will look as follows.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Hospital & Capacity & Residents \\
+    \hline
+    h1 & 1 & r1 \\
+    \hline
+    h2 & 1 & r6 \\
+    \hline
+    h3 & 1 & r2 \\
+    \hline
+    h4 & 2 & r4, r3 \\
+    \hline
+    h5 & 1 & r5 \\
+    \hline
+    h6 & 1 & r7 \\
+    \hline
+    h7 & 1 & r8 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+In the current state, all hospitals are at capacity and all residents have matched the definition of stability by being assigned only to hospitals on their preference list. Additionally, there is no swap between 2 residents that will make the overall resident happiness increase and, therefore, the algorithm terminates in this state.
+
 \section{Appendix}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
 
@@ -206,5 +281,7 @@ The runtime for the variation algorithm is $O(hp^2r^2log_2r + r + r^2)$, which i
 \lstinputlisting[caption = Swapping Function (C++), label = lst:variationSwaps, language = C++, firstline = 338, lastline = 431, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
 
 \lstinputlisting[caption = Resident Comparison Function (C++), label = lst:residentComparison, language = C++, firstline = 75, lastline = 162, firstnumber = 1]{./../residentVariation/resident.cpp}
+
+\lstinputlisting[caption = Variation Algorithm Sample Test Data, label = lst:variationTest, firstline = 5, firstnumber = 1]{./../residentVariation/testData7.txt}
 
 \end{document}
