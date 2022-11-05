@@ -2,7 +2,6 @@
 #include "resident.h"
 #include "hospital.h"
 #include "util.h"
-#include "sort.h"
 #include "list.h"
 
 #include "stdlib.h"
@@ -119,6 +118,7 @@ HospitalArr* createHospitals(int numHospitals) {
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     std::cout << std::endl;
 
+    // Iterate through all residents
     for (int i = 0; i < residents->length; i++) {
         Hospital* cur = residents->arr[i].getHospitalPreferences()[residents->arr[i].getCurPreferenceIndex()];
 
@@ -126,28 +126,40 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
         cur->addResident(&residents->arr[i]);
     }
 
+    // We have to make sure that the loop iterates at least once, so initialize the variable to true
     bool hasToCheck = true;
 
     while (hasToCheck) {
+        // Create a linked list of the residents that get booted from their current choice hospital
         List<Resident*> residentsToReassign;
 
+        // Iterate through all of the hospitals
         for (int i = 0; i < hospitals->length; i++) {
+            // Sort the residents by keeping the best one to leave at the end of the list
             hospitals->arr[i].sortResidentAssignments();
+
+            // Continue until the hospital is no longer over capacity
             while (hospitals->arr[i].getNumAssigned() - hospitals->arr[i].getCapacity() > 0) {
                 hospitals->arr[i].printAssignments();
 
+                // The last one in the assignment array will get booted
                 Resident* residentToRemove = hospitals->arr[i].getAssignments()[hospitals->arr[i].getNumAssigned() - 1];
-
                 hospitals->arr[i].setNumAssigned(hospitals->arr[i].getNumAssigned() - 1);
+
+                // Update the resident preference to try the next hospital on its list and add it to the linked list
                 residentToRemove->setCurPreferenceIndex(residentToRemove->getCurPreferenceIndex() + 1);
                 Node<Resident*>* resNode = new Node<Resident*>(residentToRemove);
                 residentsToReassign.enqueue(resNode);             
             }
         }
+        
+        // Check to make sure there are residents that have to be reassigned
         if (residentsToReassign.getSize() > 0) {
             while (!residentsToReassign.isEmpty()) {
+                // Remove the residents one by one
                 Node<Resident*>* res = residentsToReassign.dequeue();
 
+                // Add the resident to its next choice if possible
                 if (res->data->getCurPreferenceIndex() < Hospital::NUM_LEVELS) {
                     res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->addResident(res->data);
                 }
@@ -155,6 +167,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                 delete res;
             }
         } else {
+            // If the linked list was empty, then we know all residents are in a stable position
             hasToCheck = false;
         }
     }
@@ -185,7 +198,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
 
     std::cout << std::endl;
 
-    // // Try to do swaps to boost the performance of the algorithm
+    // Try to do swaps to boost the performance of the algorithm
     performSwaps(residents);
 
     // Print the final results

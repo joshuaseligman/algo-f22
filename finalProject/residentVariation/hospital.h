@@ -96,10 +96,6 @@ class Hospital {
 
         // The number of residents that want the hospital as its first choice
         int firstChoice;
-
-        void quickSortWithIndices(Resident** data, int start, int end);
-
-        int partition(Resident** data, int start, int end, int pivotIndex);
 };
 
 // Struct for working with hospitals on the heap

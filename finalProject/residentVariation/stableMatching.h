@@ -15,7 +15,7 @@ struct AlgoOutput {
     // The resident happiness
     double residentHappiness;
 
-    // The hopsital happiness
+    // The hospital happiness
     double hospitalHappiness;
 };
 
