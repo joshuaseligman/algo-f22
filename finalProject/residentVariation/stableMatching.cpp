@@ -138,34 +138,6 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
 
                 Resident* residentToRemove = hospitals->arr[i].getAssignments()[hospitals->arr[i].getNumAssigned() - 1];
 
-                // Resident* swapRes = nullptr;
-                // int hospIndex = -1;
-
-                // for (int j = 0; j < residentToRemove->getCurPreferenceIndex(); j++) {
-                //     Hospital* checkHosp = residentToRemove->getHospitalPreferences()[j];
-                //     for (int k = 0; k < checkHosp->getNumAssigned(); k++) {
-                //         if (residentToRemove->compare(checkHosp->getAssignments()[k]) < 0) {
-                //             if (swapRes != nullptr) {
-                //                 if (swapRes->compare(checkHosp->getAssignments()[k]) < 0) {
-                //                     std::cout << "Found better option" << std::endl;
-                //                     swapRes = checkHosp->getAssignments()[k];
-                //                     hospIndex = j;
-                //                 }
-                //             } else {
-                //                 swapRes = checkHosp->getAssignments()[k];
-                //                 hospIndex = j;
-                //             }
-                //         }
-                //     }
-                // }
-
-                // if (swapRes != nullptr) {
-                //     std::cout << "Mid algo swap" << std::endl;
-                //     residentToRemove->getHospitalPreferences()[hospIndex]->replace(swapRes, residentToRemove);
-                //     residentToRemove->setCurPreferenceIndex(hospIndex);
-                //     residentToRemove = swapRes;
-                // }
-
                 hospitals->arr[i].setNumAssigned(hospitals->arr[i].getNumAssigned() - 1);
                 residentToRemove->setCurPreferenceIndex(residentToRemove->getCurPreferenceIndex() + 1);
                 Node<Resident*>* resNode = new Node<Resident*>(residentToRemove);
