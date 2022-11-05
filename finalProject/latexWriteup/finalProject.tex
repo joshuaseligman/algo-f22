@@ -129,7 +129,7 @@ The pseudocode for the hospitals and residents stable matching algorithm is prov
 
 \section{Variation of Hospitals and Residents Stable Matching Problem}
 \subsection{The Algorithm}
-One variation of the hospitals and residents stable matching problem is when only the residents rank the hospitals and the hospitals do not rank the residents. When making the assignments, stability is defined by not having a resident who is assigned to one hospital that would rather be in another hospital that is still available. Similar to the original algorithm, hospital capacity would be nice to have, but is not a necessity if not enough residents prefer the hospital to meet its capacity. In other words, overall resident happiness is the most important variable to consider when making the assignments. As displayed in Algorithm \ref{algorithm:variation}, the method needed to make the assignments requires a greedy approach and taking the first possible outcome that works for the data. It is for this reason that each resident is initially assigned to their top choice hospital and then gets trimmed down to meet the respective capacity of each hospital.
+One variation of the hospitals and residents stable matching problem is when only the residents rank the hospitals and the hospitals do not rank the residents. When making the assignments, stability is defined by not having a resident who is assigned to one hospital that would rather be in another hospital that is still available. Similar to the original algorithm, hospital capacity would be nice to have, but is not a necessity if not enough residents prefer the hospital to meet its capacity. In other words, overall resident happiness is the most important variable to consider when making the assignments. As displayed in Algorithm \ref{algorithm:variation}, the method needed to make the assignments requires a greedy approach and taking the first possible outcome that works for the data. It is for this reason that each resident is initially assigned to their top choice hospital and then gets trimmed down to meet the respective capacity of each hospital. The asymptotic analysis of the runtime of this algorithm is explored in detail in Section \ref{variationAnalysis}.
 
 \begin{algorithm}
     \caption{Hospitals and Residents Stable Matching Algorithm}
@@ -138,67 +138,47 @@ One variation of the hospitals and residents stable matching problem is when onl
     \begin{algorithmic}[1]
         \Procedure{StableMatchVariation}{$residents$, $hospitals$}
           \For{$r~of~residents$}
-            \State $topHosp \gets r.preferences.head$
-            \State $r.assignment \gets topHosp$ \Comment{Residents start with their top choice regardless of capacity}
+              \State $topHosp \gets r.preferences.head$
+              \State $r.assignment \gets topHosp$ \Comment{Residents start with their top choice regardless of capacity}
           \EndFor
-          \For{$i \gets 0, NUM\_LEVELS - 1$} \Comment{Have to check at all levels}
-            \For{$j \gets 0, len(hospitals) - 1$} \Comment{Have to iterate through each hospital}
-                \While{$hospitals[j].numAssigned(0, i) > hospitals[j].capacity$} \Comment{Continue until the hospital is no longer over capacity at the given level}
-                    \State $res \gets hospitals[j].assignments[i].dequeue()$ \Comment{Get the resident being removed}
-                    \State $res.preferences.dequeue()$ \Comment{Remove the hospital from the resident's preferences}
-                    \If{$i < NUM\_LEVELS - 1$}
-                        \State $newTopHospital \gets res.preferences.head$
-                        \State $newTopHospital.assignments[i + 1].add{res}$ \Comment{Add the resident to their next top choice}
-                    \EndIf
-                \EndWhile
+          \State $hasToCheck \gets true$
+          \While{$hasToCheck$}
+            \State $residentsToReassign \gets new Queue$
+            \For{$h~of~hospitals$}
+              \State $h.sortResidents()$ \Comment{Sort the residents from worst to best for being able to leave}
+              \While{$h.isOverCapacity()$}
+                \State $residentToRemove \gets h.assignments[h.numAssigned - 1]$ \Comment{Get best one to reassign}
+                \State $h.numAssigned \gets h.numAssigned - 1$
+                \State $residentToRemove.curPreferenceIndex \gets residentToRemove.curPreferenceIndex + 1$
+                \State $residentsToReassign.enqueue(residentToRemove)$ \Comment{Add it to the queue}
+              \EndWhile
             \EndFor
-          \EndFor
-          \For{$i \gets 0, len(hospitals) - 1$}
-            \For{$j \gets 0, NUM\_LEVELS - 1$} \Comment {Iterate through all the residents assigned to the hospital}
-                \State $cur \gets hospitals[i].assignments[j].head$
-                \While{$cur~!=~null$}
-                    \State $cur.assignment \gets hospitals[i]$ \Comment{Formally assign the resident to the hospital}
-                    \State $cur \gets cur.next$
-                \EndWhile
-            \EndFor
-          \EndFor
-          \State $swaps \gets -1$ \Comment{Initialize to -1 to enter the loop}
-          \While{$swaps~!= 0$}
-            \State $swaps \gets 0$ \Comment{Start off the iteration with 0 swaps}
-            \For{$i \gets 0, len(residents) - 1$}
-                \For{$j \gets i + 1, len(residents) - 1$} \Comment{Compare all residents to all residents}
-                    \State $iHosp \gets residents[i].assignment$ \Comment{Get the current assignments}
-                    \State $jHosp \gets residents[j].assignment$
-                    \State $canSwap \gets true$ \Comment{Assume we can swap and end up with a stable pairing}
-                    \If{$residents[i].rankings[jHosp.index]~!= 0$}
-                        \State $canSwap \gets false$ \Comment{Cannot swap because resident i didn't rank jHosp}
-                    \ElsIf{$residents[j].rankings[iHosp.index]~!= 0$}
-                        \State $canSwap \gets false$ \Comment{Same but for resident j}
-                    \EndIf
-                    \If{$canSwap$}
-                        \State $curHappiness \gets avg(residents[i].rankings[iHosp.index], residents[j].rankings[jHosp.index])$
-                        \State $swapHappiness \gets avg(residents[i].rankings[jHosp.index], residents[j].rankings[iHosp.index])$
-                        \If{swapHappiness > curHappiness} \Comment{Swapping would result in a better net happiness}
-                            \State $iHosp.remove(residents[i])$ \Comment{Remove the residents from the hopsitals}
-                            \State $jHosp.remove(residents[j])$
-
-                            \State $iHosp.add(residents[j])$ \Comment{Swap the residents and the hospitals they are assigned to}
-                            \State $residents[j].assignment \gets iHosp$
-                            \State $jHosp.add(residents[i])$
-                            \State $residents[i].assignment \gets jHosp$
-
-                            \State $swaps \gets swaps + 1$ \Comment{Increment the number of swaps made}
-                        \EndIf
-                    \EndIf
-                \EndFor
-            \EndFor
+            \If{$!residentsToReassign.isEmpty()$}
+              \While{$!residentsToReassign.isEmpty()$}
+                \State $res \gets residentsToReassign.dequeue()$
+                \If{$res.curPreferenceIndex < NUM\_LEVELS$} \Comment{Add to next preference}
+                  \State $res.getHospitalPreferences[res.curPreferenceIndex].addResident(res)$
+                \EndIf
+              \EndWhile
+            \Else
+              \State $hasToCheck \gets false$ \Comment{We have a stable situation}
+            \EndIf
           \EndWhile
+          \State $computeSwaps(residents)$ \Comment {Perform swaps to get best possible outcome}
         \EndProcedure
     \end{algorithmic}
   \end{algorithm}
 
-\subsection{Asymptotic Analysis}
-Listing \ref{lst:variation} provides the C++ implementation of the variation algorithm to the stable matching problem. First, lines 4-9 include a for-loop that assigns each resident to their top choice hospital, which is an $O(r)$ operation since the loop is iterating over each resident. Next, lines 16 and 17 define nested loops that iterate over each hospital for each level of assignments the hospitals have. Since the number of levels is a constant factor, the loop is just an $O(h)$ loop that is just being executed more than once. The while loop defined on line 19 contains a check to see if the hospital is over capacity in the given range, and the condition runs in constant time because both functions being called are constant time operations. However, based on the condition, the loop will run until the hospital is no longer over capacity, which means that enough residents have to be removed to meet the condition, making the loop an $O(r)$ loop. Lines 21 and 22 are both constant time dequeue operations. Inside the if-statement though, there is a call to the $priorityAdd$ function, which is an $O(r)$ function that has to iterate over the linked list to find the appropriate spot to place the element. Therefore, the nested loops on lines 16-33 run in $O(h * r * r) = O(hr^2)$. Since there are typically more residents than hospitals, the $r^2$ term dominates the expression and makes the loop run in $O(r^2)$ time. Next, the loops on lines 36-44 iterates through each hospital and assigns the appropriate residents to that hospital, which is the same thing as saying that each resident is formally assigned to a hospital. This is an $O(r)$ operation since each resident has to be considered. The last component of the algorithm is the swapping mechanism, which is defined on lines 68-145. First, the while-loop defined on line 69 continues until no swaps were made in the previous iteration. As the objective of the greedy algorithm was to get as high of a resident happiness score as possible, the number of times this loop runs should be minimal, which is why it is being classified as an added coefficient to the performance of the loop's body. Next, the nested for-loops defined on lines 72 and 73 set up each resident to be compared to the other residents, which is an $O(r^2)$ operation as the residents array has to be gone through for each pass of the outer loop. The entire body of the nested for-loops consists entirely of comparisons and assignments, which all runs in constant time. Therefore, the functionality of swapping elements runs in $O(r^2)$ time. Overall, when combining each component of the algorithm, the runtime for the variation algorithm is $r + r^2 + r^2 = r + 2r^2$ is $O(r^2)$.
+\subsection{Asymptotic Analysis}\label{variationAnalysis}
+Listing \ref{lst:variation} provides the C++ implementation of the variation algorithm to the stable matching problem in addition to the swapping algorithm in Listing \ref{lst:variationSwaps} and how the residents compare themselves to each other in Listing \ref{lst:residentComparison}. Before going through the algorithm, in addition to $r$ being the number of residents and $h$ being the number of hospitals, $p$ will be used as the notation for the number of preferences ($p \le h$) as all residents get a fixed number of hospital preferences. First, lines 5-8 of the variation algorithm contains a for-loop that provisionally assigns all residents to their top choice hospital, which is an $O(r)$ operation as the actual adding is a constant time operation that runs $r$ times. Next, line 14 begins a while-loop that is dependent on the $hasToCheck$ variable. The number of times the loop will run is unknown for now and will be temporarily noted with an $x$. Inside the loop, after created a linked list on line 17, there is a loop that iterates through all of the hospitals. First, the provisionally assigned residents get sorted by the availability of their lower preference hospitals using a quicksort algorithm. The sort itself runs in $O(rlog_2r)$ time, which means the residents are compared about $rlog_2r$ times.
+
+The comparison algorithm in Listing \ref{lst:residentComparison} presents how each resident is compared with one another. After doing 2 $O(p)$ operations by iterating through the hospitals in the preference lists for both residents on lines 7-21 and some assignments on lines 24 and 25, both the if-statement branch and else-if branch contain the same bodies, but for different residents. The main section is the nested for-loop on lines 37-53. The outer loop iterates through the resident's preferences and the middle loop goes through each resident provisionally assigned to the hospital from the outer loop. Overall, this will run at worst case $r - 1$ times as all other residents will be compared to each other. The inner-most loop considers the remaining preferences for the middle man being looked at, which can be $p - 1$ iterations at worst case. The body of the inner-most loop contains assignments and calculations and runs in $O(1)$ time. Thus, the nested loops as a whole run in $O(r * p)$ time because it would have to go through all preferences for all residents. Overall, the comparison algorithm runs in $O(2p + rp)$ time, which is $O(ph)$ as $rp$ is the dominant term. Therefore the sorting algorithm runs in $O(rp * r * log_2r)$ is $O(pr^2log_2r)$.
+
+Once the residents are sorted on line 22 of Listing \ref{algorithm:variation}, the while-loop on lines 25-36 iterates until the hospital is no longer over capacity, which will be around $r$ times. The body of the while-loop has several assignments, which run in constant time. Thus, the overall loop on lines 20-37 runs in $O(h * (pr^2log_2r + r))$ is $O(hpr^2log_2r + hr)$, which simplifies to $O(hpr^2log_2r)$. Next, the body of the if-block defined on lines 40-52 contains a while-loop that goes through all of the residents that were removed from their hospital and reassigns them to their next preference, which is an $O(r)$ operation. However, the residents are only able to be reassigned if there is still a hospital in their preference list, which means that this part of the code will only be called about $p$ times, which is the number of times the big while-loop runs and the value of $x$. Therefore, the while-loop on lines 15-56 runs in $O(p *(hpr^2log_2r + r))$, which is $O(hp^2r^2log_2r)$ as $pr$ is not dominant and can be removed for simplification purposes. Next, the loops on lines 59-63 formally assign each resident to a hospital, which is another $O(r)$ operation.
+
+The final part of the algorithm is on line 85, which calls the swapping function. This function can be found in Listing \ref{lst:variationSwaps}. Line 4 of the swapping function defines a loop that runs until no swaps are made in an iteration. THe body of the while-loop contains nested for-loops that each go through all residents, which means the inner body runs about $r^2$ times. The entire body, however, is only comprised of assignments, math operations, and comparisons, which are all constant time operations. Lastly, the if-else block on lines 74-92 also hos assignments in the body, which runs in constant time. Overall, the swapping algorithm runs in $O(r^2)$ time.
+
+The runtime for the variation algorithm is $O(hp^2r^2log_2r + r + r^2)$, which is $O(hp^2r^2log_2r)$.
 
 \section{Appendix}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
@@ -211,7 +191,6 @@ Listing \ref{lst:variation} provides the C++ implementation of the variation alg
   backgroundcolor=\color{white},   % choose the background color
   basicstyle=\footnotesize,        % size of fonts used for the code
   breaklines=true,                 % automatic line breaking only at whitespace
-  captionpos=b,                    % sets the caption-position to bottom
   commentstyle=\color{mygreen},    % comment style
   escapeinside={\%*}{*},          % if you want to add LaTeX within your code
   keywordstyle=\color{blue},       % keyword style
@@ -222,6 +201,10 @@ Listing \ref{lst:variation} provides the C++ implementation of the variation alg
 \lstinputlisting[caption = Original Stable Matching Algorithm (C++), label = lst:original, language = C++, firstline = 98, lastline = 184, firstnumber = 1]{./../original/stableMatching.cpp}
 
 \subsection{Variation Algorithm}
-\lstinputlisting[caption = Variation Stable Matching Algorithm (C++), label = lst:variation, language = C++, firstline = 112, lastline = 273, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
+\lstinputlisting[caption = Variation Stable Matching Algorithm (C++), label = lst:variation, language = C++, firstline = 118, lastline = 219, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
+
+\lstinputlisting[caption = Swapping Function (C++), label = lst:variationSwaps, language = C++, firstline = 338, lastline = 431, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
+
+\lstinputlisting[caption = Resident Comparison Function (C++), label = lst:residentComparison, language = C++, firstline = 75, lastline = 162, firstnumber = 1]{./../residentVariation/resident.cpp}
 
 \end{document}

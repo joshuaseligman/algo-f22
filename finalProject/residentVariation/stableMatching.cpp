@@ -149,7 +149,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                 // Update the resident preference to try the next hospital on its list and add it to the linked list
                 residentToRemove->setCurPreferenceIndex(residentToRemove->getCurPreferenceIndex() + 1);
                 Node<Resident*>* resNode = new Node<Resident*>(residentToRemove);
-                residentsToReassign.enqueue(resNode);             
+                residentsToReassign.enqueue(resNode); 
             }
         }
         
