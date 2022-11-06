@@ -36,17 +36,23 @@ class Hospital {
         // Getter for the number of assigned residents
         int getNumAssigned();
 
+        // Setter for the number of assigned residents
+        void setNumAssigned(int newNumAssigned);
+
         // Gets the number of residents assigned in the first n levels
         int getNumAssignedRange(int lastLevel);
 
         // Getter for the assignments
-        List<Resident*>* getAssignments();
-
-        // Constant for the number of preferences each resident gets. Determined at file read time
-        inline static int NUM_LEVELS = 0;
+        Resident** getAssignments();
 
         // Adds a resident to the given level
         void addResident(Resident* resident, int level);
+
+        // Adds a resident to the hospital assignments
+        void addResident(Resident* resident);
+
+        // Replaces residents from the list
+        void replace(Resident* oldResident, Resident* newResident);
 
         // Removes a resident from the given level
         void removeResident(Resident* resident, int level);
@@ -62,6 +68,10 @@ class Hospital {
 
         // Adds 1 to the first choice variable
         void incrementFirstChoice();
+
+        void printAssignments();
+
+        void sortResidentAssignments();
     private:
         // The name for printing the output
         std::string name;
@@ -74,6 +84,9 @@ class Hospital {
 
         // Number of residents assigned to the hospital
         int numAssigned;
+
+        // The currently assigned residents
+        Resident** assignments;
 
         // Array for each level of assigned residents
         List<Resident*>* leveledAssignments;

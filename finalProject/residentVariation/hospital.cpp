@@ -1,17 +1,22 @@
 #include "hospital.h"
 #include "resident.h"
 #include "list.h"
+#include "sort.h"
+#include "util.h"
 
 #include <string>
 #include <sstream>
 #include <iostream>
 
 Hospital::Hospital() {
-    // Initialize leveledAssignments to be NUM_LEVELS of empty lists
-    leveledAssignments = new List<Resident*>[NUM_LEVELS];
+    // Initialize leveledAssignments to be NUM_PREFERENCES of empty lists
+    leveledAssignments = new List<Resident*>[NUM_PREFERENCES];
+
+    numAssigned = 0;
 }
 
 Hospital::~Hospital() {
+    delete [] assignments;
 }
 
 void Hospital::clearMemory() {
@@ -19,6 +24,8 @@ void Hospital::clearMemory() {
 }
 
 void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents) {
+    assignments = new Resident*[residents->length];
+
     // The part of the line before the colon is the name
     int colonIndex = data.find(":");
     name = data.substr(0, colonIndex);
@@ -32,6 +39,20 @@ void Hospital::loadData(std::string data, int hospIndex, ResidentArr* residents)
     // Ignore the space before the hyphen and save the capacity
     std::stringstream ss(remainder);
     ss >> capacity;
+}
+
+void Hospital::addResident(Resident* resident) {
+    assignments[numAssigned] = resident;
+    numAssigned++;
+}
+
+void Hospital::replace(Resident* oldResident, Resident* newResident) {
+    for (int i = 0; i < numAssigned; i++) {
+        // Find the target and replace it
+        if (assignments[i] == oldResident) {
+            assignments[i] = newResident;
+        }
+    }
 }
 
 void Hospital::addResident(Resident* resident, int level) {
@@ -94,16 +115,16 @@ int Hospital::getCapacity() {
 }
 
 int Hospital::getNumAssigned() {
-    int sum = 0;
-    for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
-        sum += leveledAssignments[i].getSize();
-    }
-    return sum;
+    return numAssigned;
+}
+
+void Hospital::setNumAssigned(int newNumAssigned) {
+    numAssigned = newNumAssigned;
 }
 
 int Hospital::getNumAssignedRange(int lastLevel) {
-    if (lastLevel >= Hospital::NUM_LEVELS) {
-        throw std::invalid_argument("Invalid level. Must be less than " + std::to_string(Hospital::NUM_LEVELS));
+    if (lastLevel >= NUM_PREFERENCES) {
+        throw std::invalid_argument("Invalid level. Must be less than " + std::to_string(NUM_PREFERENCES));
         return -1;
     }
     int sum = 0;
@@ -113,8 +134,8 @@ int Hospital::getNumAssignedRange(int lastLevel) {
     return sum;
 }
 
-List<Resident*>* Hospital::getAssignments() {
-    return leveledAssignments;
+Resident** Hospital::getAssignments() {
+    return assignments;
 }
 
 int Hospital::getFirstChoiceCount() {
@@ -123,4 +144,15 @@ int Hospital::getFirstChoiceCount() {
 
 void Hospital::incrementFirstChoice() {
     firstChoice++;
+}
+
+void Hospital::printAssignments() {
+    for (int i = 0; i < numAssigned; i++) {
+        std::cout << assignments[i]->getName() << " ";
+    }
+    std::cout << std::endl;
+}
+
+void Hospital::sortResidentAssignments() {
+    quickSortWithIndices(assignments, 0, numAssigned - 1);
 }

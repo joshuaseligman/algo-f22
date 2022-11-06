@@ -2,7 +2,6 @@
 #include "resident.h"
 #include "hospital.h"
 #include "util.h"
-#include "sort.h"
 #include "list.h"
 
 #include "stdlib.h"
@@ -33,7 +32,7 @@ void stableMatchAlgo(StringArr* data) {
                 ss >> numHospitals;
             } else {
                 // The third number is the number of preferences each resident gets
-                ss >> Hospital::NUM_LEVELS;
+                ss >> NUM_PREFERENCES;
             }
         }
         ptr = strtok(NULL, " ");  
@@ -119,45 +118,64 @@ HospitalArr* createHospitals(int numHospitals) {
 void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
     std::cout << std::endl;
 
+    // Iterate through all residents
     for (int i = 0; i < residents->length; i++) {
-        Node<Hospital*>* cur = residents->arr[i].getHospitalPreferences()->getHead();
+        Hospital* cur = residents->arr[i].getHospitalPreferences()[residents->arr[i].getCurPreferenceIndex()];
 
         // Add each resident to their top choice hospital
-        cur->data->addResident(&residents->arr[i], 0);
+        cur->addResident(&residents->arr[i]);
     }
 
-    for (int i = 0; i < hospitals->length; i++) {
-        hospitals->arr[i].getAssignments()[0].printList();
-    }
+    // We have to make sure that the loop iterates at least once, so initialize the variable to true
+    bool hasToCheck = true;
 
-    // Go through each level of the hospitals
-    for (int i = 0; i < Hospital::NUM_LEVELS; i++) {
-        for (int j = 0; j < hospitals->length; j++) {
-            // Make sure the hospital is not over capacity
-            while (hospitals->arr[j].getNumAssignedRange(i) > hospitals->arr[j].getCapacity()) {
-                // Get the resident and remove the hospital from its list
-                Node<Resident*>* res = hospitals->arr[j].getAssignments()[i].dequeue();
-                Node<Hospital*>* h = res->data->getHospitalPreferences()->dequeue();
-                delete h;
+    while (hasToCheck) {
+        // Create a linked list of the residents that get booted from their current choice hospital
+        List<Resident*> residentsToReassign;
 
-                // Add the resident to its next preferred hospital if possible
-                if (i < Hospital::NUM_LEVELS - 1) {
-                    res->data->getHospitalPreferences()->getHead()->data->getAssignments()[i + 1].priorityAdd(res, i + 1);
-                } else {
-                    delete res;
-                }
+        // Iterate through all of the hospitals
+        for (int i = 0; i < hospitals->length; i++) {
+            // Sort the residents by keeping the best one to leave at the end of the list
+            hospitals->arr[i].sortResidentAssignments();
+
+            // Continue until the hospital is no longer over capacity
+            while (hospitals->arr[i].getNumAssigned() - hospitals->arr[i].getCapacity() > 0) {
+                hospitals->arr[i].printAssignments();
+
+                // The last one in the assignment array will get booted
+                Resident* residentToRemove = hospitals->arr[i].getAssignments()[hospitals->arr[i].getNumAssigned() - 1];
+                hospitals->arr[i].setNumAssigned(hospitals->arr[i].getNumAssigned() - 1);
+
+                // Update the resident preference to try the next hospital on its list and add it to the linked list
+                residentToRemove->setCurPreferenceIndex(residentToRemove->getCurPreferenceIndex() + 1);
+                Node<Resident*>* resNode = new Node<Resident*>(residentToRemove);
+                residentsToReassign.enqueue(resNode); 
             }
+        }
+        
+        // Check to make sure there are residents that have to be reassigned
+        if (residentsToReassign.getSize() > 0) {
+            while (!residentsToReassign.isEmpty()) {
+                // Remove the residents one by one
+                Node<Resident*>* res = residentsToReassign.dequeue();
+
+                // Add the resident to its next choice if possible
+                if (res->data->getCurPreferenceIndex() < NUM_PREFERENCES) {
+                    res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->addResident(res->data);
+                }
+
+                delete res;
+            }
+        } else {
+            // If the linked list was empty, then we know all residents are in a stable position
+            hasToCheck = false;
         }
     }
 
     // Formally assign each resident to the hospitals
-    for(int i = 0; i < hospitals->length; i++) {
-        for (int j = 0; j < Hospital::NUM_LEVELS; j++) {
-            Node<Resident*>* cur = hospitals->arr[i].getAssignments()[j].getHead();
-            while (cur != nullptr) {
-                cur->data->setAssignment(&hospitals->arr[i]);
-                cur = cur->next;
-            }
+    for (int i = 0; i < hospitals->length; i++) {
+        for (int j = 0; j < hospitals->arr[i].getNumAssigned(); j++) {
+            hospitals->arr[i].getAssignments()[j]->setAssignment(&hospitals->arr[i]);
         }
     }
 
@@ -212,7 +230,7 @@ double computeResidentHappiness(ResidentArr* residents) {
     }
 
     // Take the average of ranking / number of levels
-    return (double) sum / (residents->length * Hospital::NUM_LEVELS);
+    return (double) sum / (residents->length * NUM_PREFERENCES);
 }
 
 double computeHospitalHappiness(HospitalArr* hospitals) {
@@ -395,25 +413,12 @@ void performSwaps(ResidentArr* residents) {
             Hospital* h1 = res1->getAssignment();
             Hospital* h2 = res2->getAssignment();
 
-            // Remove the residents from the hospitals
-            if (h1 != nullptr) {
-                h1->removeResident(res1, Hospital::NUM_LEVELS - res1->getPreferencesArr()[h1->getIndex()]);
-            }
+            // Replace the residents
+            h1->replace(res1, res2);
+            h2->replace(res2, res1);
 
-            if (h2 != nullptr) {
-                h2->removeResident(res2, Hospital::NUM_LEVELS - res2->getPreferencesArr()[h2->getIndex()]);
-            }
-
-            // Add the j resident to the i hospital
-            if (h1 != nullptr) {
-                h1->addResident(res2, Hospital::NUM_LEVELS - res2->getPreferencesArr()[h1->getIndex()]);
-            }
+            // Update the assignments
             res2->setAssignment(h1);
-
-            // Add the i resident to the j hospital
-            if (h2 != nullptr) {
-                h2->addResident(res1, Hospital::NUM_LEVELS - res1->getPreferencesArr()[h2->getIndex()]);
-            }
             res1->setAssignment(h2);
 
             std::cout << "Swapped " << res1->getName() << " and " << res2->getName() << std::endl;

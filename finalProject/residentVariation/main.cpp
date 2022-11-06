@@ -11,7 +11,10 @@ int main() {
     // Set the seed for the random numbers
     srand(time(NULL));
 
-    StringArr* data = readFile("testData7.txt");
+    std::string file = "testData7.txt";
+
+    std::cout << "Using " << file << std::endl << std::endl;
+    StringArr* data = readFile(file);
     
     stableMatchAlgo(data);
 

@@ -138,7 +138,7 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
                 Resident* curRes = (Resident*) cur->data;
 
                 // See if the resident is in the right place
-                if (dataRes->compare(curRes, level) <= 0) {
+                if (dataRes->compare(curRes) <= 0) {
                     // Place the new node in the list
                     data->next = cur;
                     if (prev == nullptr) {
@@ -168,10 +168,10 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
 }
 
 template <typename T>
-void List<T>::clear(bool cleardata) {
+void List<T>::clear(bool clearData) {
     while (!isEmpty()) {
         Node<T>* n = dequeue();
-        if (cleardata) {
+        if (clearData) {
             delete n->data;
         }
         delete n;

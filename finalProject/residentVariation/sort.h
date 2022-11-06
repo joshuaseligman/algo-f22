@@ -1,10 +1,7 @@
-#include "hospital.h"
+#include "resident.h"
 
-// Sort the entire array of hospitals
-void quickSort(HospitalArr* data);
-
-// Sort the array of hospitals, given the subarray to work with
-void quickSortWithIndices(HospitalArr* data, int start, int end);
+// Sort the array of residents, given the subarray to work with
+void quickSortWithIndices(Resident** data, int start, int end);
 
 // Partition the array
-int partition(HospitalArr* data, int start, int end, int pivotIndex);
+int partition(Resident** data, int start, int end, int pivotIndex);
