@@ -37,6 +37,7 @@
 \usepackage{qtree}
 \usepackage{xcolor}
 \usepackage{colortbl}
+\usepackage{soul}
 
 \allsectionsfont{\normalfont\scshape} % Make all section titles in default font and small caps.
 
@@ -125,7 +126,160 @@ In the hospitals and residents stable matching problem, the goal is to assign re
 \end{algorithm}
 
 \subsection{Asymptotic Analysis}
-The pseudocode for the hospitals and residents stable matching algorithm is provided in Algorithm \ref{algorithm:original}. The algorithm starts off by assigning all residents and hospitals to be completely free, which are $O(r)$ and $O(h)$ operations, respectively. Next, line 8 is the condition for a while loop that runs until the residents list is empty. Since residents are being picked off one-by-one as done in line 9, the loop will run for each resident, which makes it run on average $r$ times. Line 10, similar to line 8, also defines a while loop. This time, however, it is iterating over the resident's preferences, which means the while loop runs $h$ times for each iteration of the outer loop. The if-statement block on lines 12-16 is inside of the inner loop, and contains a statement to get the least preferred assigned resident, which is an $O(r)$ operation as it may have to loop through all of the residents at worst case. The condition and other 2 assignments in the if-statement block are constant time assignments. The assignment on line 17 sets the assignment for the resident, which runs in constant time. Next, just like line 12, the check if the hospital is full a constant time check. Line 19 is the same as line 13 and is an $O(r)$ operation. Next, there is a loop defined on line 20 that iterates through the remaining residents in the list of hospital preferences, which at worst case is about $r$ iterations. It also has an $O(r)$ operation that is executed once to get the starting index. Lastly, there is a constant time assignment on line 21, and the removal function calls are $O(h)$ and $O(r)$ operations, respectively, as the hospitals and residents are being iterated through in each call. Overall, when putting it all together, the runtime of the original stable matching problem for residents and hospitals is $r * h * (r + r + r * (h + r)) = rh * (2r + rh + r^2) = 2r^2h + r^2h^2 + r^3h = O(r^2h + r^2h^2 + r^3h)$. This can be simplified to $O(r^3)$ because there are typically a lot more residents than hospitals, so $r^3$ becomes the dominant term in the expression. 
+The pseudocode for the hospitals and residents stable matching algorithm is provided in Algorithm \ref{algorithm:original}. The algorithm starts off by assigning all residents and hospitals to be completely free, which are $O(r)$ and $O(h)$ operations, respectively. Next, line 8 is the condition for a while loop that runs until the residents list is empty. Since residents are being picked off one-by-one as done in line 9, the loop will run for each resident, which makes it run on average $r$ times. Line 10, similar to line 8, also defines a while loop. This time, however, it is iterating over the resident's preferences, which means the while loop runs $h$ times for each iteration of the outer loop. The if-statement block on lines 12-16 is inside of the inner loop, and contains a statement to get the least preferred assigned resident, which is an $O(r)$ operation as it may have to loop through all of the residents at worst case. The condition and other 2 assignments in the if-statement block are constant time assignments. The assignment on line 17 sets the assignment for the resident, which runs in constant time. Next, just like line 12, the check if the hospital is full a constant time check. Line 19 is the same as line 13 and is an $O(r)$ operation. Next, there is a loop defined on line 20 that iterates through the remaining residents in the list of hospital preferences, which at worst case is about $r$ iterations. It also has an $O(r)$ operation that is executed once to get the starting index. Lastly, there is a constant time assignment on line 21, and the removal function calls are $O(h)$ and $O(r)$ operations, respectively, as the hospitals and residents are being iterated through in each call. Overall, when putting it all together, the runtime of the original stable matching problem for residents and hospitals is $r * h * (r + r + r * (h + r)) = rh * (2r + rh + r^2) = 2r^2h + r^2h^2 + r^3h = O(r^2h + r^2h^2 + r^3h)$. This can be simplified to $O(r^3)$ because there are typically a lot more residents than hospitals, so $r^3$ becomes the dominant term in the expression.
+
+\subsection{Example and Walkthrough}
+Listing \ref{lst:originalTest} contains a sample test case for the algorithm using 4 residents and 3 hospitals. The initial state of the algorithm is shown below:
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Entity Name & Preferences \\
+    \hline
+    r1 & h1 h2 h3 \\
+    \hline
+    r2 & h1 h3 h2 \\
+    \hline
+    r3 & h1 h2 \\
+    \hline
+    r4 & h2 h3 \\
+    \hline
+    \hline
+    h1 (1) & r2 r3 \\
+    \hline
+    h2 (1) & r4 r3 \\
+    \hline
+    h3 (1) & r1 r2 r4 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+The residents go in order and try to propose to their preferred hospitals. The first resident to propose is r1, which begins by proposing to h1. Although r1 is not on h1's preference list, it will be provisionally assigned there for now because h1 has no other residents to take in. The table will be updated as shown below.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Entity Name & Preferences \\
+    \hline
+    r1 & \textcolor{blue}{\textbf{h1}} h2 h3 \\
+    \hline
+    r2 & h1 h3 h2 \\
+    \hline
+    r3 & h1 h2 \\
+    \hline
+    r4 & h2 h3 \\
+    \hline
+    \hline
+    h1 (1) & r2 r3 \\
+    \hline
+    h2 (1) & r4 r3 \\
+    \hline
+    h3 (1) & r1 r2 r4 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+Next, r2 will propose to its top choice of h1. Since h1 is full and r2 is still on the hospital's preference list, h1 will find its lowest preferred resident that is assigned to it (r1) and unassign it to make room to r2. Once r2 gets assigned, all residents that are below r2 on h1's preference list are removed and also remove h1 from their list.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Entity Name & Preferences \\
+    \hline
+    r1 & \st{h1} h2 h3 \\
+    \hline
+    r2 & \textcolor{blue}{\textbf{h1}} h3 h2 \\
+    \hline
+    r3 & \st{h1} h2 \\
+    \hline
+    r4 & h2 h3 \\
+    \hline
+    \hline
+    h1 (1) & r2 \st{r3} \\
+    \hline
+    h2 (1) & r4 r3 \\
+    \hline
+    h3 (1) & r1 r2 r4 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+It is now r3's turn to propose and, since h1 was removed from its list in the last step, it will turn to h2 for an assignment. Since r3 is on h2's preference list and the hospital is not at capacity, r3 will be assigned to h2. The hospital is now full, so all residents below r3 on h2's list get removed and also remove h2 from their respective lists. The updated table is shown below.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Entity Name & Preferences \\
+    \hline
+    r1 & \st{h1} \st{h2} h3 \\
+    \hline
+    r2 & \textcolor{blue}{\textbf{h1}} h3 \st{h2} \\
+    \hline
+    r3 & \st{h1} \textcolor{blue}{\textbf{h2}} \\
+    \hline
+    r4 & h2 h3 \\
+    \hline
+    \hline
+    h1 (1) & r2 \st{r3} \\
+    \hline
+    h2 (1) & r4 r3 \\
+    \hline
+    h3 (1) & r1 r2 r4 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+r4 will now propose to its top choice of h2, which still has r4 on its list. Since h2 is already full, r3 will have to be removed prior to handling r4's assignment. Once r4 gets assigned to h2, all residents below it on h2's list will be removed and will also remove h2 from their lists.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Entity Name & Preferences \\
+    \hline
+    r1 & \st{h1} \st{h2} h3 \\
+    \hline
+    r2 & \textcolor{blue}{\textbf{h1}} h3 \st{h2} \\
+    \hline
+    r3 & \st{h1} \st{h2} \\
+    \hline
+    r4 & \textcolor{blue}{\textbf{h2}} h3 \\
+    \hline
+    \hline
+    h1 (1) & r2 \st{r3} \\
+    \hline
+    h2 (1) & r4 \st{r3} \\
+    \hline
+    h3 (1) & r1 r2 r4 \\
+    \hline
+  \end{tabular}
+\end{center}
+
+The resident queue goes back to r1, which only has h3 left in its preference list. Thus, r1 will propose to h3 and all resident and hospital lists will be adjusted accordingly as h3 as it will now be full with r1 being assigned to it.
+
+\begin{center}
+  \begin{tabular}{|c|c|c|}
+    \hline
+    Entity Name & Preferences \\
+    \hline
+    r1 & \st{h1} \st{h2} \textcolor{blue}{\textbf{h3}} \\
+    \hline
+    r2 & \textcolor{blue}{\textbf{h1}} \st{h3} \st{h2} \\
+    \hline
+    r3 & \st{h1} \st{h2} \\
+    \hline
+    r4 & \textcolor{blue}{\textbf{h2}} \st{h3} \\
+    \hline
+    \hline
+    h1 (1) & r2 \st{r3} \\
+    \hline
+    h2 (1) & r4 \st{r3} \\
+    \hline
+    h3 (1) & r1 \st{r2} \st{r4} \\
+    \hline
+  \end{tabular}
+\end{center}
+
+Lastly, r3 is reached again, but none of its preferences are available, so it will remain unassigned. The algorithm will then terminate in the state presented above.
 
 \section{Variation of Hospitals and Residents Stable Matching Problem}
 \subsection{The Algorithm}
@@ -274,6 +428,8 @@ In the current state, all hospitals are at capacity and all residents have match
 
 \subsection{Original Algorithm}
 \lstinputlisting[caption = Original Stable Matching Algorithm (C++), label = lst:original, language = C++, firstline = 98, lastline = 184, firstnumber = 1]{./../original/stableMatching.cpp}
+
+\lstinputlisting[caption = Original Algorithm Sample Test Data, label = lst:originalTest, firstline = 5, firstnumber = 1]{./../original/testData4.txt}
 
 \subsection{Variation Algorithm}
 \lstinputlisting[caption = Variation Stable Matching Algorithm (C++), label = lst:variation, language = C++, firstline = 118, lastline = 219, firstnumber = 1]{./../residentVariation/stableMatching.cpp}
