@@ -7,7 +7,6 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-#include <stdlib.h>
 
 Hospital::Hospital() {
     // Initialize leveledAssignments to be NUM_PREFERENCES of empty lists

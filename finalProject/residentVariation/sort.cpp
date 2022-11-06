@@ -2,6 +2,8 @@
 
 #include "hospital.h"
 
+#include <stdlib.h>
+
 void quickSortWithIndices(Resident** data, int start, int end) {
     // Base case for arrays of size 1 or 0
     if (start >= end) {
