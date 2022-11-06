@@ -168,10 +168,10 @@ void List<T>::priorityAdd(Node<T>* data, int level) {
 }
 
 template <typename T>
-void List<T>::clear(bool cleardata) {
+void List<T>::clear(bool clearData) {
     while (!isEmpty()) {
         Node<T>* n = dequeue();
-        if (cleardata) {
+        if (clearData) {
             delete n->data;
         }
         delete n;

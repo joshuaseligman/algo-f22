@@ -2,13 +2,14 @@
 #include "hospital.h"
 
 #include "list.h"
+#include "util.h"
 
 #include <iostream>
 #include <sstream>
 #include <string>
 
 Resident::Resident() {
-    hospitalPreferences = new Hospital*[Hospital::NUM_LEVELS];
+    hospitalPreferences = new Hospital*[NUM_PREFERENCES];
     assignment = nullptr;
     curPreferenceIndex = 0;
 }
@@ -41,7 +42,7 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
     // Get the first token
     ptr = strtok(preferences.data(), " ");
 
-    int ranking = Hospital::NUM_LEVELS;
+    int ranking = NUM_PREFERENCES;
 
     // Continue until the end of the string  
     while (ptr != NULL) {
@@ -57,13 +58,13 @@ void Resident::addPreferences(std::string preferences, HospitalArr* hospitals) {
         hospitalIndex--;
 
         // Save the hospital in the preferences
-        hospitalPreferences[Hospital::NUM_LEVELS - ranking] = &hospitals->arr[hospitalIndex];
+        hospitalPreferences[NUM_PREFERENCES - ranking] = &hospitals->arr[hospitalIndex];
 
         // Add the preference to the status array
         preferenceArr[hospitalIndex] = ranking;
 
         // Moving on to the next ranking
-        if (ranking == Hospital::NUM_LEVELS) {
+        if (ranking == NUM_PREFERENCES) {
             hospitals->arr[hospitalIndex].incrementFirstChoice();
         }
         ranking--;
@@ -78,7 +79,7 @@ int Resident::compare(Resident* compResident) {
     int otherCur = compResident->getCurPreferenceIndex() + 1;
 
     // Get the first hospital in the preference list that is still available
-    while (thisCur < Hospital::NUM_LEVELS) {
+    while (thisCur < NUM_PREFERENCES) {
         if (hospitalPreferences[thisCur]->isFull()) {
             thisCur++;
         } else {
@@ -86,7 +87,7 @@ int Resident::compare(Resident* compResident) {
         }
     }
 
-    while (otherCur < Hospital::NUM_LEVELS) {
+    while (otherCur < NUM_PREFERENCES) {
         if (compResident->getHospitalPreferences()[otherCur]->isFull()) {
             otherCur++;
         } else {
@@ -108,11 +109,11 @@ int Resident::compare(Resident* compResident) {
         Hospital* target = hospitalPreferences[thisCur];
         bool found = false;
         // Iterate back through all possible moves to go down for the other resident
-        for (int i = compResident->getCurPreferenceIndex() + 1; i < Hospital::NUM_LEVELS && !found; i++) {
+        for (int i = compResident->getCurPreferenceIndex() + 1; i < NUM_PREFERENCES && !found; i++) {
             // Iterate through all the residents assigned to the hospital
             for (int j = 0; j < compResident->getHospitalPreferences()[i]->getNumAssigned() && !found; j++) {
                 Resident* middleMan = compResident->getHospitalPreferences()[i]->getAssignments()[j];
-                for (int k = middleMan->getCurPreferenceIndex() + 1; k < Hospital::NUM_LEVELS && !found; k++) {
+                for (int k = middleMan->getCurPreferenceIndex() + 1; k < NUM_PREFERENCES && !found; k++) {
                     if (middleMan->getHospitalPreferences()[k] == target) {
                         int middleDiff = k - middleMan->getCurPreferenceIndex();
                         int newOtherDiff = i - compResident->getCurPreferenceIndex();
@@ -132,11 +133,11 @@ int Resident::compare(Resident* compResident) {
         Hospital* target = compResident->getHospitalPreferences()[otherCur];
         bool found = false;
         // Iterate back through all possible moves to go down for the other resident
-        for (int i = curPreferenceIndex + 1; i < Hospital::NUM_LEVELS && !found; i++) {
+        for (int i = curPreferenceIndex + 1; i < NUM_PREFERENCES && !found; i++) {
             // Iterate through all the residents assigned to the hospital
             for (int j = 0; j < hospitalPreferences[i]->getNumAssigned() && !found; j++) {
                 Resident* middleMan = hospitalPreferences[i]->getAssignments()[j];
-                for (int k = middleMan->getCurPreferenceIndex() + 1; k < Hospital::NUM_LEVELS && !found; k++) {
+                for (int k = middleMan->getCurPreferenceIndex() + 1; k < NUM_PREFERENCES && !found; k++) {
                     if (middleMan->getHospitalPreferences()[k] == target) {
                         int middleDiff = k - middleMan->getCurPreferenceIndex();
                         int newThisDiff = i - curPreferenceIndex;

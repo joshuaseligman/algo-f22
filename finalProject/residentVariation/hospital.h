@@ -45,9 +45,6 @@ class Hospital {
         // Getter for the assignments
         Resident** getAssignments();
 
-        // Constant for the number of preferences each resident gets. Determined at file read time
-        inline static int NUM_LEVELS = 0;
-
         // Adds a resident to the given level
         void addResident(Resident* resident, int level);
 

@@ -32,7 +32,7 @@ void stableMatchAlgo(StringArr* data) {
                 ss >> numHospitals;
             } else {
                 // The third number is the number of preferences each resident gets
-                ss >> Hospital::NUM_LEVELS;
+                ss >> NUM_PREFERENCES;
             }
         }
         ptr = strtok(NULL, " ");  
@@ -160,7 +160,7 @@ void generateStableMatches(ResidentArr* residents, HospitalArr* hospitals) {
                 Node<Resident*>* res = residentsToReassign.dequeue();
 
                 // Add the resident to its next choice if possible
-                if (res->data->getCurPreferenceIndex() < Hospital::NUM_LEVELS) {
+                if (res->data->getCurPreferenceIndex() < NUM_PREFERENCES) {
                     res->data->getHospitalPreferences()[res->data->getCurPreferenceIndex()]->addResident(res->data);
                 }
 
@@ -230,7 +230,7 @@ double computeResidentHappiness(ResidentArr* residents) {
     }
 
     // Take the average of ranking / number of levels
-    return (double) sum / (residents->length * Hospital::NUM_LEVELS);
+    return (double) sum / (residents->length * NUM_PREFERENCES);
 }
 
 double computeHospitalHappiness(HospitalArr* hospitals) {

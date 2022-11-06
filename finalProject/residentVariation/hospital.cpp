@@ -2,6 +2,7 @@
 #include "resident.h"
 #include "list.h"
 #include "sort.h"
+#include "util.h"
 
 #include <string>
 #include <sstream>
@@ -9,8 +10,8 @@
 #include <stdlib.h>
 
 Hospital::Hospital() {
-    // Initialize leveledAssignments to be NUM_LEVELS of empty lists
-    leveledAssignments = new List<Resident*>[NUM_LEVELS];
+    // Initialize leveledAssignments to be NUM_PREFERENCES of empty lists
+    leveledAssignments = new List<Resident*>[NUM_PREFERENCES];
 
     numAssigned = 0;
 }
@@ -123,8 +124,8 @@ void Hospital::setNumAssigned(int newNumAssigned) {
 }
 
 int Hospital::getNumAssignedRange(int lastLevel) {
-    if (lastLevel >= Hospital::NUM_LEVELS) {
-        throw std::invalid_argument("Invalid level. Must be less than " + std::to_string(Hospital::NUM_LEVELS));
+    if (lastLevel >= NUM_PREFERENCES) {
+        throw std::invalid_argument("Invalid level. Must be less than " + std::to_string(NUM_PREFERENCES));
         return -1;
     }
     int sum = 0;
