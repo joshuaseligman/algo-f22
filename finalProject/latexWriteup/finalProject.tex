@@ -310,15 +310,15 @@ One variation of the hospitals and residents stable matching problem is when onl
             \If{$!residentsToReassign.isEmpty()$}
               \While{$!residentsToReassign.isEmpty()$}
                 \State $res \gets residentsToReassign.dequeue()$
-                \If{$res.curPreferenceIndex < NUM\_LEVELS$} \Comment{Add to next preference}
-                  \State $res.getHospitalPreferences[res.curPreferenceIndex].addResident(res)$
+                \If{$res.curPreferenceIndex < NUM\_PREFERENCES$}
+                  \State $res.getHospitalPreferences[res.curPreferenceIndex].addResident(res)$ \Comment{Add to next preference}
                 \EndIf
               \EndWhile
             \Else
               \State $hasToCheck \gets false$ \Comment{We have a stable situation}
             \EndIf
           \EndWhile
-          \State $computeSwaps(residents)$ \Comment {Perform swaps to get best possible outcome}
+          \State $performSwaps(residents)$ \Comment {Perform swaps to get best possible outcome}
         \EndProcedure
     \end{algorithmic}
   \end{algorithm}
