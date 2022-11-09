@@ -2,7 +2,7 @@
 
 #include "node.h"
 #include "binaryTreeNode.h"
-#include "graphNode.h"
+#include "vertex.h"
 #include "graph.h"
 
 template <typename T>
@@ -15,5 +15,5 @@ Node<T>::Node(T initialData) {
 // Define acceptable data types that the Node can accept for the template
 template class Node<std::string>;
 template class Node<BinaryTreeNode<std::string>*>;
-template class Node<GraphNode*>;
+template class Node<Vertex*>;
 template class Node<AdjacencyListStruct*>;

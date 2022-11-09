@@ -4,7 +4,7 @@
 #include "queue.h"
 #include "node.h"
 #include "binaryTreeNode.h"
-#include "graphNode.h"
+#include "vertex.h"
 #include "graph.h"
 
 // Instantiate the queue with the head pointing to nothing
@@ -97,5 +97,5 @@ Node<T>* Queue<T>::getHead() {
 // Define acceptable data types that the Queue can accept for the template
 template class Queue<std::string>;
 template class Queue<BinaryTreeNode<std::string>*>;
-template class Queue<GraphNode*>;
+template class Queue<Vertex*>;
 template class Queue<AdjacencyListStruct*>;

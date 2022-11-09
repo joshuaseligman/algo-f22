@@ -1,14 +1,14 @@
 #pragma once
 
 #include "node.h"
-#include "graphNode.h"
+#include "vertex.h"
 #include "util.h"
 #include "queue.h"
 
 // Struct for storing data in an adjacency list
 struct AdjacencyListStruct {
     int vertexId;
-    GraphNode* vertex;
+    Vertex* vertex;
 };
 
 class Graph {
@@ -29,19 +29,19 @@ class Graph {
         void depthFirstSearch();
 
         // Performs a DFS from the given node
-        void depthFirstSearch(GraphNode* start);
+        void depthFirstSearch(Vertex* start);
 
         // Performs a breadth first search on the entire graph and prints out the vertex ids of the encountered vertices
         void breadthFirstSearch();
 
         // Performs a breadth first search from the given starting point
-        void breadthFirstSearch(GraphNode* start);
+        void breadthFirstSearch(Vertex* start);
 
         // Resets all vertices to be not processed
         void clearProcessedStates();
 
-        // Gets the graph node of the given id, nullptr if not found
-        GraphNode* getGraphNode(int nodeId);
+        // Gets the vertex of the given id, nullptr if not found
+        Vertex* getVertexById(int nodeId);
 
     private:
         // Creates a vertex for the linked objects
@@ -60,7 +60,7 @@ class Graph {
         int numVertices;
 
         // Stores a pointer to the head of a linked list containing all the vertices
-        Queue<GraphNode*>* vertices;
+        Queue<Vertex*>* vertices;
 
         // The matrix representation of the graph
         bool* matrix;

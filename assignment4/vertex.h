@@ -2,16 +2,16 @@
 
 #include "queue.h"
 
-class GraphNode {
+class Vertex {
     public:
         // Constructor for the graph node
-        GraphNode(int nodeId, int nodeIndex);
+        Vertex(int nodeId, int nodeIndex);
 
         // Destructor for the graph node
-        ~GraphNode();
+        ~Vertex();
 
         // Adds a new neighbor to the list
-        void addNeighbor(GraphNode* newNeighbor);
+        void addNeighbor(Vertex* newNeighbor);
 
         // Getter for the id
         int getId();
@@ -20,7 +20,7 @@ class GraphNode {
         int getIndex();
 
         // Getter for the neighbors queue
-        Queue<GraphNode*>* getNeighbors();
+        Queue<Vertex*>* getNeighbors();
 
         // Boolean to determine if the node was processed during a traversal
         bool isProcessed;
@@ -32,5 +32,5 @@ class GraphNode {
         int index;
 
         // A queue containing the neighboring vertices
-        Queue<GraphNode*>* neighbors;
+        Queue<Vertex*>* neighbors;
 };

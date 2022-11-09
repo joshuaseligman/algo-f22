@@ -2,7 +2,7 @@
 
 #include "util.h"
 #include "node.h"
-#include "graphNode.h"
+#include "vertex.h"
 #include "queue.h"
 
 #include <regex>
@@ -11,7 +11,7 @@
 
 Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
     numVertices = 0;
-    vertices = new Queue<GraphNode*>;
+    vertices = new Queue<Vertex*>;
 
     for (int i = beginIndex; i <= endIndex; i++) {
         // Get the first 5 characters. Should be "add v" or "add e"
@@ -64,10 +64,10 @@ void Graph::createVertex(std::string vertexInfo) {
     }
 
     // Create the graph node
-    GraphNode* newGraphNode = new GraphNode(vertexId, numVertices);
+    Vertex* newVertex = new Vertex(vertexId, numVertices);
 
     // Create the regular node and store it in the list at the front to keep O(1) time
-    Node<GraphNode*>* newNode = new Node<GraphNode*>(newGraphNode);
+    Node<Vertex*>* newNode = new Node<Vertex*>(newVertex);
     vertices->enqueue(newNode);
 
     // Increment the number of vertices
@@ -104,7 +104,7 @@ void Graph::createEdge(std::string edgeInfo) {
         ptr = strtok(NULL, " - ");
     }
 
-    GraphNode* v1 = getGraphNode(id1);
+    Vertex* v1 = getVertexById(id1);
     if (v1 == nullptr) {
         // Create an error message if the vertex was not found
         std::stringstream ss;
@@ -112,7 +112,7 @@ void Graph::createEdge(std::string edgeInfo) {
         throw std::invalid_argument(ss.str());
     }
 
-    GraphNode* v2 = getGraphNode(id2);
+    Vertex* v2 = getVertexById(id2);
     if (v2 == nullptr) {
         // Create an error message if the vertex was not found
         std::stringstream ss;
@@ -137,10 +137,10 @@ void Graph::createMatrix() {
     }
 
     // Go through all vertices
-    Node<GraphNode*>* cur = vertices->getHead();
+    Node<Vertex*>* cur = vertices->getHead();
     while (cur != nullptr) {
         // Go through all of the neighbors
-        Node<GraphNode*>* neighbor = cur->data->getNeighbors()->getHead();
+        Node<Vertex*>* neighbor = cur->data->getNeighbors()->getHead();
         while (neighbor != nullptr) {
             matrix[cur->data->getIndex() * numVertices + neighbor->data->getIndex()] = true;
             neighbor = neighbor->next;
@@ -154,10 +154,10 @@ void Graph::createAdjacencyList() {
     adjacencyList = new Queue<AdjacencyListStruct*>[numVertices];
 
     // Go through all vertices
-    Node<GraphNode*>* cur = vertices->getHead();
+    Node<Vertex*>* cur = vertices->getHead();
     while (cur != nullptr) {
         // Go through all of its neighbors
-        Node<GraphNode*>* neighbor = cur->data->getNeighbors()->getHead();
+        Node<Vertex*>* neighbor = cur->data->getNeighbors()->getHead();
         while (neighbor != nullptr) {
             // Create the data and store it
             AdjacencyListStruct* newData = new AdjacencyListStruct;
@@ -190,7 +190,7 @@ void Graph::printMatrix() {
 
 void Graph::printAdjacencyList() {
     // Go through each vertex
-    Node<GraphNode*>* cur = vertices->getHead();
+    Node<Vertex*>* cur = vertices->getHead();
     while (cur != nullptr) {
         // Print out the vertex's id
         std::cout << cur->data->getId() << ": ";
@@ -214,7 +214,7 @@ void Graph::depthFirstSearch() {
     // Make sure everything is cleared
     clearProcessedStates();
 
-    Node<GraphNode*>* start = vertices->getHead();
+    Node<Vertex*>* start = vertices->getHead();
 
     while (start != nullptr) {
         // If the vertex has not been processed, it is disconnected from the rest of the graph
@@ -228,14 +228,14 @@ void Graph::depthFirstSearch() {
     }
 }
 
-void Graph::depthFirstSearch(GraphNode* start) {
+void Graph::depthFirstSearch(Vertex* start) {
     if (!start->isProcessed) {
         // Print out the vertex id only if it hasn't been processed yet
         std::cout << start->getId() << " ";
         start->isProcessed = true;
     }
     // Iterate through all neighbors
-    Node<GraphNode*>* cur = start->getNeighbors()->getHead();
+    Node<Vertex*>* cur = start->getNeighbors()->getHead();
     while (cur != nullptr) {
         if (!cur->data->isProcessed) {
             // Run a DFS starting from the neighbor if it hasn't been processed already
@@ -249,7 +249,7 @@ void Graph::breadthFirstSearch() {
     // Reset the processed states
     clearProcessedStates();
 
-    Node<GraphNode*>* start = vertices->getHead();
+    Node<Vertex*>* start = vertices->getHead();
 
     while (start != nullptr) {
         // If the vertex has not been processed, it is disconnected from the rest of the graph
@@ -263,26 +263,26 @@ void Graph::breadthFirstSearch() {
     }
 }
 
-void Graph::breadthFirstSearch(GraphNode* start) {
+void Graph::breadthFirstSearch(Vertex* start) {
     // Create the queue for the vertices to check
-    Queue<GraphNode*> verticesToCheck;
+    Queue<Vertex*> verticesToCheck;
 
     // Add the start to the queue
-    Node<GraphNode*>* startNode = new Node<GraphNode*>(start);
+    Node<Vertex*>* startNode = new Node<Vertex*>(start);
     verticesToCheck.enqueue(startNode);
     startNode->data->isProcessed = true;
 
     // Continue until no more vertices are left to check
     while (!verticesToCheck.isEmpty()) {
         // Get the next vertex and print it out
-        Node<GraphNode*>* check = verticesToCheck.dequeue();
+        Node<Vertex*>* check = verticesToCheck.dequeue();
         std::cout << check->data->getId() << " ";
 
-        Node<GraphNode*>* cur = check->data->getNeighbors()->getHead();
+        Node<Vertex*>* cur = check->data->getNeighbors()->getHead();
         while (cur != nullptr) {
             if (!cur->data->isProcessed) {
                 // Create a new node and add it to the queue
-                Node<GraphNode*>* newNode = new Node<GraphNode*>(cur->data);
+                Node<Vertex*>* newNode = new Node<Vertex*>(cur->data);
                 verticesToCheck.enqueue(newNode);
                 newNode->data->isProcessed = true;
             }
@@ -295,16 +295,16 @@ void Graph::breadthFirstSearch(GraphNode* start) {
 
 void Graph::clearProcessedStates() {
     // Initialize all nodes to not be processed yet
-    Node<GraphNode*>* cur = vertices->getHead();
+    Node<Vertex*>* cur = vertices->getHead();
     while (cur != nullptr) {
         cur->data->isProcessed = false;
         cur = cur->next;
     }
 }
 
-GraphNode* Graph::getGraphNode(int nodeId) {
+Vertex* Graph::getVertexById(int nodeId) {
     // Start at the head of the list
-    Node<GraphNode*>* cur = vertices->getHead();
+    Node<Vertex*>* cur = vertices->getHead();
 
     // Assume not found
     bool found = false;
