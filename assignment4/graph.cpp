@@ -302,7 +302,7 @@ void Graph::clearProcessedStates() {
     }
 }
 
-Vertex* Graph::getVertexById(int nodeId) {
+Vertex* Graph::getVertexById(int vertexId) {
     // Start at the head of the list
     Node<Vertex*>* cur = vertices->getHead();
 
@@ -311,14 +311,18 @@ Vertex* Graph::getVertexById(int nodeId) {
 
     while (cur != nullptr && !found) {
         // Set found to true if the id matches
-        if (cur->data->getId() == nodeId) {
+        if (cur->data->getId() == vertexId) {
             found = true;
         } else {
-            // Otherwise move on to the next node
+            // Otherwise move on to the next vertex
             cur = cur->next;
         }
     }
 
-    // Return the graph node
-    return cur->data;
+    // Return the vertex
+    Vertex* out = nullptr;
+    if (cur != nullptr) {
+        out = cur->data;
+    }
+    return out;
 }

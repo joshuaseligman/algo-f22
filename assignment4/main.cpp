@@ -47,7 +47,7 @@ int main() {
     // // Edge case for an element that doesn't exist in the bst
     // std::cout << bst.search("Test") << std::endl;
 
-    StringArr* graphFile = readFile("graphs1.txt");
+    StringArr* graphFile = readFile("graphsTest.txt");
 
     createGraphs(graphFile);
 

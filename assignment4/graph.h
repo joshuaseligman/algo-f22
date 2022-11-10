@@ -41,7 +41,7 @@ class Graph {
         void clearProcessedStates();
 
         // Gets the vertex of the given id, nullptr if not found
-        Vertex* getVertexById(int nodeId);
+        Vertex* getVertexById(int vertexId);
 
     private:
         // Creates a vertex for the linked objects
