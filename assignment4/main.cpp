@@ -15,6 +15,12 @@ int main() {
     StringArr* graphFile = readFile("graphs1.txt");
     createGraphs(graphFile);
 
+    std::cout << std::endl;
+
+    // Do some special tests for the graphs
+    StringArr* graphsTestFile = readFile("graphsTest.txt");
+    createGraphs(graphsTestFile);
+
     // Do the BST stuff
     StringArr* magicItems = readFile("magicitems.txt");
 
