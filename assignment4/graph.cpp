@@ -120,6 +120,18 @@ void Graph::createEdge(std::string edgeInfo) {
         throw std::invalid_argument(ss.str());
     }
 
+    // Not supporting multigraphs
+    Node<Vertex*>* cur = v1->getNeighbors()->getHead();
+    while (cur != nullptr) {
+        if (cur->data->getId() == v2->getId()) {
+            // Throw error if the edge already exists
+            std::stringstream ss;
+            ss << "Edge " << v1->getId() << " - " << v2->getId() << " already exists";
+            throw std::invalid_argument(ss.str());
+        }
+        cur = cur->next;
+    }
+
     // Add each vertex to the neighbors list
     v1->addNeighbor(v2);
     v2->addNeighbor(v1);
