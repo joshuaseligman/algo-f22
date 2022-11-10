@@ -30,7 +30,7 @@ BinarySearchTree::~BinarySearchTree() {
     }
 }
 
-void BinarySearchTree::insert(BinaryTreeNode<std::string>* newNode) {
+void BinarySearchTree::insert(BinaryTreeNode<std::string>* newNode, bool shouldPrintPath) {
     // Set the trailing pointer to be null
     BinaryTreeNode<std::string>* trailing = nullptr;
 
@@ -44,14 +44,21 @@ void BinarySearchTree::insert(BinaryTreeNode<std::string>* newNode) {
         if (newNode->data.compare(cur->data) < 0) {
             // Smaller items go to the left
             cur = cur->left;
-            std::cout << "L";
+            if (shouldPrintPath) {
+                std::cout << "L";
+            }
         } else {
             // Larger or equal items go to the right
             cur = cur->right;
-            std::cout << "R";
+            if (shouldPrintPath) {
+                std::cout << "R";
+            }
         }
     }
-    std::cout << std::endl;
+
+    if (shouldPrintPath) {
+        std::cout << std::endl;
+    }
 
     // Trailing is one level above the node and is the parent
     newNode->parent = trailing;
@@ -71,12 +78,12 @@ void BinarySearchTree::insert(BinaryTreeNode<std::string>* newNode) {
     }
 }
 
-bool BinarySearchTree::search(std::string target, int* comparisons) {
+bool BinarySearchTree::search(std::string target, int* comparisons, bool shouldPrintPath) {
     // Run the search starting with the root of the tree
-    return searchHelper(target, root, comparisons);
+    return searchHelper(target, root, comparisons, shouldPrintPath);
 }
 
-bool BinarySearchTree::searchHelper(std::string target, BinaryTreeNode<std::string>* cur, int* comparisons) {
+bool BinarySearchTree::searchHelper(std::string target, BinaryTreeNode<std::string>* cur, int* comparisons, bool shouldPrintPath) {
     // Assume the element is not found (cur is nullptr)
     bool out = false;
 
@@ -94,12 +101,16 @@ bool BinarySearchTree::searchHelper(std::string target, BinaryTreeNode<std::stri
             out = true;
         } else if (strComp < 0) {
             // Check the left side because the target is less than the current value
-            std::cout << "L";
-            out = searchHelper(target, cur->left, comparisons);
+            if (shouldPrintPath) {
+                std::cout << "L";
+            }
+            out = searchHelper(target, cur->left, comparisons, shouldPrintPath);
         } else {
             // Check the right side because the target is greater than the current value
-            std::cout << "R";
-            out = searchHelper(target, cur->right, comparisons);
+            if (shouldPrintPath) {
+                std::cout << "R";
+            }
+            out = searchHelper(target, cur->right, comparisons, shouldPrintPath);
         }
     }
 

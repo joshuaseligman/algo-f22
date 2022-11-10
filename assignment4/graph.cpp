@@ -26,7 +26,7 @@ Graph::Graph(StringArr* data, int beginIndex, int endIndex) {
         }
     }
 
-    std::cout << numVertices << std::endl;
+    // std::cout << numVertices << std::endl;
 
     createMatrix();
 
@@ -136,7 +136,7 @@ void Graph::createEdge(std::string edgeInfo) {
     v1->addNeighbor(v2);
     v2->addNeighbor(v1);
 
-    std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << std::endl;
+    // std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << std::endl;
 }
 
 void Graph::createMatrix() {
@@ -198,6 +198,7 @@ void Graph::printMatrix() {
         }
         std::cout << std::endl;
     }
+    std::cout << std::endl;
 }
 
 void Graph::printAdjacencyList() {
@@ -220,6 +221,7 @@ void Graph::printAdjacencyList() {
 
         cur = cur->next;
     }
+    std::cout << std::endl;
 }
 
 void Graph::depthFirstSearch() {

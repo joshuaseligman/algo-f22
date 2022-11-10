@@ -13,7 +13,7 @@ Vertex::Vertex(int nodeId, int nodeIndex) {
     // Initialize to false because it wasn't worked with yet
     isProcessed = false;
 
-    std::cout << "Created vertex. Id: " << id << "; Index: " << index << std::endl;
+    // std::cout << "Created vertex. Id: " << id << "; Index: " << index << std::endl;
 }
 
 Vertex::~Vertex() {
