@@ -88,20 +88,80 @@ void fractionalKnapsackAlgo(StringArr* data) {
         delete spiceNode;
     }
 
-    for (int i = 0; i < spiceArr.length; i++) {
-        std::cout << "Spice object: " << spiceArr.arr[i]->getName() << "; unit price = " << spiceArr.arr[i]->getUnitPrice() << std::endl;
-    }
-
-    quickSort(&spiceArr);
-    std::cout << std::endl;
-
-    for (int i = 0; i < spiceArr.length; i++) {
-        std::cout << "Spice object: " << spiceArr.arr[i]->getName() << "; unit price = " << spiceArr.arr[i]->getUnitPrice() << std::endl;
-    }
+    // Run the algorithm with the given spices and knapsacks
+    runAlgo(&spiceArr, &knapsacks);
 
     // Memory management
     for (int i = 0; i < spiceArr.length; i++) {
         delete spiceArr.arr[i];
     }
     delete [] spiceArr.arr;
+}
+
+void runAlgo(SpiceArr* spices, Queue<int>* knapsacks) {
+    // Start off by running a sort on the spices array to make them in descending order
+    quickSort(spices);
+
+    while (!knapsacks->isEmpty()) {
+        Node<int>* curKnapsack = knapsacks->dequeue();
+
+        // Create an array that corresponds with the spice array for keeping track of what was taken by the knapsack
+        int quantityTaken[spices->length];
+        for (int i = 0; i < spices->length; i++) {
+            quantityTaken[i] = 0;
+        }
+
+        // Start off with an empty knapsack and a value of 0
+        int capacityLeft = curKnapsack->data;
+        double spiceValue = 0;
+
+        // Start considering the first element in the array (most valuable per unit)
+        int spiceIndex = 0;
+
+        // Continue until the knapsack is full or until there is no more spice to take
+        while (capacityLeft > 0 && spiceIndex < spices->length) {
+            // If there is space for the entire pile of spice, take it all
+            if (capacityLeft >= spices->arr[spiceIndex]->getQuantity()) {
+                // Update the array of spice taken
+                quantityTaken[spiceIndex] = spices->arr[spiceIndex]->getQuantity();
+
+                // Be greedy and take everything available if possible
+                capacityLeft -= spices->arr[spiceIndex]->getQuantity();
+                spiceValue += spices->arr[spiceIndex]->getPrice();
+            } else {
+                // Update the table entry
+                quantityTaken[spiceIndex] = capacityLeft;
+
+                // Compute the value of the spice we can take
+                spiceValue += capacityLeft * spices->arr[spiceIndex]->getUnitPrice();
+
+                // Update the capacity to be 0
+                capacityLeft = 0;
+            }
+            // Go on to the next spice
+            spiceIndex++;
+        }
+
+        // Start with this text
+        std::cout << "Knapsack of capacity " << curKnapsack->data << " is worth " << spiceValue << " quatloos and contains";
+
+        // Iterate through all of the spices
+        for (int j = 0; j < spices->length; j++) {
+            // Only print out the spices we take
+            if (quantityTaken[j] > 0) {
+                // Little formatting logic
+                if (j > 0) {
+                    std::cout << ", ";
+                } else {
+                    std::cout << " ";
+                }
+                // The amount and name of the spice taken
+                std::cout << quantityTaken[j] << " scoops of " << spices->arr[j]->getName();
+            }
+        }
+        std::cout << "." << std::endl;
+
+        // Memory management
+        delete curKnapsack;
+    }
 }
