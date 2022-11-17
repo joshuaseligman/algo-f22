@@ -26,3 +26,11 @@ class Spice {
         // The unit price (price / quantity)
         double unitPrice;
 };
+
+struct SpiceArr {
+    // The array of spice object pointers
+    Spice** arr;
+
+    // The length of the array
+    int length;
+};
