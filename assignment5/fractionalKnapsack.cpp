@@ -1,5 +1,6 @@
 #include "fractionalKnapsack.h"
 #include "util.h"
+#include "spice.h"
 
 #include <iostream>
 
@@ -43,7 +44,8 @@ void fractionalKnapsackAlgo(StringArr* data) {
                 ptr = strtok(NULL, ";");
             }
 
-            std::cout << "Read a spice object: name = " << name << "; price = " << price << "; quantity = " << quantity << std::endl;
+            Spice testSpice(name, price, quantity);
+            std::cout << "Read a spice object: name = " << testSpice.getName() << "; price = " << testSpice.getPrice() << "; quantity = " << testSpice.getQuantity() << "; unit price = " << testSpice.getUnitPrice() << std::endl;
         } else if (data->arr[i].substr(0, 8).compare("knapsack") == 0) {
             // Knapsack data starts after the last space
             int startOfCapacity = data->arr[i].find_last_of(" ") + 1;
