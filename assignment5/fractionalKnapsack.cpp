@@ -44,6 +44,16 @@ void fractionalKnapsackAlgo(StringArr* data) {
             }
 
             std::cout << "Read a spice object: name = " << name << "; price = " << price << "; quantity = " << quantity << std::endl;
+        } else if (data->arr[i].substr(0, 8).compare("knapsack") == 0) {
+            // Knapsack data starts after the last space
+            int startOfCapacity = data->arr[i].find_last_of(" ") + 1;
+
+            // The last character will be a semicolon, so can exclude that character
+            std::string capacityStr = data->arr[i].substr(startOfCapacity, data->arr[i].length() - 1 - startOfCapacity);
+
+            // Do the type conversion
+            int knapsackCapacity = std::stoi(capacityStr);
+            std::cout << "Read a knapsack: capacity = " << knapsackCapacity << std::endl;
         }
     }
 }
