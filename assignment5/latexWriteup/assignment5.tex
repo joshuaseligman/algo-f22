@@ -85,9 +85,40 @@
 
 \section{Fractional Knapsack Algorithm}
 \subsection{The Algorithm}
+The fractional knapsack algorithm solves the problem of maximizing the value of the objects one takes to fill up their knapsack. As displayed in Algorithm \ref{algorithm:fracKnapsack}, the solution to the fractional knapsack problem requires a greedy approach by getting the most valuable spice available at each point the algorithm. To do this, the spices are sorted by their unit price to get the most value for the amount of spice taken. The loop on lines 7-18 will continue until the knapsack is full or until there are no more spices to consider and, as previously mentioned, will take as much of the most valuable spice that is available. Since the spices are sorted ahead of time, the greedy approach of taking the local maximum value and hope it leads to a global maximum value works because the spices are not changing and the unit prices of the spices taken will continue to decrease as the algorithm is run. This ensures that the global maximum value is always achieved for any set of spices and any knapsack capacity.
+
+\begin{algorithm}
+  \caption{Fractional Knapsack Algorithm.}
+  \label{algorithm:fracKnapsack}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+    \Procedure{FractionalKnapsack}{$spices$, $capacity$}
+      \State $sort(spices)$ \Comment{Sort the spices by unit value, descending order}
+      \State $quantityTaken \gets new~int[spices.length]$ \Comment{Store an array to keep track of how much of each spice was taken}
+      \State $capacityLeft \gets capacity$ \Comment{Start with empty knapsack}
+      \State $totalValue \gets 0$ \Comment{Start off with no value}
+      \State $curSpiceIndex \gets 0$ \Comment{Start with most valuable spice per unit}
+
+      \While{$capacityLeft > 0~\&\&~curSpiceIndex < spices.length$}
+        \If{$capacityLeft \ge spices[curSpiceIndex].quantity$} \Comment{Enough space to take everything}
+          \State $quantityTaken[curSpiceIndex] \gets spices[curSpiceIndex].quantity$
+          \State $capacityLeft \gets capacityLeft - spices[curSpiceIndex].quantity$
+          \State $totalValue \gets totalValue + spices[curSpiceIndex].value$ 
+        \Else \Comment{Take what we can}
+          \State $quantityTaken[curSpiceIndex] \gets capacityLeft$
+          \State $totalValue \gets totalValue + capacityLeft * spices[curSpiceIndex].unitPrice$
+          \State $capacityLeft \gets 0$
+        \EndIf
+
+        \State{$curSpiceIndex \gets curSpiceIndex + 1$} \Comment{Move on to next spice}
+      \EndWhile
+      \State \Return{$quantityTaken,~totalValue$}
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
 
 \subsection{Asymptotic Analysis}
-
+Listing \ref{lst:fracKnapsack} contains the C++ implementation of the fractional knapsack algorithm. First, line 3 makes a call to a quicksort algorithm for the spices to put them in descending order by their unit prices, which runs in $O(s * log_2s)$ time, where $s$ is the number of spices available to be taken. Next, the loop defined on line 5 iterates iterates through each of the knapsacks because the implementation takes in many knapsacks for testing. This loop will run $k$ times, where $k$ is the number of knapsacks. The sorting algorithm is executed before the loop because all of the knapsacks are being filled with the same data and, therefor, the sorting operation only has to be done once. Line 6 is also specific to the implementation as it dequeues the next knapsack from the queue, which is a constant time operation. Lines 9, 15, 16, and 19 all define variables to keep track of, which are all constant time operations. The small loop on lines 10-12 initializes the array to use all 0s, which is a C++ specific problem as other programming languages do this automatically, which will cause these lines to be excluded from the asymptotic analysis. Next, the loop defined on line 22 continues until the knapsack is full or until there are no more spices. The worst case scenario is when there is not enough spice to fill the knapsack, which causes the loop to run a total of $s$ times. The entire body of the loop matches what is done in Algorithm \ref{algorithm:fracKnapsack}, which is only the constant time operations of conditions and assignments. Thus, the entire loop on lines 22-43 runs in $O(s)$ time. Lastly, lines 46-62 will be excluded as they are outputting the results. Overall, for each individual knapsack, the runtime complexity is $O(s * log_2s + s)$, which is $O(s * log_2s)$ because $s * log_2s$ is the dominant term in the expression. However, the implementation runs the $O(s)$ loop $k$ times, which will cause the overall runtime complexity of the C++ implementation to become $O(s * log_2s + k * s)$.
 
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
 
