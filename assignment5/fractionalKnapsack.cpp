@@ -3,6 +3,7 @@
 #include "spice.h"
 #include "queue.h"
 #include "node.h"
+#include "sort.h"
 
 #include <iostream>
 
@@ -88,7 +89,14 @@ void fractionalKnapsackAlgo(StringArr* data) {
     }
 
     for (int i = 0; i < spiceArr.length; i++) {
-        std::cout << "Spice object: " << spiceArr.arr[i]->getName() << std::endl;
+        std::cout << "Spice object: " << spiceArr.arr[i]->getName() << "; unit price = " << spiceArr.arr[i]->getUnitPrice() << std::endl;
+    }
+
+    quickSort(&spiceArr);
+    std::cout << std::endl;
+
+    for (int i = 0; i < spiceArr.length; i++) {
+        std::cout << "Spice object: " << spiceArr.arr[i]->getName() << "; unit price = " << spiceArr.arr[i]->getUnitPrice() << std::endl;
     }
 
     // Memory management
