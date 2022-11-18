@@ -4,6 +4,7 @@
 #include "node.h"
 #include "vertex.h"
 #include "queue.h"
+#include "stack.h"
 
 #include <regex>
 #include <iostream>
@@ -194,6 +195,53 @@ void Graph::relax(Vertex* vertex, EdgeStruct* edge) {
         // If so, make the adjustments to the variables
         edge->neighbor->ssspDistance = vertex->ssspDistance + edge->weight;
         edge->neighbor->predecessor = vertex;
+    }
+}
+
+void Graph::printBellmanFordResults() {
+    Node<Vertex*>* cur = vertices->getHead();
+    // Print the results for the path to each vertex
+    while (cur != nullptr) {
+        // Stack to reverse the order of the vertices that are printed
+        Stack<std::string> ssspOutput;
+
+        // Start with the current vertex
+        Node<std::string>* curIdNode = new Node<std::string>(cur->data->getId());
+        ssspOutput.push(curIdNode);
+
+        // Do not forget to keep the cost
+        int cost = cur->data->ssspDistance;
+
+        // Go through all the predecessors
+        Vertex* predecessorVertex = cur->data->predecessor;
+        while (predecessorVertex != nullptr) {
+            // Add the id of the predecessor
+            Node<std::string>* predecessorId = new Node<std::string>(predecessorVertex->getId());
+            ssspOutput.push(predecessorId);
+
+            predecessorVertex = predecessorVertex->predecessor;
+        }
+
+        bool first = true;
+        // Print out all of the vertices from the stack
+        while (!ssspOutput.isEmpty()) {
+            // Clean output with the arrow
+            if (!first) {
+                std::cout << " -> ";
+            } else {
+                first = false;
+            }
+            // Print the id of the vertex
+            Node<std::string>* outNode = ssspOutput.pop();
+            std::cout << outNode->data;
+
+            // Memory management
+            delete outNode;
+        }
+        // Print the overall cost
+        std::cout << "; cost = " << cost << std::endl;
+
+        cur = cur->next;
     }
 }
 

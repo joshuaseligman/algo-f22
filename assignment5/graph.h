@@ -26,6 +26,9 @@ class Graph {
         // Runs the bellman ford sssp algorithm with the single source as the first vertex in the graph
         bool bellmanFordSssp();
 
+        // Prints out the results from the bellman ford algorithm
+        void printBellmanFordResults();
+
     private:
         // Creates a vertex for the linked objects
         void createVertex(std::string vertexInfo);

@@ -12,6 +12,8 @@ int main() {
 
     createGraphs(graphFile);
 
+    std::cout << std::endl;
+
     StringArr* spiceFile = readFile("spice.txt");
 
     fractionalKnapsackAlgo(spiceFile);

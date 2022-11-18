@@ -18,7 +18,11 @@ void createGraphs(StringArr* contents) {
                 try {
                     // Mark the graph from "new graph" to the line before the next "new graph"
                     Graph g(contents, curBegin, i - 1);
-                    std::cout << g.bellmanFordSssp() << std::endl;
+                    if (g.bellmanFordSssp()) {
+                        g.printBellmanFordResults();
+                    } else {
+                        std::cout << "Negative weight loop detected." << std::endl;
+                    }
                 } catch (const std::exception& e) {
                     std::cout << "Error: " << e.what() << std::endl;
                 }
@@ -31,7 +35,11 @@ void createGraphs(StringArr* contents) {
             try {
                 // The graph is defined in the rest of the file
                 Graph g(contents, curBegin, i);
-                std::cout << g.bellmanFordSssp() << std::endl;
+                if (g.bellmanFordSssp()) {
+                    g.printBellmanFordResults();
+                } else {
+                    std::cout << "Negative weight loop detected." << std::endl;
+                }
             } catch (const std::exception& e) {
                 std::cout << "Error: " << e.what() << std::endl;
             }
