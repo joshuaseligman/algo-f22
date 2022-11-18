@@ -135,6 +135,68 @@ void Graph::createEdge(std::string edgeInfo) {
     std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << "; weight: " << weight << std::endl;
 }
 
+bool Graph::bellmanFordSssp() {
+    // Assume no negative weight cycles
+    bool out = true;
+
+    // Initialize the vertices based on the source vertex
+    initSingleSource(vertices->getHead()->data);
+
+    for (int i = 0; i < numVertices - 1; i++) {
+        Node<Vertex*>* cur = vertices->getHead();
+        // Iterate through each vertex
+        while (cur != nullptr) {
+            Node<EdgeStruct*>* edgeNode = cur->data->getNeighbors()->getHead();
+            // With the other while loop, this effectively iterates through all of the edges in the graph
+            while (edgeNode != nullptr) {
+                // See if the edge is a better path for the vertex it points to
+                relax(cur->data, edgeNode->data);
+                edgeNode = edgeNode->next;
+            }
+            cur = cur->next;
+        }
+    }
+
+    Node<Vertex*>* cur = vertices->getHead();
+    // Go through each vertex
+    while (cur != nullptr && out == true) {
+        Node<EdgeStruct*>* edgeNode = cur->data->getNeighbors()->getHead();
+        // Iterate through all of the edges in the graph with the nested while loops
+        while (edgeNode != nullptr && out == true) {
+            // Check for a negative weight cycle
+            if (edgeNode->data->neighbor->ssspDistance > cur->data->ssspDistance + edgeNode->data->weight) {
+                out = false;
+            }
+            edgeNode = edgeNode->next;
+        }
+        cur = cur->next;
+    }
+
+    return out;
+}
+
+void Graph::initSingleSource(Vertex* source) {
+    Node<Vertex*>* cur = vertices->getHead();
+    while (cur != nullptr) {
+        // Add no predecessor and assume the distance is an arbitrary represetation of infinity
+        cur->data->predecessor = nullptr;
+        cur->data->ssspDistance = 1000000000;
+
+        cur = cur->next;
+    }
+    // Override what we did earlier because the path from the source to the source is 0
+    source->ssspDistance = 0;
+}
+
+void Graph::relax(Vertex* vertex, EdgeStruct* edge) {
+    // Check to see if the edge is a better route to the vertex it points to
+    if (edge->neighbor->ssspDistance > vertex->ssspDistance + edge->weight) {
+        // If so, make the adjustments to the variables
+        edge->neighbor->ssspDistance = vertex->ssspDistance + edge->weight;
+        edge->neighbor->predecessor = vertex;
+    }
+}
+
 Vertex* Graph::getVertexById(std::string vertexId) {
     // Start at the head of the list
     Node<Vertex*>* cur = vertices->getHead();

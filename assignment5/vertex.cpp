@@ -10,6 +10,10 @@ Vertex::Vertex(std::string nodeId) {
     id = nodeId;
     neighbors = new Queue<EdgeStruct*>;
 
+    // Initialize to nothing and a very large number
+    predecessor = nullptr;
+    ssspDistance = 1000000000;
+
     // std::cout << "Created vertex. Id: " << id << "; Index: " << index << std::endl;
 }
 

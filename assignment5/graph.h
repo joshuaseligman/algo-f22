@@ -23,12 +23,21 @@ class Graph {
         // Gets the vertex of the given id, nullptr if not found
         Vertex* getVertexById(std::string vertexId);
 
+        // Runs the bellman ford sssp algorithm with the single source as the first vertex in the graph
+        bool bellmanFordSssp();
+
     private:
         // Creates a vertex for the linked objects
         void createVertex(std::string vertexInfo);
 
         // Creates an edge for the linked objects
         void createEdge(std::string edgeInfo);
+
+        // Initializes the graph for bellman ford
+        void initSingleSource(Vertex* source);
+
+        // Makes any needed changes for the shortest path to the given vertex
+        void relax(Vertex* vertex, EdgeStruct* edge);
 
         // The number of vertices in the graph
         int numVertices;

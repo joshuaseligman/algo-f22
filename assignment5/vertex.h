@@ -23,6 +23,11 @@ class Vertex {
         // Getter for the neighbors queue
         Queue<EdgeStruct*>* getNeighbors();
 
+        // The predecessor node for bellman ford sssp
+        Vertex* predecessor;
+
+        // The distance for bellman ford sssp
+        int ssspDistance;
     private:
         // Id of the vertex
         std::string id;
