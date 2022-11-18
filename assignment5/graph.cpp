@@ -98,6 +98,9 @@ void Graph::createEdge(std::string edgeInfo) {
         ptr = strtok(NULL, " - ");
     }
 
+    // Get the weight by starting with the character after the indices until the end of the string
+    int weight = std::stoi(edgeInfo.substr(m.position() + m.length() + 1, edgeInfo.length()));
+
     Vertex* v1 = getVertexById(id1);
     if (v1 == nullptr) {
         // Create an error message if the vertex was not found
@@ -115,9 +118,9 @@ void Graph::createEdge(std::string edgeInfo) {
     }
 
     // Not supporting multigraphs
-    Node<Vertex*>* cur = v1->getNeighbors()->getHead();
+    Node<EdgeStruct*>* cur = v1->getNeighbors()->getHead();
     while (cur != nullptr) {
-        if (cur->data->getId() == v2->getId()) {
+        if (cur->data->neighbor->getId().compare(v2->getId()) == 0) {
             // Throw error if the edge already exists
             std::stringstream ss;
             ss << "Edge " << v1->getId() << " - " << v2->getId() << " already exists";
@@ -127,10 +130,9 @@ void Graph::createEdge(std::string edgeInfo) {
     }
 
     // Add each vertex to the neighbors list
-    v1->addNeighbor(v2);
-    v2->addNeighbor(v1);
+    v1->addNeighbor(v2, weight);
 
-    // std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << std::endl;
+    std::cout << "Created edge " << v1->getId() << " - " << v2->getId() << "; weight: " << weight << std::endl;
 }
 
 Vertex* Graph::getVertexById(std::string vertexId) {

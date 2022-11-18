@@ -16,3 +16,4 @@ template class Node<std::string>;
 template class Node<int>;
 template class Node<Spice*>;
 template class Node<Vertex*>;
+template class Node<EdgeStruct*>;

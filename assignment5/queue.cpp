@@ -98,3 +98,4 @@ template class Queue<std::string>;
 template class Queue<int>;
 template class Queue<Spice*>;
 template class Queue<Vertex*>;
+template class Queue<EdgeStruct*>;
