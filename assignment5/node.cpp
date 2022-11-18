@@ -2,6 +2,7 @@
 
 #include "node.h"
 #include "spice.h"
+#include "vertex.h"
 
 template <typename T>
 Node<T>::Node(T initialData) {
@@ -14,3 +15,4 @@ Node<T>::Node(T initialData) {
 template class Node<std::string>;
 template class Node<int>;
 template class Node<Spice*>;
+template class Node<Vertex*>;

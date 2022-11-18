@@ -4,6 +4,7 @@
 #include "queue.h"
 #include "node.h"
 #include "spice.h"
+#include "vertex.h"
 
 // Instantiate the queue with the head pointing to nothing
 template <typename T>
@@ -96,3 +97,4 @@ Node<T>* Queue<T>::getHead() {
 template class Queue<std::string>;
 template class Queue<int>;
 template class Queue<Spice*>;
+template class Queue<Vertex*>;
