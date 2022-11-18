@@ -44,13 +44,13 @@ void Graph::createVertex(std::string vertexInfo) {
     ptr = strtok(vertexInfo.data(), " ");
 
     bool idNext = false;
-    int vertexId;
+    std::string vertexId;
 
     while (ptr != NULL) {
         std::stringstream ss(ptr);
         if (idNext) {
             // Get the id and break
-            ss >> vertexId;
+            vertexId = ss.str();
 
             // Change back to false and let the strtok function break the loop
             idNext = false;
@@ -78,15 +78,15 @@ void Graph::createEdge(std::string edgeInfo) {
     // Variable to store the match results
     std::smatch m;
     // Regular expression looks for a number followed by a space, hyphen, space, and another number
-    std::regex e("\\d+ - \\d+");
+    std::regex e("\\w+ - \\w+");
 
     // Try to find the match
     std::regex_search(edgeInfo, m, e);
 
     bool firstId = true;
 
-    int id1 = INT_MIN;
-    int id2 = INT_MIN;
+    std::string id1 = "";
+    std::string id2 = "";
 
     char* ptr;
     // Only work with the substring that is the vertices
@@ -95,11 +95,11 @@ void Graph::createEdge(std::string edgeInfo) {
         std::stringstream ss(ptr);
         if (firstId) {
             // Store the id of the first vertex
-            ss >> id1;
+            id1 = ss.str();
             firstId = false;
         } else {
             // Store the id of the second vertex
-            ss >> id2;
+            id2 = ss.str();
         }
         ptr = strtok(NULL, " - ");
     }
@@ -316,7 +316,7 @@ void Graph::clearProcessedStates() {
     }
 }
 
-Vertex* Graph::getVertexById(int vertexId) {
+Vertex* Graph::getVertexById(std::string vertexId) {
     // Start at the head of the list
     Node<Vertex*>* cur = vertices->getHead();
 
@@ -325,7 +325,7 @@ Vertex* Graph::getVertexById(int vertexId) {
 
     while (cur != nullptr && !found) {
         // Set found to true if the id matches
-        if (cur->data->getId() == vertexId) {
+        if (cur->data->getId().compare(vertexId) == 0) {
             found = true;
         } else {
             // Otherwise move on to the next vertex

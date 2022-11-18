@@ -3,8 +3,9 @@
 #include "queue.h"
 
 #include <iostream>
+#include <string>
       
-Vertex::Vertex(int nodeId, int nodeIndex) {
+Vertex::Vertex(std::string nodeId, int nodeIndex) {
     // Assign the id and index for the graph node
     id = nodeId;
     index = nodeIndex;
@@ -26,7 +27,7 @@ void Vertex::addNeighbor(Vertex* newNeighbor) {
     neighbors->enqueue(neighborNode);
 }
 
-int Vertex::getId() {
+std::string Vertex::getId() {
     return id;
 }
 

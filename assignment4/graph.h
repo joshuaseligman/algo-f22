@@ -4,10 +4,11 @@
 #include "vertex.h"
 #include "util.h"
 #include "queue.h"
+#include <string>
 
 // Struct for storing data in an adjacency list
 struct AdjacencyListStruct {
-    int vertexId;
+    std::string vertexId;
     Vertex* vertex;
 };
 
@@ -41,7 +42,7 @@ class Graph {
         void clearProcessedStates();
 
         // Gets the vertex of the given id, nullptr if not found
-        Vertex* getVertexById(int vertexId);
+        Vertex* getVertexById(std::string vertexId);
 
     private:
         // Creates a vertex for the linked objects

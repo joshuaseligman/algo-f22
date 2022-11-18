@@ -1,11 +1,13 @@
 #pragma once
 
 #include "queue.h"
+#include "vertex.h"
+#include <string>
 
 class Vertex {
     public:
         // Constructor for the graph node
-        Vertex(int nodeId, int nodeIndex);
+        Vertex(std::string nodeId, int nodeIndex);
 
         // Destructor for the graph node
         ~Vertex();
@@ -14,7 +16,7 @@ class Vertex {
         void addNeighbor(Vertex* newNeighbor);
 
         // Getter for the id
-        int getId();
+        std::string getId();
 
         // Getter for the index the vertex is stored in
         int getIndex();
@@ -26,7 +28,7 @@ class Vertex {
         bool isProcessed;
     private:
         // Id of the vertex
-        int id;
+        std::string id;
 
         // Index of the vertex in the array in case the first id given is different from 0
         int index;
