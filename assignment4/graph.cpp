@@ -123,7 +123,7 @@ void Graph::createEdge(std::string edgeInfo) {
     // Not supporting multigraphs
     Node<Vertex*>* cur = v1->getNeighbors()->getHead();
     while (cur != nullptr) {
-        if (cur->data->getId() == v2->getId()) {
+        if (cur->data->getId().compare(v2->getId()) == 0) {
             // Throw error if the edge already exists
             std::stringstream ss;
             ss << "Edge " << v1->getId() << " - " << v2->getId() << " already exists";
