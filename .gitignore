@@ -1,5 +1,7 @@
 #LateX files
 *.gz
+*.aux
+*.log
 
 # Compilation files
 main

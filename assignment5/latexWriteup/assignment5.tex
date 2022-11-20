@@ -83,12 +83,72 @@
 \begin{document}
 \maketitle % Print the title
 
+\section{Bellman-Ford Single Source Shortest Path}
+\subsection{The Algorithm}
+The Bellman-Ford single source shortest path (SSSP) algorithm computes the shortest path from a single vertex in a directed and weighted graph to every other vertex that is connected to the source through a series of edges. As displayed in Algorithm \ref{algorithm:bfsssp}, the Bellman-Ford routine uses dynamic programming to compute the shortest path to each vertex in the graph from the source. In other words, rather than computing and then comparing each possible path in the graph, the Bellman-Ford algorithm relies on neighboring vertices to share their known distances with each other, which would cause the best paths to spread throughout the graph so each vertex can take advantage of these routes rather than trying to determine it completely on their own. The only problem with the Bellman-Ford SSSP algorithm, however, is the case of a negative weight cycle. This is checked for on lines 9-13 of Algorithm \ref{algorithm:bfsssp}. This edge case causes issues because going to a vertex via a negative weight and then looping back to the first vertex with a smaller positive weight will cause the algorithm to believe the path to the vertex is $-\infty$ if the loop on lines 3-7 did not terminate. An example negative weight loop is shown in Figure \ref{figure:negativeWeightLoop}. In this image, if the path from vertex 1 to the source node goes through vertex 2, which goes through vertex 3 and so on, Since the negative weight from vertex 2 to 1 has a greater magnitude than the positive weight from vertex 1 to 2, one could theoretically go through the loop an infinite number of times to decrease the distance of vertex 1 to the source. It is for this reason that the algorithm will return false upon finding a negative weight cycle as the edge case prevents the algorithm from having an accurate representation of the distance from a vertex affected by the negative weight cycle to the source.
+
+\begin{figure}
+  \hspace*{\fill}
+  % From https://www.baeldung.com/cs/latex-drawing-graphs
+  \begin{tikzpicture}[node distance={15mm}, thick, main/.style = {draw, circle}] 
+    \node[main] (1) {$1$};
+    \node[main] (2) [right of=1] {$2$};
+    \node[main] (3) [below right of=2] {$3$};
+    \draw[->] (1) to [out=60, in=120, looseness=1.0] node[midway, above]{1} (2);
+    \draw[->] (2) to [out=240, in=300, looseness =1.0] node[midway, above]{-2} (1);
+    \draw[->] (2) -- node[midway, above, sloped]{3} (3);
+  \end{tikzpicture}
+  \hspace*{\fill}
+  \caption{Sample negative weight-loop.}
+  \label{figure:negativeWeightLoop}
+\end{figure}
+
+\begin{algorithm}
+  \caption{Bellman-Ford single source shortest path algorithm.}
+  \label{algorithm:bfsssp}
+  %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
+  \begin{algorithmic}[1]
+    \Procedure{BellmanFord}{$graph$, $weightFunction$, $sourceVertex$}
+      \State $InitSingleSource(graph, sourceVertex)$ \Comment{Initialize the vertices to do the algorithm}
+      \For{$i \gets 0,~i < length(graph.vertices) - 1,~i++$}
+        \For{$edge~\epsilon~graph.edges$} \Comment{Iterate through all the edges}
+          \State $Relax(edge.fromVertex,~edge.toVertex,~weightFunction)$ \Comment{Make a better decision if needed}
+        \EndFor
+      \EndFor
+      \State $out \gets true$ \Comment{Assume all went well}
+      \For{$edge~\epsilon~graph.edges$}
+        \If{$edge.toVertex.distance > edge.fromVertex.distance + weightFunction(edge.fromVertex, edge.toVertex)$}
+          \State $out \gets false$ \Comment{There is a negative weight loop, so the algorithm failed}
+        \EndIf
+      \EndFor
+      \State \Return{$out$}
+    \EndProcedure
+
+    \Procedure{InitSingleSource}{$graph$, $sourceVertex$}
+      \For{$vertex~\epsilon~graph.vertices$}
+        \State $vertex.distance \gets \infty$ \Comment{Assume each vertex has no path to the source}
+        \State $vertex.predecessor \gets null$
+      \EndFor
+      \State $sourceVertex.distance \gets 0$ \Comment{The source vertex has a distance of 0 to itself}
+    \EndProcedure
+
+    \Procedure{Relax}{$fromVertex$, $toVertex$ $weightFunction$}
+      \If{$toVertex.distance > fromVertex.distance + weightFunction(fromVertex, toVertex)$}
+        \State $toVertex.distance \gets fromVertex.distance + weightFunction(fromVertex, toVertex)$
+        \State $toVertex.predecessor \gets fromVertex$ \Comment{There is a better route to toVertex through fromVertex}
+      \EndIf
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Asymptotic Analysis}
+
 \section{Fractional Knapsack Algorithm}
 \subsection{The Algorithm}
 The fractional knapsack algorithm solves the problem of maximizing the value of the objects one takes to fill up their knapsack. As displayed in Algorithm \ref{algorithm:fracKnapsack}, the solution to the fractional knapsack problem requires a greedy approach by getting the most valuable spice available at each point the algorithm. To do this, the spices are sorted by their unit price to get the most value for the amount of spice taken. The loop on lines 7-18 will continue until the knapsack is full or until there are no more spices to consider and, as previously mentioned, will take as much of the most valuable spice that is available. Since the spices are sorted ahead of time, the greedy approach of taking the local maximum value and hope it leads to a global maximum value works because the spices are not changing and the unit prices of the spices taken will continue to decrease as the algorithm is run. This ensures that the global maximum value is always achieved for any set of spices and any knapsack capacity.
 
 \begin{algorithm}
-  \caption{Fractional Knapsack Algorithm.}
+  \caption{Fractional Knapsack algorithm.}
   \label{algorithm:fracKnapsack}
   %Documentation for algorithmicx: https://texdoc.org/serve/algorithmicx/0
   \begin{algorithmic}[1]
