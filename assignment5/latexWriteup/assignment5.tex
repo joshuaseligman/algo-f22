@@ -142,6 +142,7 @@ The Bellman-Ford single source shortest path (SSSP) algorithm computes the short
 \end{algorithm}
 
 \subsection{Asymptotic Analysis}
+The C++ implementation of the Bellman-Ford algorithm can be found in Listing \ref{lst:bfsssp}. First, line 6 makes a call to the $initSingleSource$ function, which starts on line 41. In the $initSingleSource$ function there is a loop on lines 43-49 that goes through each vertex in the graph and performs a couple assignments, which run in constant time for a total of $v$ times, where v is the number of vertices in the graph. After the loop, there is an assignment to make the special initialization for the source vertex on line 51. Therefore, the $initSingleSource$ function runs in $O(v)$ time. Next, the loop defined on line 8 iterates the number of vertices minus 1 times. Inside of this loop contains 2 nested loops: a while-loop that goes through each vertex (defined on line 11) and a while-loop that goes through each edge for the vertex of the outer while-loop (defined on line 14). Although deceiving, these nested while-loops iterate through each edge in the graph. The only reason why there is the loop for the vertices is because the graph is represented using linked objects and the connections between the vertex objects are the edges. Inside of the inner-most loop is a call to the $relax$ function. This method is defined on lines 54-61 and contains an if-statement with some assignments, which all run in $O(1)$ time. Therefore, the nested while-loops will run in $O(e)$ time, where $e$ is the number of edges in the graph. Since the $O(e)$ loop is nested inside of a loop that runs $v - 1$ times, the overall runtime of the loop on lines 8-21 is $O(v * e)$. Lastly, the loop structure on lines 25-36 iterates through all of the edges in the graph and has a body containing only assignments and comparisons. Therefore, the final loop runs in $O(e)$ time. When putting the 3 main parts of the algorithm together, the runtime complexity of the Bellman-Ford SSSP algorithm is $O(v + v * e + e)$, which simplifies to $O(v * e)$ because $v * e$ is the dominant term in the expression.
 
 \section{Fractional Knapsack Algorithm}
 \subsection{The Algorithm}
@@ -198,6 +199,9 @@ Listing \ref{lst:fracKnapsack} contains the C++ implementation of the fractional
 }
 
 \section{Appendix}
+\subsection{Bellman-Ford Single Source Shortest Path Algorithm}
+\lstinputlisting[caption = Bellman-Ford Single Source Shortest Path Algorithm (C++), label = lst:bfsssp, language = C++, firstline = 139, lastline = 199, firstnumber = 1]{./../graph.cpp}
+
 \subsection{Fractional Knapsack Algorithm}
 \lstinputlisting[caption = Fractional Knapsack Algorithm (C++), label = lst:fracKnapsack, language = C++, firstline = 101, lastline = 167, firstnumber = 1]{./../fractionalKnapsack.cpp}
 
