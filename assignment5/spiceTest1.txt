@@ -1,0 +1,15 @@
+-- She who controls the spice controls the universe.
+
+-- Available spice to take
+spice name = red;    total_price =  4.0;  qty = 4;
+spice name = green;  total_price = 12.0;  qty = 6;
+spice name = blue;   total_price = 40.0;  qty = 8;
+spice name = orange; total_price = 18.0;  qty = 2;
+
+-- Available knapsacks in which to keep spice
+-- This should be valued at 0 with no spice taken
+knapsack capacity = 0;
+-- Value should be 18 + 40 + 4 * 2 = 66
+knapsack capacity = 14;
+-- This should be valued the same as 20 and 21 (the highest value possible)
+knapsack capacity = 100;

@@ -1,0 +1,2 @@
+-- Test for no spices just in case
+knapsack capacity = 5;
