@@ -3,7 +3,7 @@
 This is the repository with all of my work from my Algorithm Analysis and Design course. All of the code was written in C++ and can be built by calling the `make` command to compile a given project.
 
 Here is an outline of the work done in each assignment:
-* Assignment 0: Wrote a limerick to get used to LateX, which was used for all of my reports.
+* Assignment 0: Wrote a limerick in LateX, which was used for all of my reports.
 * Assignment 1: Built a singly linked list and used it to create stack and queue classes.
 * Assignment 2: Implemented selection sort, insertion sort, merge sort, and quicksort algorithms.
 * Assignment 3: Implemented linear and binary search. Also created a hash table that uses chaining to handle collisions.
